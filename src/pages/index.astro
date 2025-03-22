@@ -1,0 +1,130 @@
+---
+// File: src/pages/index.astro
+import Layout from '../layouts/Page.astro';
+import { TextSection, Button  } from '@components/odyssey-theme';
+
+const seo = {
+  title: 'Hnutí Kruh',
+  description: 'Hnutí Kruh – otevřenost, soudržnost a spolupráce pro férovou politiku',
+};
+---
+
+<Layout {seo}>
+
+  <!-- Banner -->
+  <section class="banner">
+    <img src="/social.png" alt="banner" />
+  </section>
+
+  <!-- Manifest -->
+  <section class="manifest">
+    <TextSection narrow>
+      <h2 id="manifest">Manifest</h2>
+      <p><strong>Otevřenost, soudržnost a spolupráce</strong></p>
+      <p>
+        Spojujeme své síly ve jménu hodnot férové politiky tvořené všemi a pro všechny. Chceme společnost založenou na spolupráci, přímosti a poctivosti. Vytváříme politický systém, který zajistí dobrý život, beze strachu o budoucnost, nám všem.
+      </p>
+      <div class="boxes">
+        <div class="box">
+          Věříme ve svět, kde má každý férovou šanci uspět a nikdo netrpí jen proto, že se správně nenarodil. Práce a přínos musí být náležitě oceněny. Odmítáme úspěch na úkor druhých. Usilujeme o <strong>spravedlivé podmínky a rovné příležitosti.</strong>
+        </div>
+        <div class="box">
+          Stavíme se proti koncentraci moci v rukou vyvolených. Požadujeme transparentní rozhodování politiků. O budoucnosti musíme rozhodovat společně. Prosazujeme <strong>odpovědnost a otevřenost.</strong>
+        </div>
+        <div class="box">
+          Chceme férový daňový systém, který podporuje důstojný život. Danit se mají astronomické zisky, ne prospěšná práce obyčejných lidí. Daně jsou naše / <strong>investice do budoucnosti.</strong>
+        </div>
+        <div class="box">
+          Víme, že <strong>společnost prospívá ze spolupráce.</strong> Chráníme volný přístup ke společné debatě za společným cílem. Oceňujeme rozdílné pohledy a odlišné zkušenosti. To přináší nejlepší výsledky pro celek i do budoucna.
+        </div>
+        <div class="box">
+          Stojíme na straně těch, kdo se nemohou bránit sami. Pomáháme růst – jedincům, i celku. Naše síla vychází ze vzájemné důvěry a podpory. <strong>Prosazujeme solidaritu, sounáležitost a empatii.</strong>
+        </div>
+        <div class="box">
+          Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi. <strong>Jsme odvážné a máme svou hrdost.</strong>
+        </div>
+      </div>
+      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty...</strong></p>
+    </TextSection>
+  </section>
+
+<!-- Petice -->
+<section class="petice">
+	<TextSection narrow>
+	  <h2 id="petice">Petice</h2>
+	  <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
+	  <p>
+		Stáhněte si petici, sbírejte podpisy svých známých, a petici nám doručte na některou z adres členek petičního výboru.
+	  </p>
+	  <div style="text-align: center; margin-top: 1rem;">
+		<Button href="/assets/petice/petice.pdf" newTab>PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”</Button>
+	  </div>
+	</TextSection>
+  </section>
+
+  <!-- Akce -->
+  <section class="akce">
+    <TextSection narrow>
+      <h2 id="akce">Kde nás můžete potkat</h2>
+      <ul>
+        <li><strong>22. 3.</strong> Zastavme společně krajní pravici! nám. Jana Palacha, Praha</li>
+        <li><strong>26. 4.</strong> Blokády pochodu Hnutí pro život</li>
+      </ul>
+    </TextSection>
+  </section>
+
+</Layout>
+
+<style>
+
+  /* Banner */
+  .banner {
+    text-align: center;
+    margin: 2rem 0;
+  }
+  .banner img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  /* Manifest */
+  .manifest {
+    margin: 2rem 0;
+  }
+  .manifest .boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .manifest .box {
+    background-color: var(--theme-surface-1, #f2f2f2);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Petice */
+  .petice {
+    margin: 2rem 0;
+  }
+  .petice a {
+    color: var(--theme-primary, #333);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* Akce */
+  .akce {
+    margin: 2rem 0;
+  }
+  .akce ul {
+    list-style: disc;
+    padding-left: 2rem;
+  }
+  .akce li {
+    margin-bottom: 0.5rem;
+  }
+
+</style>

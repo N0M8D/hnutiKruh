@@ -27,6 +27,7 @@
 		"prettier-plugin-astro": "^0.0.12"
 	},
 	"dependencies": {
-		"@iconify-json/simple-icons": "^1.2.29"
+		"@iconify-json/simple-icons": "^1.2.29",
+		"@vercel/analytics": "^1.5.0"
 	}
 }

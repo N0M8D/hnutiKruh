@@ -1,0 +1,63 @@
+---
+/**
+ * File: src/components/selections/EventsList.astro
+ *
+ * Props:
+ *   events: Array<{ date: string, description: string }>
+ *     - date: např. "22. 3."
+ *     - description: např. "Zastavme společně krajní pravici! nám. Jana Palacha, Praha"
+ */
+ const { events = [] } = Astro.props;
+---
+<div class="events-list">
+  {events.map((event) => (
+    <div class="event-item">
+      <div class="event-date">
+        <strong>{event.date}</strong>
+      </div>
+      <div class="event-description">
+        {event.description}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff8f6; /* Světlý odstín růžové/lososové */
+    border: 1px solid #fdded9; /* Jemná linka */
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .event-date {
+    color: #e96c54; /* výraznější barva pro datum */
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+
+  .event-description {
+    flex: 1; /* Aby se text roztáhl a zarovnal do zbytku řádku */
+    color: #333;
+  }
+
+  @media (max-width: 600px) {
+    /* Na mobilu zalomíme datum a popis pod sebe */
+    .event-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .event-date {
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>

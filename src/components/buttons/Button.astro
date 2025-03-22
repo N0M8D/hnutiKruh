@@ -1,20 +1,21 @@
 ---
-const { href, unelevated, outlined, customIcon, onPrimary, newTab } =
-  Astro.props;
-
+// File: Button.astro
+const { href, unelevated, outlined, customIcon, onPrimary, newTab, fullWidth, style } = Astro.props;
 const Tag = href ? 'a' : 'button';
 ---
-
 <Tag
-  class={`btn ${unelevated && `btn--unelevated`} ${
-    outlined && `btn--outlined`
-  } ${onPrimary && `btn--on-primary`}`}
+  class={`btn ${unelevated ? "btn--unelevated" : ""} ${outlined ? "btn--outlined" : ""} ${onPrimary ? "btn--on-primary" : ""} ${fullWidth ? "btn--fullwidth" : ""}`}
   href={href}
-  target={`${newTab ? '_blank': ``}`}
-  rel={`${newTab ? 'noopener noreferrer' : ``}`}
+  target={newTab ? '_blank' : undefined}
+  rel={newTab ? 'noopener noreferrer' : undefined}
+  style={style}
 >
   <slot />
-  {customIcon && <span class="custom-icon__span"><slot name="icon">custom_icon</slot></span>}
+  {customIcon && (
+    <span class="custom-icon__span">
+      <slot name="icon">custom_icon</slot>
+    </span>
+  )}
 </Tag>
 
 <style>
@@ -30,6 +31,10 @@ const Tag = href ? 'a' : 'button';
     border: none;
     border-radius: var(--theme-button-border-radius);
     font-weight: 500;
+  }
+  /* Nová třída fullwidth */
+  .btn--fullwidth {
+    width: 100%;
   }
   .btn:hover {
     background-color: var(--theme-primary-hover);
@@ -57,12 +62,10 @@ const Tag = href ? 'a' : 'button';
     display: flex;
     align-items: center;
   }
-
   .custom-icon__span :global(svg) {
     width: 24px;
     height: 24px;
   }
-
   a.btn {
     text-decoration: none;
   }

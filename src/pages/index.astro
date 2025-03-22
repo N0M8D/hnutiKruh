@@ -2,11 +2,23 @@
 // File: src/pages/index.astro
 import Layout from '../layouts/Page.astro';
 import { TextSection, Button  } from '@components/odyssey-theme';
-
+import EventsList from '../components/sections/EventList.astro';
 const seo = {
   title: 'Hnutí Kruh',
   description: 'Hnutí Kruh – otevřenost, soudržnost a spolupráce pro férovou politiku',
 };
+
+// Příklad dat pro akce
+const events = [
+  {
+    date: '22. 3.',
+    description: 'Zastavme společně krajní pravici! nám. Jana Palacha, Praha',
+  },
+  {
+    date: '26. 4.',
+    description: 'Blokády pochodu Hnutí pro život',
+  },
+];
 ---
 
 <Layout {seo}>
@@ -57,7 +69,7 @@ const seo = {
 		Stáhněte si petici, sbírejte podpisy svých známých, a petici nám doručte na některou z adres členek petičního výboru.
 	  </p>
 	  <div style="text-align: center; margin-top: 1rem;">
-		<Button href="/assets/petice/petice.pdf" newTab>PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”</Button>
+		<Button fullWidth href="/assets/petice/petice.pdf" newTab>PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”</Button>
 	  </div>
 	</TextSection>
   </section>
@@ -66,10 +78,7 @@ const seo = {
   <section class="akce">
     <TextSection narrow>
       <h2 id="akce">Kde nás můžete potkat</h2>
-      <ul>
-        <li><strong>22. 3.</strong> Zastavme společně krajní pravici! nám. Jana Palacha, Praha</li>
-        <li><strong>26. 4.</strong> Blokády pochodu Hnutí pro život</li>
-      </ul>
+      <EventsList events={events} />
     </TextSection>
   </section>
 

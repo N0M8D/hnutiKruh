@@ -14,7 +14,7 @@ const posts = await Astro.glob('./posts/*.mdx').then(posts =>
 			title: frontmatter.title,
 			description: frontmatter.description,
 			authors: frontmatter.authors,
-			publishDate: parse(frontmatter.publishDate, 'MMMM d, yyyy', new Date()),
+			publishDate: parse(frontmatter.publishDate, 'dd.MM.yyyy', new Date()),
 			featuredImage: frontmatter.featuredImage,
 			excerpt: frontmatter.excerpt,
 			href: url,

@@ -1,8 +1,10 @@
 ---
 // File: src/pages/index.astro
 import Layout from '../layouts/Page.astro';
-import { TextSection, Button  } from '@components/odyssey-theme';
+import { TextSection, Button } from '@components/odyssey-theme';
 import EventsList from '../components/sections/EventList.astro';
+import Lide from '../components/sections/Lide.astro';
+
 const seo = {
   title: 'Hnutí Kruh',
   description: 'Hnutí Kruh – otevřenost, soudržnost a spolupráce pro férovou politiku',
@@ -20,8 +22,29 @@ const events = [
     description: 'Blokády pochodu Hnutí pro život'
   },
 ];
----
 
+// Příklad dat pro osoby – uprav fotky a texty dle potřeby
+const people = [
+  {
+    photo: '/assets/brand/kolo+.png',
+    name: 'Marta Martinová',
+    description: 'Zakladatelka hnutí, inspirativní lídryně, která prosazuje otevřenost a spolupráci.',
+    socials: [
+      { icon: 'instagramIcon', url: 'https://instagram.com/petr' },
+    ]
+  },
+  {
+    photo: '/assets/brand/kolo.png',
+    name: 'Klára kadar',
+    description: 'Aktivní člen hnutí, angažovaný v komunitních projektech a občanské iniciativě.'
+  },
+  {
+    photo: '/assets/brand/kolo+.png',
+    name: 'Jana Kolaříková',
+    description: 'Koordinátorka projektů, zaměřená na vzdělávání a posilování občanské angažovanosti.'
+  },
+];
+---
 <Layout {seo}>
 
   <!-- Banner -->
@@ -57,22 +80,22 @@ const events = [
           Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi. <strong>Jsme odvážné a máme svou hrdost.</strong>
         </div>
       </div>
-      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty...</strong></p>
+      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
     </TextSection>
   </section>
 
-<!-- Petice -->
-<section class="petice">
-	<TextSection narrow>
-	  <h2 id="petice">Petice</h2>
-	  <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
-	  <p>
-		Stáhněte si petici, sbírejte podpisy svých známých, a petici nám doručte na některou z adres členek petičního výboru.
-	  </p>
-	  <div style="text-align: center; margin-top: 1rem;">
-		<Button fullWidth href="/assets/petice/petice.pdf" newTab>PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”</Button>
-	  </div>
-	</TextSection>
+  <!-- Petice -->
+  <section class="petice">
+    <TextSection narrow>
+      <h2 id="petice">Petice</h2>
+      <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
+      <p>
+        Stáhněte si petici, sbírejte podpisy svých známých, a petici nám doručte na některou z adres členek petičního výboru.
+      </p>
+      <div style="text-align: center; margin-top: 1rem;">
+        <Button fullWidth href="/assets/petice/petice.pdf" newTab>PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”</Button>
+      </div>
+    </TextSection>
   </section>
 
   <!-- Akce -->
@@ -83,10 +106,18 @@ const events = [
     </TextSection>
   </section>
 
+  <!-- Lidé -->
+  <!--TODO až budou fotky a texty přidat -->
+ {/*<section class="lide-section">
+    <TextSection narrow>
+      <h2 id="lide">Lidé</h2>
+      <Lide people={people} />
+    </TextSection>
+  </section>*/}
+
 </Layout>
 
 <style>
-
   /* Banner */
   .banner {
     text-align: center;
@@ -137,4 +168,8 @@ const events = [
     margin-bottom: 0.5rem;
   }
 
+  /* Lidé */
+  .lide-section {
+    margin: 2rem 0;
+  }
 </style>

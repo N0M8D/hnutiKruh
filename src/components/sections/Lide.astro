@@ -1,0 +1,114 @@
+---
+// File: src/components/sections/Lide.astro
+import Container from '../core/Container.astro';
+import Icon from '../icons/Icon.astro'; // Pokud máš vlastní Icon komponentu
+
+/**
+ * Typ pro osobu (ukázka):
+ * {
+ *   photo: string;         // Cesta k fotce
+ *   name: string;          // Jméno osoby
+ *   description: string;   // Krátký popis
+ *   socials?: Array<{      // Volitelné pole sociálních odkazů
+ *     icon: string;        // Název ikony, např. "instagramIcon", "facebookIcon" atd.
+ *     url: string;         // Odkaz na profil
+ *   }>
+ * }
+ */
+
+/**
+ * Props:
+ *   people: Array<{
+ *     photo: string,
+ *     name: string,
+ *     description: string,
+ *     socials?: Array<{
+ *       icon: string,
+ *       url: string
+ *     }>
+ *   }>
+ */
+const { people = [] } = Astro.props;
+---
+
+<Container>
+  <div class="lide">
+    {people.map((person) => (
+      <div class="card">
+        <img src={person.photo} alt={`Fotka ${person.name}`} class="card-photo" />
+        <h3 class="card-name">{person.name}</h3>
+        <p class="card-description">{person.description}</p>
+
+        {person.socials && person.socials.length > 0 && (
+          <div class="card-socials">
+            {person.socials.map((social) => (
+              <a
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card-socials__link"
+              >
+                <Icon name={social.icon} viewBox="0 0 402 402" width={32} height={32} />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</Container>
+
+<style>
+  .lide {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .card {
+    background-color: var(--theme-surface-1, #fff);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .card-photo {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: block;
+  }
+
+  .card-name {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-description {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+
+  .card-socials {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .card-socials__link {
+    display: inline-flex;
+    color: inherit; /* nebo zvol vlastní barvu */
+    text-decoration: none;
+  }
+
+  /* Např. při hoveru můžeš zvýraznit */
+  .card-socials__link:hover {
+    opacity: 0.8;
+  }
+</style>

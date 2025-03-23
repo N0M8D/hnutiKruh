@@ -1,68 +1,72 @@
-/* Special thanks to this tool for local fonts CSS generation:
-  https://google-webfonts-helper.herokuapp.com/fonts/lato?subsets=latin
-*/
+/* Roboto - 300 (Light) - základní latinka (pokud nemáte ext) */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local('Roboto Light'),
+    url('/assets/fonts/roboto-v20-latin-300.woff2') format('woff2'),
+    url('/assets/fonts/roboto-v20-latin-300.woff') format('woff');
+}
 
-/* roboto-serif-600 - latin */
+/* Roboto - 400 (Regular) - s podporou latin-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Roboto'),
+    /* název souborů odpovídá vašim reálným: 
+          "roboto-v20-latin-ext_latin-regular.woff2" atd. */
+    url('/assets/fonts/roboto-v20-latin-ext_latin-regular.woff2') format('woff2'),
+    url('/assets/fonts/roboto-v20-latin-ext_latin-regular.woff') format('woff');
+}
+
+/* Roboto - 700 (Bold) - s podporou latin-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Roboto Bold'),
+    url('/assets/fonts/roboto-v20-latin-ext_latin-700.woff2') format('woff2'),
+    url('/assets/fonts/roboto-v20-latin-ext_latin-700.woff') format('woff');
+}
+
+/* Roboto - 700italic (Bold Italic) - základní latinka (pokud nemáte ext) */
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Roboto Bold Italic'),
+    url('/assets/fonts/roboto-v20-latin-700italic.woff2') format('woff2'),
+    url('/assets/fonts/roboto-v20-latin-700italic.woff') format('woff');
+}
+
+/* Roboto Serif (pokud chcete zachovat jako serif) */
 @font-face {
   font-family: 'Roboto Serif';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
   src: local(''),
-       url('/assets/fonts/roboto-serif-v8-latin-600.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/assets/fonts/roboto-serif-v8-latin-600.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/assets/fonts/roboto-v47-latin-ext-600.woff2') format('woff2'),
+    url('/assets/fonts/roboto-v47-latin-ext-600.woff') format('woff');
 }
-/* roboto-serif-700 - latin */
+
 @font-face {
   font-family: 'Roboto Serif';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
   src: local(''),
-       url('/assets/fonts/roboto-serif-v8-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/assets/fonts/roboto-serif-v8-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('/assets/fonts/roboto-v47-latin-ext-700.woff2') format('woff2'),
+    url('/assets/fonts/roboto-v47-latin-ext-700.woff') format('woff');
 }
 
-/* lato-300 - latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: local(''),
-       url('/assets/fonts/lato-v23-latin-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/assets/fonts/lato-v23-latin-300.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
-/* lato-regular - latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local(''),
-       url('/assets/fonts/lato-v23-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/assets/fonts/lato-v23-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
-/* lato-700 - latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: local(''),
-       url('/assets/fonts/lato-v23-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/assets/fonts/lato-v23-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
-/* lato-700italic - latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: 700;
-  font-display: swap;
-  src: local(''),
-       url('/assets/fonts/lato-v23-latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/assets/fonts/lato-v23-latin-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
+/* ------------------ Zbytek stylů ------------------ */
+
 :root {
   --font-size-sm: clamp(14.4px, 0.07vw + 14.13px, 15px);
   --font-size-base: clamp(18px, 0.23vw + 17.09px, 20px);
@@ -75,43 +79,45 @@
 
 html,
 body {
-	line-height: 1.5;
-	font-family: var(--theme-font-family-sans);
-	font-size: var(--font-size-base);
-	color: var(--theme-on-bg);
-} 
+  line-height: 1.5;
+  /* Zkontrolujte, že opravdu máte nastavené
+     --theme-font-family-sans: 'Roboto' někde v globálních proměnných. */
+  font-family: var(--theme-font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--theme-on-bg);
+}
 
 h1,
 h2,
 h3 {
-	font-family: var(--theme-font-family-serif);
-	font-weight: 700;
+  font-family: var(--theme-font-family-serif);
+  font-weight: 700;
 }
 
 h1 {
-	font-size: var(--font-size-xxl);
+  font-size: var(--font-size-xxl);
 }
 
 h2 {
-	font-size: var(--font-size-xl);
+  font-size: var(--font-size-xl);
 }
 
 h3 {
-	font-size: var(--font-size-lg);
+  font-size: var(--font-size-lg);
 }
 
 h1,
 h2 {
-	line-height: 1.1;
-	font-weight: 700;
+  line-height: 1.1;
+  font-weight: 700;
 }
 
 h3 {
-	font-weight: 500;
+  font-weight: 500;
 }
 
 h6 {
-	font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm);
 }
 
 h1,
@@ -121,14 +127,14 @@ h4,
 h5,
 h6,
 p {
-	margin: 0 0 1rem 0;
+  margin: 0 0 1rem 0;
 }
 
 blockquote {
-	font-style: italic;
-	font-size: var(--font-size-base);
-	font-weight: 500;
-	margin-bottom: 1rem;
-	padding-left: 1.5rem;
-	border-left: 0.25rem solid var(--theme-on-bg);
+  font-style: italic;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  border-left: 0.25rem solid var(--theme-on-bg);
 }

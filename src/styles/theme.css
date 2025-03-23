@@ -1,13 +1,13 @@
 :root {
 	/* Theme Colors */
-	--theme-primary: #fe8081;
-	--theme-primary-hover: #ff6c6c;
+	--theme-primary: #ff8080;
+	--theme-primary-hover: #d35f5f;
 	--theme-on-primary: hsl(0, 0%, 100%);
 
 	--theme-bg: #fffffe;
 	--theme-on-bg: #5e4536;
 
-	--theme-surface-1: #fdd2c0;
+	--theme-surface-1: #ffe6d5;
 	--theme-on-surface-1: #5e4536;
 
 	--theme-surface-2: #6a4d34;

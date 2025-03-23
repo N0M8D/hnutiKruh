@@ -1,0 +1,48 @@
+---
+import * as icons from '../../icons/icons.js';
+/**
+ * Vlastní Icon komponenta.
+ *
+ * Props:
+ *   name: string - Klíč, podle kterého se vyhledá SVG řetězec v souboru icons.js.
+ *                  Například "instagramIcon" (očekává se, že v icons.js je exportováno:
+ *                  export const instagramIcon = `...`).
+ *   width?: number - Šířka ikony (výchozí 24).
+ *   height?: number - Výška ikony (výchozí 24).
+ *   viewBox?: string - ViewBox pro obalové SVG, výchozí "0 0 24 24".
+ */
+const { name, width = 24, height = 24, viewBox = "0 0 24 24" } = Astro.props;
+
+let iconSvg = icons[name];
+if (!iconSvg) {
+  iconSvg = `<text x="0" y="15" fill="red" font-size="12">Icon not found</text>`;
+}
+
+// Zkontrolujeme, zda načtený řetězec již obsahuje <svg>
+const containsSvg = iconSvg.trim().startsWith("<svg");
+---
+
+<div class="icon" style={`width: ${width}px; height: ${height}px;`}>
+  {containsSvg ? (
+    // Pokud řetězec již obsahuje <svg>, vložíme jej přímo
+    <Fragment set:html={iconSvg} />
+  ) : (
+    // Jinak obalíme obsah do vlastního SVG s předaným viewBox
+    <svg width={width} height={height} viewBox={viewBox} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <g set:html={iconSvg} />
+    </svg>
+  )}
+</div>
+
+<style>
+  .icon {
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+  }
+  .icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

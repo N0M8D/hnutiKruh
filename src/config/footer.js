@@ -2,22 +2,22 @@ export const footerSocials = [
 	{
 		name: 'Mastodon',
 		url: 'https://witter.cz/@Hnutikruh',
-		icon: "mdi:mastodon",
+		icon: "mastodonIcon",
 	},
 	{
 		name: 'BlueSky',
 		url: 'https://bsky.app/profile/HnutiKruh',
-		icon: "simple-icons:bluesky",
+		icon: "blueskyIcon",
 	},
 	{
 		name: 'Threads',
 		url: 'https://threads.net/@HnutiKruh',
-		icon: "simple-icons:threads",
+		icon: "threadsIcon",
 	},
 	{
 		name: 'Instagram',
 		url: 'https://instagram.com/HnutiKruh',
-		icon: "mdi:instagram",
+		icon: "instagramIcon",
 	},
 ];
 

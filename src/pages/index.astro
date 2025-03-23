@@ -5,6 +5,7 @@ import { TextSection, Button } from '@components/odyssey-theme';
 import EventsList from '../components/sections/EventList.astro';
 import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
+import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
 
 const seo = {
   title: 'Hnutí Kruh',
@@ -47,10 +48,15 @@ const people = [
 
 <Layout {seo}>
 
-  <!-- Banner -->
-  <section class="banner">
-    <img src="/social.png" alt="banner" />
-  </section>
+<!-- Banner -->
+<section class="banner">
+  <img src="/social.png" alt="banner" />
+</section>
+
+<div class="background-circles">
+<AnimatedCircle direction="left" offset="75%" delay="0.4s" depth="-15px" />
+<AnimatedCircle direction="right" offset="150%" delay="1s"depth="10px" image="/assets/brand/kolo+.png" />
+</div>
 
   <!-- Manifest -->
   <section class="manifest">
@@ -83,6 +89,7 @@ const people = [
       <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
     </TextSection>
   </section>
+
 
   <!-- Petice -->
   <section class="petice">
@@ -137,6 +144,7 @@ const people = [
 </Layout>
 
 <style>
+
   .banner {
     text-align: center;
     margin: 2rem 0;
@@ -148,8 +156,10 @@ const people = [
   }
 
   .manifest {
-    margin: 2rem 0;
-  }
+  position: relative;
+  margin: 2rem 0;
+  z-index: 1;
+}
   .manifest .boxes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -164,7 +174,9 @@ const people = [
   }
 
   .petice {
+    position: relative;
     margin: 2rem 0;
+    z-index: 1;
   }
   .petice a {
     color: var(--theme-primary, #333);
@@ -185,6 +197,10 @@ const people = [
 
   .akce {
     margin: 2rem 0;
+    position: relative;
+    overflow: hidden; /* přidáno */
+    margin: 2rem 0;
+    z-index: 1;
   }
   .akce ul {
     list-style: disc;

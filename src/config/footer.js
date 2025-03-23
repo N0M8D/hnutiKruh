@@ -6,7 +6,7 @@ export const footerSocials = [
 	},
 	{
 		name: 'BlueSky',
-		url: 'https://bsky.app/profile/HnutiKruh',
+		url: 'https://bsky.app/profile/hnutikruh.bsky.social',
 		icon: "blueskyIcon",
 	},
 	{

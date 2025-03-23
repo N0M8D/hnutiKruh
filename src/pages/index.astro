@@ -4,13 +4,13 @@ import Layout from '../layouts/Page.astro';
 import { TextSection, Button } from '@components/odyssey-theme';
 import EventsList from '../components/sections/EventList.astro';
 import Lide from '../components/sections/Lide.astro';
+import { Icon } from 'astro-icon/components';
 
 const seo = {
   title: 'Hnutí Kruh',
   description: 'Hnutí Kruh – otevřenost, soudržnost a spolupráce pro férovou politiku',
 };
 
-// Příklad dat pro akce
 const events = [
   {
     date: '22. 3.',
@@ -23,20 +23,19 @@ const events = [
   },
 ];
 
-// Příklad dat pro osoby – uprav fotky a texty dle potřeby
 const people = [
   {
     photo: '/assets/brand/kolo+.png',
     name: 'Marta Martinová',
     description: 'Zakladatelka hnutí, inspirativní lídryně, která prosazuje otevřenost a spolupráci.',
     socials: [
-      { icon: 'instagramIcon', url: 'https://instagram.com/petr' },
+      { icon: 'mdi:instagram', url: 'https://instagram.com/marta' }
     ]
   },
   {
     photo: '/assets/brand/kolo.png',
-    name: 'Klára kadar',
-    description: 'Aktivní člen hnutí, angažovaný v komunitních projektech a občanské iniciativě.'
+    name: 'Klára Kadar',
+    description: 'Aktivní členka hnutí, angažovaná v komunitních projektech a občanské iniciativě.'
   },
   {
     photo: '/assets/brand/kolo+.png',
@@ -45,6 +44,7 @@ const people = [
   },
 ];
 ---
+
 <Layout {seo}>
 
   <!-- Banner -->
@@ -90,10 +90,28 @@ const people = [
       <h2 id="petice">Petice</h2>
       <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
       <p>
-        Stáhněte si petici, sbírejte podpisy svých známých, a petici nám doručte na některou z adres členek petičního výboru.
+        Stáhněte si petici, sbírejte podpisy svých známých a petici nám doručte na některou z adres členek petičního výboru:
       </p>
-      <div style="text-align: center; margin-top: 1rem;">
-        <Button fullWidth href="/assets/petice/petice.pdf" newTab>PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”</Button>
+
+      <ul class="petice-adresy">
+        <li>
+          <strong>Marta Martinová</strong><br />
+          <Icon name="mdi:local-post-office" width={20} height={20} style="vertical-align: middle;" /> Pod Sokolovnou 252, 28921 Kostomlaty nad Labem
+        </li>
+        <li>
+          <strong>Jana Kolaříková</strong><br />
+          <Icon name="mdi:local-post-office" width={20} height={20} style="vertical-align: middle;" /> Nádražní 137, 387 11 Katovice 
+        </li>
+        <li>
+          <strong>Klára Kadár</strong><br />
+          <Icon name="mdi:local-post-office" width={20} height={20} style="vertical-align: middle;" /> Terešov 17, 338 08 Terešov
+        </li>
+      </ul>
+
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <Button fullWidth href="/assets/petice/petice.pdf" newTab>
+          PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”
+        </Button>
       </div>
     </TextSection>
   </section>
@@ -107,18 +125,16 @@ const people = [
   </section>
 
   <!-- Lidé -->
-  <!--TODO až budou fotky a texty přidat -->
- {/*<section class="lide-section">
+  <section class="lide-section">
     <TextSection narrow>
       <h2 id="lide">Lidé</h2>
       <Lide people={people} />
     </TextSection>
-  </section>*/}
+  </section>
 
 </Layout>
 
 <style>
-  /* Banner */
   .banner {
     text-align: center;
     margin: 2rem 0;
@@ -129,7 +145,6 @@ const people = [
     border-radius: 8px;
   }
 
-  /* Manifest */
   .manifest {
     margin: 2rem 0;
   }
@@ -146,7 +161,6 @@ const people = [
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
-  /* Petice */
   .petice {
     margin: 2rem 0;
   }
@@ -156,7 +170,17 @@ const people = [
     font-weight: 600;
   }
 
-  /* Akce */
+  .petice-adresy {
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+    color: #444;
+  }
+
+  .petice-adresy li {
+    margin-bottom: 0.75rem;
+  }
+
   .akce {
     margin: 2rem 0;
   }
@@ -168,7 +192,6 @@ const people = [
     margin-bottom: 0.5rem;
   }
 
-  /* Lidé */
   .lide-section {
     margin: 2rem 0;
   }

@@ -4,7 +4,7 @@ import Layout from './Base.astro';
 import type { Props as BaseHeadProps } from '../components/head/BaseHead.astro';
 import Logo from '../components/Logo.astro';
 import settings from '../config/settings';
-import { footerLists, footerSocials } from '../config/footer';
+import { footerLists, footerSocials, contactList } from '../config/footer';
 
 
 export interface Props {
@@ -32,6 +32,7 @@ const { seo } = Astro.props as Props;
 		color="var(--theme-on-surface-1)"
 		footerLists={footerLists}
     footerSocials={footerSocials}
+	contactList={contactList}
 		copyrightName={settings.name}
     showPlug={settings.showPlug}
 	>

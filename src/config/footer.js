@@ -26,6 +26,23 @@ export const footerLists = [
 		title: 'Kontakt',
 		items: [
 			{
+				title: 'Marta Martinová',
+				/* slug: 'mailto:marta@martamartinova.cz', */
+			},
+			{
+				title: 'Jana Koláříková',
+				/* slug: 'mailto:info@janakolarikova.cz', */
+			},
+			{
+				title: 'Klára Kadár',
+				/* slug: 'mailto:klara@kadar.cz', */
+			},
+		],
+	},
+	{
+		title: 'Email',
+		items: [
+			{
 				title: 'marta@martamartinova.cz',
 				slug: 'mailto:marta@martamartinova.cz',
 			},
@@ -36,6 +53,23 @@ export const footerLists = [
 			{
 				title: 'klara@kadar.cz',
 				slug: 'mailto:klara@kadar.cz',
+			},
+		],
+	},
+	{
+		title: 'Telefon',
+		items: [
+			{
+				title: '+420 724 020 585',
+				slug: 'tel:+420724020585',
+			},
+			{
+				title: '+420 722 419 534',
+				slug: 'tel:+420722419534',
+			},
+			{
+				title: '+420 736 456 457',
+				slug: 'tel:+420736456457',
 			},
 		],
 	},

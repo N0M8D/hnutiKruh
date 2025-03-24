@@ -1,5 +1,6 @@
 export const footerSocials = [
 	{
+		
 		name: 'Mastodon',
 		url: 'https://witter.cz/@Hnutikruh',
 		icon: "mastodonIcon",
@@ -20,6 +21,7 @@ export const footerSocials = [
 		icon: "instagramIcon",
 	},
 ];
+
 
 export const footerLists = [
 	{

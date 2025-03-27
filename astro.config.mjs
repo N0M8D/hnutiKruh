@@ -9,6 +9,7 @@ import astroIcon from 'astro-icon';
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
+  adapter: vercel(),
   integrations: [
     astroIcon({
       // Zde přidáš 'simple-icons' kolekci

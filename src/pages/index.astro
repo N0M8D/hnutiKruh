@@ -1,11 +1,12 @@
 ---
 // File: src/pages/index.astro
 import Layout from '../layouts/Page.astro';
-import { TextSection, Button } from '@components/odyssey-theme';
+import { TextSection, Button, Container } from '@components/odyssey-theme';
 import EventsList from '../components/sections/EventList.astro';
 import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
 import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
+import NewsletterForm from '@components/forms/NewsletterForm.astro';
 
 const seo = {
   title: 'Hnutí Kruh',
@@ -45,6 +46,7 @@ const people = [
   },
 ];
 ---
+
 
 <Layout {seo}>
 
@@ -140,6 +142,9 @@ const people = [
     </TextSection>
   </section>
   **/}
+
+  <NewsletterForm/>
+
 
 </Layout>
 

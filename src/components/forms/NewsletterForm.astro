@@ -1,29 +1,73 @@
 ---
-import {Icon} from 'astro-icon/components'
-import {Button, FormInput } from "@components/odyssey-theme";
-
+import { Icon } from 'astro-icon/components';
+import { Button, FormInput, TextSection } from "@components/odyssey-theme";
 ---
 
-<form name="Newsletter Form" method="POST" action="/newsletter-thank-you">
-  <div class="newsletter-form__container">
-    <FormInput name="Email" placeholder="hello@example.com"/>
-    <Button customIcon>Submit
-      <Fragment slot="icon">
-        <Icon name="ic:baseline-chevron-right" />
-      </Fragment>
-    </Button>
-  </div>
-</form>
+<section class="newsletter">
+  <!-- Stejně jako eventList -->
+  <TextSection narrow>
+    <div class="newsletter-card">
+      <h2>Přihlášení k odběru newsletteru</h2>
+      <form name="Newsletter Form" method="POST" action="/api/subscribe">
+        <div class="newsletter-form__container">
+          <FormInput name="Jmeno" placeholder="Jméno" />
+          <FormInput name="Prijmeni" placeholder="Příjmení" />
+          <FormInput name="Email" placeholder="hello@example.com" required />
+          <Button customIcon fullWidth>
+            Přihlásit se k odběru
+            <Fragment slot="icon">
+              <Icon name="ic:baseline-chevron-right" />
+            </Fragment>
+          </Button>
+        </div>
+         <!-- Popisek pod formulářem -->
+         <p class="newsletter-disclaimer">
+          *Odesláním formuláře souhlasíte s tím, že vám bude zasílán newsletter a můžete být kontaktováni. Vaše údaje budou využity výhradně pro tento účel.
+        </p>
+      </form>
+    </div>
+  </TextSection>
+</section>
 
 <style>
+.newsletter {
+  margin: 2rem 0;
+}
+
+/* Karta s pozadím */
+.newsletter-card {
+  background-color: var(--theme-surface-1, #fff);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* width: 100% a bez max-width, šířku řeší <TextSection narrow> */
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Grid pro vstupní pole a tlačítko */
 .newsletter-form__container {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
-@media (max-width: 600px) {
+
+/* Popisek (disclaimer) pod formulářem */
+.newsletter-disclaimer {
+  margin-top: 1rem;
+  font-size: 0.875rem; /* menší písmo */
+  color: #666;        /* neutrální barva textu */
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
   .newsletter-form__container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+  /* Email a tlačítko se roztáhnou přes oba sloupce */
+  .newsletter-form__container > :nth-child(3),
+  .newsletter-form__container > :nth-child(4) {
+    grid-column: span 2;
   }
 }
 </style>

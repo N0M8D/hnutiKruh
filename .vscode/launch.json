@@ -6,6 +6,23 @@
 			"name": "Development server",
 			"request": "launch",
 			"type": "node-terminal"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Astro",
+			"program": "${workspaceFolder}/node_modules/astro/astro.js",
+			"args": [
+				"dev"
+			],
+			"runtimeArgs": [
+				"--inspect-brk"
+			],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"skipFiles": [
+				"<node_internals>/**"
+			]
 		}
 	]
 }

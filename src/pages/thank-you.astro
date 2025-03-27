@@ -1,0 +1,46 @@
+---
+/* File: src/pages/thank-you.astro */
+import Layout from '../layouts/Page.astro';
+import { Button } from '@components/odyssey-theme';
+
+const seo = {
+  title: 'Děkujeme! | Hnutí kruh',
+  description: 'Děkujeme za přihlášení k odběru newsletteru a za důvěru, kterou nám tím projevujete.'
+};
+---
+
+<Layout {seo}>
+  <section class="thank-you">
+    <h1>Děkujeme! ♥️</h1>
+    <p>
+      Váš formulář byl úspěšně odeslán. Brzy se můžete těšit, že vám přistane newsletter ve vaší schránce.
+    </p>
+    <p>
+      Pokud máte jakékoliv dotazy, neváhejte nás kontaktovat.
+    </p>
+    <div class="button-wrapper">
+        <Button href="/" fullWidth>Zpět na hlavní stránku</Button>
+      </div>
+  </section>
+</Layout>
+
+<style>
+  .thank-you {
+    text-align: center;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 800px;
+  }
+  .thank-you h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .thank-you p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .button-wrapper {
+    margin-top: 2rem;
+  }
+</style>

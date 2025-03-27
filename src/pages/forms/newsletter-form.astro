@@ -1,0 +1,15 @@
+---
+/* File: src/pages/forms/newsletter-form.astro */
+import Layout from '../../layouts/Page.astro';
+import { Button } from '@components/odyssey-theme';
+import NewsletterForm from '@components/forms/NewsletterForm.astro';
+
+const seo = {
+  title: 'Newsletter | Hnutí kruh',
+  description: 'Odebírejte náš newsletter!'
+};
+---
+
+<Layout {seo}>
+    <NewsletterForm/>
+</Layout>

@@ -1,7 +1,7 @@
 ---
 // File: src/pages/index.astro
 import Layout from '../layouts/Page.astro';
-import { TextSection, Button, Container } from '@components/odyssey-theme';
+import { TextSection, Button, Container, AnnouncementBar } from '@components/odyssey-theme';
 import EventsList from '../components/sections/EventList.astro';
 import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
@@ -46,7 +46,6 @@ const people = [
   },
 ];
 ---
-
 
 <Layout {seo}>
 
@@ -117,11 +116,15 @@ const people = [
         </li>
       </ul>
 
-      <div style="text-align: center; margin-top: 1.5rem;">
-        <Button fullWidth href="/assets/petice/petice.pdf" newTab>
-          PETICE ZA ZALOŽENÍ POLITICKÉ STRANY “HNUTÍ KRUH”
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+        <Button href="/assets/petice/petice.pdf" newTab>
+          📄 STÁHNOUT PETICI
+        </Button>
+        <Button href="https://docs.google.com/forms/d/e/1FAIpQLSd7p3jaKfurl3mDHXh1ztL00cXLgbW4LoBOB1F8SYBV93X-nA/viewform" newTab>
+          ✍️ CHCI PODEPSAT
         </Button>
       </div>
+      
     </TextSection>
   </section>
 

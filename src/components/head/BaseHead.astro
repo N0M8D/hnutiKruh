@@ -42,6 +42,9 @@ const image = new URL(Astro.props.image || './social.png', Astro.site);
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={image} />
 
+<!-- Robots, Terminators, etc .. -->
+<meta name="robots" content="index, follow" />
+
 <!-- For Demonstration of the themes -->
 {settings.enableThemeSwitcher && <ThemeProvider />}
 

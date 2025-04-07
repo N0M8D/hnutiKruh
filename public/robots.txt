@@ -1,0 +1,21 @@
+# robots.txt for hnutikruh.cz – Astro
+
+User-agent: *
+Disallow: /admin/
+Disallow: /login/
+Disallow: /registrace/
+Disallow: /uzivatele/
+Disallow: /kosik/
+Disallow: /objednavka/
+Disallow: /soukrome/
+Disallow: /thank-you/
+
+Allow: /
+Allow: /organisation/legal
+Allow: /forms/newsletter-form
+
+# Blokace parametrů URL (např. sledovací kódy nebo stránkování)
+Disallow: /*?*
+Disallow: /*&*
+
+# Nepoužívá sitemapu

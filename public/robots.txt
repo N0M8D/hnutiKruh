@@ -18,4 +18,5 @@ Allow: /forms/newsletter-form
 Disallow: /*?*
 Disallow: /*&*
 
-# Nepoužívá sitemapu
+# sitemap
+Sitemap: https://www.hnutikruh.cz/sitemap-index.xml

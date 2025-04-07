@@ -1,0 +1,68 @@
+---
+import { Container } from '@components/odyssey-theme';
+import Layout from './Page.astro'; 
+import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
+
+const {
+  content: { name, description, function: role, featuredImage }
+} = Astro.props;
+
+const seo = {
+  title: name,
+  description,
+  image: featuredImage,
+};
+---
+
+<Layout seo={seo}>
+  <div class="person-header__container">
+    {featuredImage && (
+      <img class="person-avatar" src={featuredImage} alt={name} />
+    )}
+    <h1>{name}</h1>
+    {role && <p class="person-role">{role}</p>}
+    {description && <p class="person-description">{description}</p>}
+  </div>
+
+  <Container narrow>
+    <div class="background-circles">
+        <AnimatedCircle direction="left" offset="25%" delay="0.4s" depth="15px" />
+        </div>
+    <article id="article">
+      <slot></slot>
+    </article>
+  </Container>
+</Layout>
+
+<style>
+  .person-header__container {
+    max-width: var(--container-max-width);
+    margin: 2rem auto;
+    padding: var(--container-padding);
+    text-align: center;
+  }
+
+  .person-avatar {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+
+  .person-role {
+    font-weight: bold;
+    color: var(--theme-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .person-description {
+    font-size: 1rem;
+    color: var(--theme-text-secondary, #666);
+    margin-bottom: 1rem;
+  }
+
+  #article {
+    padding-bottom: 3rem;
+  }
+</style>

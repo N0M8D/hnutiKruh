@@ -1,0 +1,110 @@
+---
+import { Container } from '@components/odyssey-theme';
+import Layout from '../../layouts/Page.astro';
+
+const people = await Astro.glob('./people-list/*.mdx').then(entries =>
+  entries.map(({ frontmatter, url }) => ({
+    name: frontmatter.name,
+    description: frontmatter.description,
+    role: frontmatter.role,
+    featuredImage: frontmatter.featuredImage,
+    href: url,
+  }))
+);
+
+const seo = {
+  title: 'Naši lidé | Hnutí kruh',
+  description: 'Toto jsou naši lidé',
+};
+---
+
+<Layout {seo}>
+    <Container>
+      <section class="people-section">
+        <h1>Naši lidé</h1>
+        <p>Seznam členek hnutí, které stojí za myšlenkami otevřenosti a spolupráce.</p>
+        <div class="people-grid">
+          {people.map((person, index) => {
+            const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';
+            return (
+              <a href={person.href} class="person-card">
+                <div class="photo-wrapper">
+                  <img src={frameImage} alt="" class="photo-frame" />
+                  <img src={person.featuredImage} alt={person.name} class="person-photo" />
+                </div>
+                <h3>{person.name}</h3>
+                <p class="role">{person.role}</p>
+                <p class="description">{person.description}</p>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    </Container>
+  </Layout>
+  
+
+<style>
+.people-section {
+  margin: var(--section-margin) auto;
+  text-align: center;
+}
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.person-card {
+  background: var(--theme-surface-1);
+  padding: 1rem; /* zmenšeno z 1.5rem */
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* menší stín */
+  transition: transform 0.2s ease;
+}
+
+.person-card:hover {
+  transform: translateY(-3px);
+}
+
+.photo-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 0.75rem; /* menší mezera dolů */
+}
+.photo-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  z-index: 1;
+}
+.person-photo {
+  position: absolute;
+  top: 14%;
+  left: 14%;
+  width: 72%;
+  height: 72%;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 2;
+}
+.role {
+  font-weight: bold;
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.description {
+  font-size: 0.8rem; /* menší text */
+  line-height: 1.3;
+  color: var(--theme-text-2);
+  margin: 0.25rem 0 0 0;
+}
+
+
+</style>

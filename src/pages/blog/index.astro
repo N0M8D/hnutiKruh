@@ -27,29 +27,41 @@ const posts = await Astro.glob('./posts/*.mdx').then(posts =>
 );
 
 const seo = {
-	title: 'Blog | Astro Odyssey Theme',
-	description: 'Astro Odyssey Theme Blog Page',
+	title: 'Články | Hnutí kruh',
+	description: 'Články a aktuality z Hnutí kruh',
 };
 ---
 
 <Layout {seo}>
 	<Container>
-		<TextCardSection>
-			<h1>Články hnutí kruh</h1>
-			<p>
-				Zde budou články hnutí ..
+		{/**}<TextCardSection>
+			<h1 class="text-3xl font-bold text-brown-900">Novinky, příběhy a inspirace Hnutí Kruh</h1>
+			<p class="mt-2 text-gray-700">
+			  Vítejte na blogu Hnutí Kruh – místě, kde sdílíme naše zkušenosti, názory a reportáže z terénu. Najdete tu:
 			</p>
-			<NewsletterForm />
-		</TextCardSection>
+			<ul class="list-disc list-inside mt-4 space-y-2 text-gray-700">
+			  <li>Reportáže a reflexe z našich blokád, setkání a workshopů</li>
+			  <li>Osobní příběhy členů a dobrovolníků</li>
+			  <li>Odborné rozhovory s experty a aktivisty</li>
+			  <li>Praktické návody, jak se zapojit a vytvořit místní kruh</li>
+			</ul>
+			<p class="mt-4 text-gray-700">
+			  Prozkoumejte články níže, inspirujte se a pomozte nám společně budovat silnější, spravedlivější a inkluzivní komunitu.
+			</p>
+		  </TextCardSection>**/}
+		  
 		<section class="blog-posts-list__section">
-			<h2>Nedávné příspěvky</h2>
+			<h2>Poslední příspěvky</h2>
 			<BlogPostsList posts={posts} />
 		</section>
+
+		<NewsletterForm />
 	</Container>
 </Layout>
 
 <style>
 	.blog-posts-list__section {
 		margin: var(--section-margin) auto;
+		max-width: var(--container-max-width-narrow);
 	}
 </style>

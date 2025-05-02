@@ -1,6 +1,10 @@
 export const nav = [
-	/*{
-		title: 'Domů',
-		slug: '/',
-	},*/
+	{
+		title: 'Tváře kruhu',
+		slug: '/people',
+	},
+	{
+		title: 'Články',
+		slug: '/blog',
+	},
 ];

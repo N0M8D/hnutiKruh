@@ -1,7 +1,8 @@
 ---
 // File: src/pages/index.astro
+import { parse, isBefore } from 'date-fns';
 import Layout from '../layouts/Page.astro';
-import { TextSection, Button, Container, AnnouncementBar } from '@components/odyssey-theme';
+import { TextSection, Button, Container, AnnouncementBar, BlogPostsList } from '@components/odyssey-theme';
 import EventsList from '../components/sections/EventList.astro';
 import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
@@ -14,28 +15,13 @@ const seo = {
 };
 
 const events = [
-  /*{
-    date: '22. 3.',
-    description: 'Zastavme společně krajní pravici! nám. Jana Palacha, Praha',
-    googleMaps: 'https://www.google.com/maps/place/Jana+Palacha,+Praha'
+  {
+    date: '6. 5.',
+    description: 'Petiční stánek u IKEM od 7:00 - 15:00 <- přijďte se nám podepsat !',
   },
   {
-    date: '23. 4.',
-    description: 'petiční stánek před Bulovkou (6:00 - 10:00, 12:30 - 15:30)'
-  },
-  {
-    date: '26. 4.',
-    description: 'Blokáda pochodu Hnutí pro život'
-  },*/
-  {
-    date: '27. 4.',
-    description: 'Istanbulská úmluva, diskuse o ženském politickém leadershipu Marta Martinová, Johana Nejedlová, Maria Siváková, A studio Rubín',
-    googleMaps: 'https://maps.app.goo.gl/4wGbntMNXcWdrSeD7'
-  },
-  {
-    date: '29. 4.',
-    description: 'Petiční stánek před FF UK 14:00 - 17:00',
-    //googleMaps: 'https://maps.app.goo.gl/4wGbntMNXcWdrSeD7'
+    date: '13. 5.',
+    description: 'Petiční stánek u nemocnice Motol od 7:00 - 15:00',
   },
   {
     date: '28. 5.',
@@ -44,26 +30,37 @@ const events = [
   },
 ];
 
-const people = [
-  {
-    photo: '/assets/brand/kolo+.png',
-    name: 'Marta Martinová',
-    description: 'Zakladatelka hnutí, inspirativní lídryně, která prosazuje otevřenost a spolupráci.',
-    socials: [
-      { icon: 'mdi:instagram', url: 'https://instagram.com/marta' }
-    ]
-  },
-  {
-    photo: '/assets/brand/kolo.png',
-    name: 'Klára Kadar',
-    description: 'Aktivní členka hnutí, angažovaná v komunitních projektech a občanské iniciativě.'
-  },
-  {
-    photo: '/assets/brand/kolo+.png',
-    name: 'Jana Koláříková',
-    description: 'Koordinátorka projektů, zaměřená na vzdělávání a posilování občanské angažovanosti.'
-  },
-];
+const peopleModules = import.meta.glob('../pages/people/people-list/*.mdx', { eager: true });
+
+const people = Object.values(peopleModules).map((mod: any) => ({
+  name: mod.frontmatter.name,
+  description: mod.frontmatter.description,
+  photo: mod.frontmatter.featuredImage,
+  href: mod.url,
+  role: mod.frontmatter.role
+}));
+
+
+// Načteme tři poslední články z blogu
+const postModules = import.meta.glob('../pages/blog/posts/*.mdx', { eager: true });
+
+const posts = Object.values(postModules)
+  .map((mod: any) => ({
+    title: mod.frontmatter.title,
+    description: mod.frontmatter.description,
+    authors: mod.frontmatter.authors,
+    publishDate: parse(mod.frontmatter.publishDate, 'dd.MM.yyyy', new Date()),
+    featuredImage: mod.frontmatter.featuredImage,
+    excerpt: mod.frontmatter.excerpt,
+    href: mod.url
+  }))
+  .sort((a, b) => {
+    if (isBefore(a.publishDate, b.publishDate)) return 1;
+    if (isBefore(b.publishDate, a.publishDate)) return -1;
+    return 0;
+  })
+  .slice(0, 3);
+
 ---
 
 <Layout {seo}>
@@ -109,8 +106,14 @@ const people = [
         </div>
       </div>
       <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
+
+      <Button href="/assets/docs/manifestA2.pdf" newTab fullWidth>
+        📄 Stáhnout Manifest
+      </Button>
     </TextSection>
+
   </section>
+  
 
 
   <!-- Petice -->
@@ -138,7 +141,7 @@ const people = [
       </ul>
 
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
-        <Button href="/assets/petice/petice.pdf" newTab>
+        <Button href="/assets/docs/petice.pdf" newTab>
           📄 STÁHNOUT PETICI
         </Button>
         <Button href="https://docs.google.com/forms/d/e/1FAIpQLSd7p3jaKfurl3mDHXh1ztL00cXLgbW4LoBOB1F8SYBV93X-nA/viewform" newTab>
@@ -157,15 +160,22 @@ const people = [
     </TextSection>
   </section>
 
-  <!-- Lidé -->
-    <!-- TODO až bude grafika + texty doplnit! -->
- {/**  <section class="lide-section">
+  <!-- Poslední články -->
+  <section class="clanky">
     <TextSection narrow>
-      <h2 id="lide">Lidé</h2>
+      <h2 id="clanky">Poslední články</h2>
+      <BlogPostsList posts={posts} />
+    </TextSection>
+  </section>
+
+  <!-- Lidé -->
+   <section class="lide-section">
+    <TextSection narrow>
+      <h2 id="lide">Naše tváře</h2>
       <Lide people={people} />
     </TextSection>
   </section>
-  **/}
+  
 
   <NewsletterForm/>
 

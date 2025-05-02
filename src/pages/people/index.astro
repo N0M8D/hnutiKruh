@@ -2,27 +2,27 @@
 import { Container } from '@components/odyssey-theme';
 import Layout from '../../layouts/Page.astro';
 
-const people = await Astro.glob('./people-list/*.mdx').then(entries =>
-  entries.map(({ frontmatter, url }) => ({
-    name: frontmatter.name,
-    description: frontmatter.description,
-    role: frontmatter.role,
-    featuredImage: frontmatter.featuredImage,
-    href: url,
-  }))
-);
+const peopleModules = import.meta.glob('../../pages/people/people-list/*.mdx', { eager: true });
+
+const people = Object.values(peopleModules).map((mod: any) => ({
+  name: mod.frontmatter.name,
+  description: mod.frontmatter.description,
+  photo: mod.frontmatter.featuredImage,
+  href: mod.url,
+  role: mod.frontmatter.role
+}));
 
 const seo = {
-  title: 'Naši lidé | Hnutí kruh',
-  description: 'Toto jsou naši lidé',
+  title: 'Naše tváře | Hnutí kruh',
+  description: 'Toto jsou tváře kruhu',
 };
 ---
 
 <Layout {seo}>
     <Container>
       <section class="people-section">
-        <h1>Naši lidé</h1>
-        <p>Seznam členek hnutí, které stojí za myšlenkami otevřenosti a spolupráce.</p>
+        <h1>Hlavní tváře Kruhu</h1>
+        <p>Seznam některých z tváří Hnutí kruh.</p>
         <div class="people-grid">
           {people.map((person, index) => {
             const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';
@@ -30,7 +30,7 @@ const seo = {
               <a href={person.href} class="person-card">
                 <div class="photo-wrapper">
                   <img src={frameImage} alt="" class="photo-frame" />
-                  <img src={person.featuredImage} alt={person.name} class="person-photo" />
+                  <img src={person.photo} alt={person.name} class="person-photo" />
                 </div>
                 <h3>{person.name}</h3>
                 <p class="role">{person.role}</p>

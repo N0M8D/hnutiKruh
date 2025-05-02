@@ -1,51 +1,60 @@
 ---
 import Layout from '../../../layouts/Page.astro'
 import { Container } from '@components/odyssey-theme';
-import {generateTagData} from '../../../utils/helpers.js'
+import { parse } from 'date-fns';
+import { generateTagData } from '../../../utils/helpers.js';
 
+const { slug } = Astro.params;
 
-export async function getStaticPaths() {
-  const allPosts = await Astro.glob('../posts/*.mdx');
-  const sortedPosts = allPosts.sort((a, b) => new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf());
-  const allCategoriesUnique = new Set();
-  
-  sortedPosts.forEach(post => {
-    post.frontmatter.tags && post.frontmatter.tags.map(tag => {
-      allCategoriesUnique.add(tag);
-    })
-  })
-  
-  const allCategoriesData = generateTagData(allCategoriesUnique);
-   // map through the categories array
-  return allCategoriesData.map((tag) => {
-    // filter the posts that match the given category
-    const posts = sortedPosts.filter((post) => post.frontmatter.tags.includes(tag.title))
-      return {
-      params: {slug: tag.slug}, 
-      props: {
-        tag: tag.title, 
-        posts: posts
-      }
-    };
-  });
+// Načíst všechny posty
+const allPostEntries = import.meta.glob('../posts/*.mdx', { eager: true });
+
+// Přeformátovat
+const allPosts = Object.entries(allPostEntries).map(([path, post]) => {
+  return {
+    url: path
+      .replace('../posts/', '/blog/')
+      .replace('.mdx', ''),
+    ...post,
+  };
+});
+
+// Najít tag podle slug
+const allTags = generateTagData(
+  new Set(allPosts.flatMap((post) => post.frontmatter.tags || []))
+);
+
+const tagData = allTags.find((tag) => tag.slug === slug);
+
+if (!tagData) {
+  throw new Error(`Tag '${slug}' nebyl nalezen.`);
 }
 
-const {tag, posts} = Astro.props;
+// Filtrovat posty podle tagu
+const posts = allPosts
+  .filter((post) => post.frontmatter.tags?.includes(tagData.title))
+  .sort((a, b) =>
+    new Date(b.frontmatter.date).valueOf() - new Date(a.frontmatter.date).valueOf()
+  );
 
-const seo ={
-  title: `${tag} | Astro Odyssey`,
-}
+const seo = {
+  title: `${tagData.title} | Hnutí kruh`,
+};
 ---
 
 <Layout seo={seo}>
   <Container narrow>
     <section class="tag-page__section"> 
-      <h1>Posts Tagged with "{tag}"</h1>
-      <ul>
-        {posts.map(post => (
-          <li><a href={post.url}>{post.frontmatter.title}</a></li>
-        ))}
-      </ul>
+      <h1>Posty s tagem "{tagData.title}"</h1>
+      {posts.length === 0 ? (
+        <p>Žádné články s tímto tagem nebyly nalezeny.</p>
+      ) : (
+        <ul>
+          {posts.map(post => (
+            <li><a href={post.url}>{post.frontmatter.title}</a></li>
+          ))}
+        </ul>
+      )}
     </section>
   </Container>
 </Layout>

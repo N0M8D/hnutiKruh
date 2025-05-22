@@ -4,7 +4,7 @@ export const nav = [
 		slug: '/people',
 	},
 	{
-		title: 'Články',
+		title: 'Aktuality',
 		slug: '/blog',
 	},
 ];

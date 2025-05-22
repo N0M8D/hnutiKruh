@@ -77,6 +77,25 @@ const posts = Object.values(postModules)
 <AnimatedCircle direction="right" offset="150%" delay="1s"depth="10px" image="/assets/brand/kolo+.png" />
 </div>
 
+    <!-- Poslední články -->
+  <section class="clanky">
+    <TextSection narrow>
+      <h2 id="clanky">Poslední články</h2>
+      <BlogPostsList posts={posts} />
+      <Button href="./blog" newTab fullWidth>
+        Více článků
+      </Button>
+    </TextSection>
+  </section>
+
+    <!-- Akce -->
+  <section class="akce">
+    <TextSection narrow>
+      <h2 id="akce">Kde nás můžete potkat</h2>
+      <EventsList events={events} />
+    </TextSection>
+  </section>
+
   <!-- Manifest -->
   <section class="manifest">
     <TextSection narrow>
@@ -154,24 +173,6 @@ const posts = Object.values(postModules)
     </TextSection>
   </section>
 
-  <!-- Akce -->
-  <section class="akce">
-    <TextSection narrow>
-      <h2 id="akce">Kde nás můžete potkat</h2>
-      <EventsList events={events} />
-    </TextSection>
-  </section>
-
-  <!-- Poslední články -->
-  <section class="clanky">
-    <TextSection narrow>
-      <h2 id="clanky">Poslední články</h2>
-      <BlogPostsList posts={posts} />
-      <Button href="./blog" newTab fullWidth>
-        Více článků
-      </Button>
-    </TextSection>
-  </section>
 
   <!-- Lidé -->
    <section class="lide-section">

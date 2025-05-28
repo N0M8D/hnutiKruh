@@ -51,7 +51,9 @@ a {
 /* Make images easier to work with */
 img,
 picture {
-	max-width: 100%;
+	max-width: 70%;
+	margin: 0 auto 1rem auto;
+	border-radius: var(--theme-shape-radius);
 	display: block;
 }
 

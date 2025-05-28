@@ -38,7 +38,7 @@ const seo = {
   </div>
   <Container narrow>  
     <article id="article">
-        <slot></slot>
+        <slot class=post-content"></slot>
     </article>
   </Container>
 </Layout>
@@ -67,10 +67,12 @@ const seo = {
   .post-layout__img {
     margin: 0 auto 1rem auto;
     border-radius: var(--theme-shape-radius);
-    max-width: 25rem;
+    max-width: 80%;
   }
   .post-layout__date {
     margin-bottom: 1rem;
     opacity: 0.84;
   }
+
+
 </style>

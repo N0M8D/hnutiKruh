@@ -3,10 +3,10 @@ import { Icon } from 'astro-icon/components';
 import { Button, FormInput, TextSection } from "@components/odyssey-theme";
 ---
 
-<section class="newsletter">
+<div class="newsletter">
   <!-- Stejně jako eventList -->
   <TextSection narrow>
-    <div class="newsletter-card">
+    <div class="">
       <h2>Přihlášení k odběru newsletteru</h2>
       <form name="Newsletter Form" method="POST" action="/api/subscribe">
         <div class="newsletter-form__container">
@@ -27,7 +27,7 @@ import { Button, FormInput, TextSection } from "@components/odyssey-theme";
       </form>
     </div>
   </TextSection>
-</section>
+</div>
 
 <style>
 .newsletter {

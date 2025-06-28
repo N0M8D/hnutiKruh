@@ -37,4 +37,40 @@
 		Times, serif;
 	--theme-font-family-sans: 'Lato', -apple-system, BlinkMacSystemFont,
 		sans-serif;
+
+	--theme-bg-gradient: linear-gradient(90deg,
+			rgba(255, 230, 213, 0.95) 0%,
+			/* světlejší lososová, vyšší opacity */
+			rgba(255, 128, 128, 0.32) 100%
+			/* hlavní růžová, více sytá */
+		);
+}
+
+body {
+	background: var(--theme-bg-gradient);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	color: var(--theme-on-bg);
+	font-family: var(--theme-font-family-sans);
+}
+
+.glass,
+.card,
+section,
+header,
+article {
+	/* footer zde nesmí být */
+	padding: 1rem;
+	background: rgba(255, 255, 255, 0.25);
+	backdrop-filter: blur(12px) saturate(180%);
+	-webkit-backdrop-filter: blur(12px) saturate(180%);
+	border-radius: var(--theme-shape-radius);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08);
+}
+
+h1,
+h2 {
+	text-align: center;
 }

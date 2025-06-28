@@ -82,18 +82,22 @@ const posts = Object.values(postModules)
 
 <Layout {seo}>
 
+<div class="logo-glow-wrapper">
+  <div class="logo-glow"></div>
+  <img src="/assets/brand/kruh_png_logo.png" alt="Hnutí Kruh logo" class="landing-logo" />
+</div>
 <!-- Banner -->
-<section class="banner">
+{/*<div class="banner">
   <img src="/assets/brand/sukynky_short.png" alt="banner" />
-</section>
+</div> */}
 
-<div class="background-circles">
+{/* <div class="background-circles">
 <AnimatedCircle direction="left" offset="75%" delay="0.4s" depth="-15px" />
 <AnimatedCircle direction="right" offset="150%" delay="1s"depth="10px" image="/assets/brand/kolo+.png" />
-</div>
+</div>*/}
 
     <!-- Poslední články -->
-  <section class="clanky">
+  <div class="clanky">
     <TextSection narrow>
       <h2 id="clanky">Aktuality</h2>
       <BlogPostsList posts={posts} />
@@ -101,18 +105,18 @@ const posts = Object.values(postModules)
         Více článků
       </Button>
     </TextSection>
-  </section>
+  </div>
 
     <!-- Akce -->
-  <section class="akce">
+  <div class="akce">
     <TextSection narrow>
       <h2 id="akce">Kde nás můžete potkat</h2>
       <EventsList events={events} />
     </TextSection>
-  </section>
+  </div>
 
   <!-- Manifest -->
-  <section class="manifest">
+  <div class="manifest">
     <TextSection narrow>
       <h1 hidden>HNUTÍ KRUH</h1>
       
@@ -148,12 +152,12 @@ const posts = Object.values(postModules)
       </Button>
     </TextSection>
 
-  </section>
+  </div>
   
 
 
   <!-- Petice -->
-  <section class="petice">
+  <div class="petice">
     <TextSection narrow>
       <h2 id="petice">Petice</h2>
       <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
@@ -186,16 +190,16 @@ const posts = Object.values(postModules)
       </div>
       
     </TextSection>
-  </section>
+  </div>
 
 
   <!-- Lidé -->
-   <section class="lide-section">
+   <div class="lide-div">
     <TextSection narrow>
       <h2 id="lide">Naše tváře</h2>
       <Lide people={people} />
     </TextSection>
-  </section>
+  </div>
   
 
   <NewsletterForm/>
@@ -256,7 +260,6 @@ const posts = Object.values(postModules)
   .akce {
     margin: 2rem 0;
     position: relative;
-    overflow: hidden; /* přidáno */
     margin: 2rem 0;
     z-index: 1;
   }
@@ -268,7 +271,77 @@ const posts = Object.values(postModules)
     margin-bottom: 0.5rem;
   }
 
-  .lide-section {
+  .lide-div {
     margin: 2rem 0;
   }
+
+.logo-glow-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem auto 1.5rem auto;
+  width: 100%;
+  max-width: 700px;
+  height: 340px;
+}
+
+.landing-logo {
+  position: relative;
+  z-index: 1; /* logo nad září */
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  display: block;
+  background: transparent;
+}
+
+.logo-glow {
+  position: absolute;
+  z-index: 0; /* záře pod logem */
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 500px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,128,160,0.18) 0%,
+    rgba(255,128,128,0.10) 40%,
+    rgba(255,230,213,0.04) 70%,
+    rgba(255,255,255,0.01) 100%
+  );
+  filter: blur(18px);
+  opacity: 0;
+  animation: logo-glow-pulse 4.2s infinite;
+}
+
+@keyframes logo-glow-pulse {
+  0% {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  70% {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  75% {
+    opacity: 1;
+    filter: blur(16px);
+  }
+  80% {
+    opacity: 0.6;
+    filter: blur(10px);
+  }
+  85% {
+    opacity: 1;
+    filter: blur(16px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
 </style>

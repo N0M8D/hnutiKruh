@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { TextSection, Button, Container, AnnouncementBar, BlogPostsList } from '@components/odyssey-theme';
+
+const seo = {
+  title: 'Manifest | Hnutí kruh',
+  description: 'Toto je manifest Hnutí kruh',
+};
+---
+
+<Layout {seo}>
+   <!-- Manifest -->
+  <div class="manifest">
+    <TextSection narrow>
+      <h1 hidden>HNUTÍ KRUH</h1>
+      
+      <h2 id="manifest">Manifest</h2>
+      <p><strong>Otevřenost, soudržnost a spolupráce</strong></p>
+      <p>
+        Spojujeme své síly ve jménu hodnot férové politiky tvořené všemi a pro všechny. Chceme společnost založenou na spolupráci, přímosti a poctivosti. Vytváříme politický systém, který zajistí dobrý život, beze strachu o budoucnost, nám všem.
+      </p>
+      <div class="boxes">
+        <div class="box">
+          Věříme ve svět, kde má každý férovou šanci uspět a nikdo netrpí jen proto, že se správně nenarodil. Práce a přínos musí být náležitě oceněny. Odmítáme úspěch na úkor druhých. Usilujeme o <strong>spravedlivé podmínky a rovné příležitosti.</strong>
+        </div>
+        <div class="box">
+          Stavíme se proti koncentraci moci v rukou vyvolených. Požadujeme transparentní rozhodování politiků. O budoucnosti musíme rozhodovat společně. Prosazujeme <strong>odpovědnost a otevřenost.</strong>
+        </div>
+        <div class="box">
+          Chceme férový daňový systém, který podporuje důstojný život. Danit se mají astronomické zisky, ne prospěšná práce obyčejných lidí. Daně jsou naše <strong>investice do budoucnosti.</strong>
+        </div>
+        <div class="box">
+          Víme, že <strong>společnost prospívá ze spolupráce.</strong> Chráníme volný přístup ke společné debatě za společným cílem. Oceňujeme rozdílné pohledy a odlišné zkušenosti. To přináší nejlepší výsledky pro celek i do budoucna.
+        </div>
+        <div class="box">
+          Stojíme na straně těch, kdo se nemohou bránit sami. Pomáháme růst – jedincům, i celku. Naše síla vychází ze vzájemné důvěry a podpory. <strong>Prosazujeme solidaritu, sounáležitost a empatii.</strong>
+        </div>
+        <div class="box">
+          Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi. <strong>Jsme odvážné a máme svou hrdost.</strong>
+        </div>
+      </div>
+      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
+
+      <Button href="/assets/docs/manifestA2.pdf" newTab fullWidth>
+        📄 Stáhnout Manifest
+      </Button>
+    </TextSection>
+
+  </div>
+  
+  </Layout>
+  
+
+<style>
+  .manifest {
+  position: relative;
+  margin: 2rem 0;
+  z-index: 1;
+}
+  .manifest .boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .manifest .box {
+    background-color: var(--theme-surface-1, #f2f2f2);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>

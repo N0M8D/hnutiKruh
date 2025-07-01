@@ -16,20 +16,9 @@ const seo = {
 
 const events = [
   {
-    date: '13. 6.',
-    description: 'Petiční stánek na Hradčanech v Praze, 13:00 - 18:00',
-    googleMaps: 'https://mapy.com/cs/turisticka?source=coor&id=14.405042474945077%2C50.09398760721191&x=14.4015985&y=50.0930309&z=17'
-  },
-    {
-    date: '15. 6.',
-    description: 'Petiční stánek na Výstavišti v Praze, 13:00 - 17:00',
-    googleMaps: 'https://mapy.com/cs/turisticka?source=coor&id=14.430990164955148%2C50.104393378984774&x=14.4298207&y=50.1055219&z=17'
-  },
-  {
-    date: '20. 6.',
-    description: 'Petiční stánek na Výstavišti v Praze, od 16:00 až do večera',
-    googleMaps: 'https://mapy.com/cs/turisticka?source=coor&id=14.430990164955148%2C50.104393378984774&x=14.4298207&y=50.1055219&z=17'
-  },
+    date: '',
+    description: "Aktuálně nejsou plánované žádné akce.",
+  }
    /*{
     date: '24. 5.',
     description: 'Sociálně-ekologické fórum, 9:00-21:30, Impact Hub Praha',
@@ -115,44 +104,6 @@ const posts = Object.values(postModules)
     </TextSection>
   </div>
 
-  <!-- Manifest -->
-  <div class="manifest">
-    <TextSection narrow>
-      <h1 hidden>HNUTÍ KRUH</h1>
-      
-      <h2 id="manifest">Manifest</h2>
-      <p><strong>Otevřenost, soudržnost a spolupráce</strong></p>
-      <p>
-        Spojujeme své síly ve jménu hodnot férové politiky tvořené všemi a pro všechny. Chceme společnost založenou na spolupráci, přímosti a poctivosti. Vytváříme politický systém, který zajistí dobrý život, beze strachu o budoucnost, nám všem.
-      </p>
-      <div class="boxes">
-        <div class="box">
-          Věříme ve svět, kde má každý férovou šanci uspět a nikdo netrpí jen proto, že se správně nenarodil. Práce a přínos musí být náležitě oceněny. Odmítáme úspěch na úkor druhých. Usilujeme o <strong>spravedlivé podmínky a rovné příležitosti.</strong>
-        </div>
-        <div class="box">
-          Stavíme se proti koncentraci moci v rukou vyvolených. Požadujeme transparentní rozhodování politiků. O budoucnosti musíme rozhodovat společně. Prosazujeme <strong>odpovědnost a otevřenost.</strong>
-        </div>
-        <div class="box">
-          Chceme férový daňový systém, který podporuje důstojný život. Danit se mají astronomické zisky, ne prospěšná práce obyčejných lidí. Daně jsou naše <strong>investice do budoucnosti.</strong>
-        </div>
-        <div class="box">
-          Víme, že <strong>společnost prospívá ze spolupráce.</strong> Chráníme volný přístup ke společné debatě za společným cílem. Oceňujeme rozdílné pohledy a odlišné zkušenosti. To přináší nejlepší výsledky pro celek i do budoucna.
-        </div>
-        <div class="box">
-          Stojíme na straně těch, kdo se nemohou bránit sami. Pomáháme růst – jedincům, i celku. Naše síla vychází ze vzájemné důvěry a podpory. <strong>Prosazujeme solidaritu, sounáležitost a empatii.</strong>
-        </div>
-        <div class="box">
-          Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi. <strong>Jsme odvážné a máme svou hrdost.</strong>
-        </div>
-      </div>
-      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
-
-      <Button href="/assets/docs/manifestA2.pdf" newTab fullWidth>
-        📄 Stáhnout Manifest
-      </Button>
-    </TextSection>
-
-  </div>
   
 
 
@@ -217,23 +168,7 @@ const posts = Object.values(postModules)
     height: auto;
   }
 
-  .manifest {
-  position: relative;
-  margin: 2rem 0;
-  z-index: 1;
-}
-  .manifest .boxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin: 1rem 0;
-  }
-  .manifest .box {
-    background-color: var(--theme-surface-1, #f2f2f2);
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
+
 
   .petice {
     position: relative;
@@ -280,7 +215,7 @@ const posts = Object.values(postModules)
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2rem auto 1.5rem auto;
+  margin: 0.1rem auto -5rem auto;
   width: 100%;
   max-width: 700px;
   height: 340px;

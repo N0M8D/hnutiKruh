@@ -1,0 +1,458 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { TextSection, Container } from '../../components/odyssey-theme';
+
+const seo = {
+  title: 'Program - Hnutí Kruh',
+  description: 'Program Hnutí Kruh - naše hodnoty a vize pro férovou politiku',
+};
+---
+
+<Layout {seo}>
+  <Container>
+    <TextSection>
+      <h1>Program Hnutí Kruh</h1>
+      
+      <h2>Naše hodnoty</h2>
+      <p>
+        Hnutí Kruh stojí na třech základních pilířích: <strong>otevřenosti</strong>, 
+        <strong>soudržnosti</strong> a <strong>spolupráci</strong>. Věříme, že pouze 
+        společným úsilím můžeme vytvořit férovou a spravedlivou společnost.
+      </p>
+
+      <h2>Klíčové oblasti našeho programu</h2>
+      
+      <div class="program-circles">
+        <div class="circles-row">
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <div class="circle-icon">🏥</div>
+              <h3>Zdravotnictví a sociální péče</h3>
+              <div class="expand-indicator">+</div>
+            </summary>
+          </details>
+
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <div class="circle-icon">🌱</div>
+              <h3>Ekologie a udržitelnost</h3>
+              <div class="expand-indicator">+</div>
+            </summary>
+          </details>
+
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <div class="circle-icon">🏫</div>
+              <h3>Vzdělávání</h3>
+              <div class="expand-indicator">+</div>
+            </summary>
+          </details>
+
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <div class="circle-icon">🏘️</div>
+              <h3>Sociální spravedlnost</h3>
+              <div class="expand-indicator">+</div>
+            </summary>
+          </details>
+
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <div class="circle-icon">🏛️</div>
+              <h3>Transparentnost a participace</h3>
+              <div class="expand-indicator">+</div>
+            </summary>
+          </details>
+        </div>
+
+        <div class="content-area">
+          <div class="circle-content" data-topic="zdravotnictvi">
+            <h4>Zdravotnictví a sociální péče</h4>
+            <p>
+              Prosazujeme dostupné a kvalitní zdravotnictví pro všechny. Podporujeme 
+              investice do prevence a psychické péče, která je dlouhodobě zanedbávána.
+            </p>
+            <h5>Konkrétní cíle:</h5>
+            <ul>
+              <li>Zkrácení čekacích dob u specialistů</li>
+              <li>Rozvoj komunitní a preventivní péče</li>
+              <li>Dostupná psychologická pomoc pro všechny věkové kategorie</li>
+              <li>Lepší podmínky pro zdravotnický personál</li>
+              <li>Modernizace zdravotnických zařízení</li>
+            </ul>
+          </div>
+
+          <div class="circle-content" data-topic="ekologie">
+            <h4>Ekologie a udržitelnost</h4>
+            <p>
+              Chráníme životní prostředí pro budoucí generace. Podporujeme obnovitelné 
+              zdroje energie, udržitelnou dopravu a odpovědné hospodaření s přírodními zdroji.
+            </p>
+            <h5>Konkrétní cíle:</h5>
+            <ul>
+              <li>Přechod na obnovitelné zdroje energie</li>
+              <li>Rozvoj veřejné dopravy a cyklostezek</li>
+              <li>Ochrana biodiverzity a zelených ploch</li>
+              <li>Podpora cirkulární ekonomiky</li>
+              <li>Snížení emisí a zlepšení kvality ovzduší</li>
+            </ul>
+          </div>
+
+          <div class="circle-content" data-topic="vzdelavani">
+            <h4>Vzdělávání</h4>
+            <p>
+              Kvalitní vzdělání je základem demokratické společnosti. Podporujeme 
+              modernizaci školství, lepší ohodnocení učitelů a dostupnost vzdělání pro všechny.
+            </p>
+            <h5>Konkrétní cíle:</h5>
+            <ul>
+              <li>Zvýšení platů učitelů a jejich společenského postavení</li>
+              <li>Modernizace výuky s využitím digitálních technologií</li>
+              <li>Rozvoj kritického myšlení a mediální gramotnosti</li>
+              <li>Dostupné celoživotní vzdělávání</li>
+              <li>Podpora inkluzivního vzdělávání</li>
+            </ul>
+          </div>
+
+          <div class="circle-content" data-topic="socialni">
+            <h4>Sociální spravedlnost</h4>
+            <p>
+              Prosazujeme rovné příležitosti bez ohledu na původ, pohlaví nebo sociální 
+              status. Bojujeme proti všem formám diskriminace a podporujeme sociální soudržnost.
+            </p>
+            <h5>Konkrétní cíle:</h5>
+            <ul>
+              <li>Dostupné bydlení pro všechny příjmové skupiny</li>
+              <li>Rovné příležitosti na trhu práce</li>
+              <li>Podpora rodin a sladění rodinného a pracovního života</li>
+              <li>Ochrana práv menšin a zranitelných skupin</li>
+              <li>Sociální služby orientované na člověka</li>
+            </ul>
+          </div>
+
+          <div class="circle-content" data-topic="transparentnost">
+            <h4>Transparentnost a participace</h4>
+            <p>
+              Věříme v otevřenou politiku, kde občané mají skutečný vliv na rozhodování. 
+              Podporujeme transparentnost veřejných financí a participativní demokratické procesy.
+            </p>
+            <h5>Konkrétní cíle:</h5>
+            <ul>
+              <li>Otevřená data a transparentní hospodaření</li>
+              <li>Participativní rozpočty na všech úrovních</li>
+              <li>Posílení místní samosprávy</li>
+              <li>Digitalizace veřejné správy</li>
+              <li>Aktivní zapojení občanů do rozhodování</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2>Naše vize</h2>
+      <p>
+        Chceme vytvořit společnost, kde se každý člověk může svobodně rozvíjet a 
+        přispívat k společnému dobru. Společnost založenou na vzájemné úctě, 
+        solidaritě a odpovědnosti vůči budoucím generacím.
+      </p>
+
+      <p>
+        <em>
+          Náš program se neustále vyvíjí na základě dialogu s občany a odborníky. 
+          Pokud máte náměty nebo připomínky, neváhejte nás kontaktovat.
+        </em>
+      </p>
+    </TextSection>
+  </Container>
+</Layout>
+
+<style>
+  h1 {
+    color: var(--theme-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  h2 {
+    color: var(--theme-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--theme-primary);
+    padding-bottom: 0.5rem;
+  }
+
+  h3 {
+    color: #a05a2c;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .program-circles {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .circles-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+  }
+
+  .program-circle {
+    position: relative;
+    width: 200px;
+  }
+
+  .program-circle:not([open]) .circle-content {
+    display: none;
+  }
+
+  .content-area {
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  .content-area .circle-content {
+    display: none;
+  }
+
+  .content-area .circle-content.active {
+    display: block;
+  }
+
+  .circle-summary {
+    width: 200px;
+    height: 200px;
+    border: 3px solid #e8d5c4;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    transition: all 0.4s ease;
+    background: linear-gradient(135deg, #fefcfa 0%, #f9f3ed 100%);
+    box-shadow: 0 8px 25px rgba(160, 90, 44, 0.15);
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .circle-summary:hover {
+    border-color: #a05a2c;
+    box-shadow: 0 12px 35px rgba(160, 90, 44, 0.25);
+    transform: translateY(-5px) scale(1.05);
+    background: linear-gradient(135deg, #fefcfa 0%, #f5ebe0 100%);
+  }
+
+  .circle-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .program-circle[open] .circle-summary {
+    border-color: #a05a2c;
+    background: linear-gradient(135deg, #a05a2c 0%, #bf6f30 100%);
+    color: white;
+    transform: scale(0.9);
+  }
+
+  .program-circle[open] .circle-summary .circle-icon {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .program-circle[open] .circle-summary h3 {
+    color: white;
+  }
+
+  .program-circle[open] .circle-summary .expand-indicator {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .circle-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #a05a2c, #bf6f30);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(160, 90, 44, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .circle-summary h3 {
+    margin: 0.5rem 0;
+    color: #a05a2c;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition: color 0.3s ease;
+  }
+
+  .expand-indicator {
+    font-size: 1.2rem;
+    color: #a05a2c;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(160, 90, 44, 0.1);
+    margin-top: 0.5rem;
+  }
+
+  .program-circle[open] .expand-indicator {
+    transform: rotate(45deg);
+  }
+
+  .circle-content {
+    background: white;
+    border: 2px solid #a05a2c;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(160, 90, 44, 0.1);
+    animation: slideDown 0.4s ease-out;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .circle-content h4 {
+    color: #a05a2c;
+    margin: 0 0 1rem 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .circle-content h5 {
+    color: #a05a2c;
+    margin: 1.5rem 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .circle-content ul {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+  }
+
+  .circle-content li {
+    margin-bottom: 0.5rem;
+    color: #444;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .circle-content li::marker {
+    color: #a05a2c;
+  }
+
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  em {
+    color: #666;
+    font-style: italic;
+    margin-top: 2rem;
+    display: block;
+    text-align: center;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+
+  /* Responsive design pro menší obrazovky */
+  @media (max-width: 768px) {
+    .circles-row {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .program-circle {
+      width: 160px;
+    }
+
+    .circle-summary {
+      width: 160px;
+      height: 160px;
+      padding: 15px;
+    }
+
+    .circle-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 2rem;
+    }
+
+    .circle-summary h3 {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .circles-row {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .program-circle {
+      width: 140px;
+      justify-self: center;
+    }
+
+    .circle-summary {
+      width: 140px;
+      height: 140px;
+    }
+
+    .circle-content {
+      padding: 1rem;
+    }
+
+    .circle-summary h3 {
+      font-size: 0.8rem;
+      line-height: 1.1;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const circles = document.querySelectorAll('.program-circle');
+    const contents = document.querySelectorAll('.content-area .circle-content');
+    const topics = ['zdravotnictvi', 'ekologie', 'vzdelavani', 'socialni', 'transparentnost'];
+    
+    circles.forEach((circle, index) => {
+      const summary = circle.querySelector('.circle-summary');
+      
+      summary.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Zavřít všechny ostatní kruhy
+        circles.forEach(c => c.removeAttribute('open'));
+        contents.forEach(c => c.classList.remove('active'));
+        
+        // Otevřít kliknutý kruh
+        circle.setAttribute('open', '');
+        
+        // Zobrazit odpovídající obsah
+        const targetContent = document.querySelector(`[data-topic="${topics[index]}"]`);
+        if (targetContent) {
+          targetContent.classList.add('active');
+        }
+      });
+    });
+  });
+</script>

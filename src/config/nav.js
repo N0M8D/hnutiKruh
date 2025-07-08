@@ -4,6 +4,10 @@ export const nav = [
 		slug: '/manifest',
 	},
 	{
+		title: 'Program',
+		slug: '/program',
+	},
+	{
 		title: 'Tváře kruhu',
 		slug: '/people',
 	},

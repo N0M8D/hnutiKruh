@@ -10,7 +10,7 @@ const animationName = direction === 'left' ? 'roll-in' : 'roll-in-right';
 <img
   src={image}
   alt="kruh"
-  class={`circle ${direction}`}
+  class={`circle ${direction} noShadow`}
   style={`width: ${size}; animation-name: ${animationName}; animation-delay: ${delay}; top: ${offset}; ${direction === 'left' ? `left: ${depth}` : `right: ${depth}`}`}
 />
 

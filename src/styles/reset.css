@@ -55,6 +55,12 @@ picture {
 	margin: 0 auto 1rem auto;
 	border-radius: var(--theme-shape-radius);
 	display: block;
+	box-shadow: 5px 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+img.noShadow,
+picture.noShadow {
+	box-shadow: none;
 }
 
 /* Inherit fonts for inputs and buttons */

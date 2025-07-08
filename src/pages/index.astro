@@ -73,10 +73,10 @@ const posts = Object.values(postModules)
 
 <div class="logo-glow-wrapper">
   <div class="logo-glow"></div>
-  <img src="/assets/brand/kruh_png_logo.png" alt="Hnutí Kruh logo" class="landing-logo" />
+  <img src="/assets/brand/kruh_png_logo.png" alt="Hnutí Kruh logo" class="landing-logo noShadow" />
 </div>
 <!-- Banner -->
-{/*<div class="banner">
+{/*<div class="banner>
   <img src="/assets/brand/sukynky_short.png" alt="banner" />
 </div> */}
 
@@ -111,6 +111,11 @@ const posts = Object.values(postModules)
   <div class="petice">
     <TextSection narrow>
       <h2 id="petice">Petice</h2>
+      <div class="petition-counter-container">
+        <span class="petition-counter-label">Počet podpisů:</span>
+        <span id="petition-counter" class="petition-counter">0</span>
+        <span class="petition-counter-goal">/ 1000</span>
+      </div>
       <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
       <p>
         Stáhněte si petici, sbírejte podpisy svých známých a petici nám doručte na některou z adres členek petičního výboru:
@@ -279,4 +284,86 @@ const posts = Object.values(postModules)
     filter: blur(6px);
   }
 }
+
+.petition-counter-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.2rem 0 1.8rem 0;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+.petition-counter-label {
+  font-size: 1.1rem;
+  color: #7a4a1b;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.petition-counter {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #a05a2c;
+  text-shadow: 0 2px 18px rgba(139,69,19,0.13), 0 1px 0 #fff;
+  margin: 0 0.2rem;
+  transition: color 0.3s;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px #ffe6d5aa);
+}
+
+.petition-counter-goal {
+  font-size: 1.1rem;
+  color: #bfa07a;
+  font-weight: 400;
+  margin-left: 0.2rem;
+}
 </style>
+
+<script type="text/javascript" is:inline>
+  // Nastavte zde aktuální počet podpisů
+  const targetCount = 792; // Změňte dle aktuálního stavu
+
+  let hasAnimated = false;
+
+  function animateCounter() {
+    const counter = document.getElementById('petition-counter');
+    if (!counter) return;
+    let current = 0;
+    const duration = 15000;
+    const frameRate = 30;
+    const totalFrames = Math.round(duration / (1000 / frameRate));
+    let frame = 0;
+
+    const animate = () => {
+      frame++;
+      const progress = Math.min(frame / totalFrames, 1);
+      const value = Math.floor(progress * targetCount);
+      counter.textContent = value.toLocaleString('cs-CZ');
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        counter.textContent = targetCount.toLocaleString('cs-CZ');
+      }
+    };
+    animate();
+  }
+
+  // Spustí animaci při zobrazení sekce Petice
+  function onScroll() {
+    if (hasAnimated) return;
+    const section = document.getElementById('petice');
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      hasAnimated = true;
+      animateCounter();
+      window.removeEventListener('scroll', onScroll);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll);
+  window.addEventListener('DOMContentLoaded', onScroll);
+</script>

@@ -26,41 +26,41 @@ const seo = {
         <div class="circles-row">
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
               <div class="circle-icon">🏥</div>
               <h3>Zdravotnictví a sociální péče</h3>
-              <div class="expand-indicator">+</div>
             </summary>
           </details>
 
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
               <div class="circle-icon">🌱</div>
               <h3>Ekologie a udržitelnost</h3>
-              <div class="expand-indicator">+</div>
             </summary>
           </details>
 
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
               <div class="circle-icon">🏫</div>
               <h3>Vzdělávání</h3>
-              <div class="expand-indicator">+</div>
             </summary>
           </details>
 
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
               <div class="circle-icon">🏘️</div>
               <h3>Sociální spravedlnost</h3>
-              <div class="expand-indicator">+</div>
             </summary>
           </details>
 
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
               <div class="circle-icon">🏛️</div>
               <h3>Transparentnost a participace</h3>
-              <div class="expand-indicator">+</div>
             </summary>
           </details>
         </div>
@@ -167,13 +167,11 @@ const seo = {
 
 <style>
   h1 {
-    color: var(--theme-primary);
     margin-bottom: 2rem;
     text-align: center;
   }
 
   h2 {
-    color: var(--theme-primary);
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     border-bottom: 2px solid var(--theme-primary);
@@ -181,7 +179,6 @@ const seo = {
   }
 
   h3 {
-    color: #a05a2c;
     margin-top: 2rem;
     margin-bottom: 1rem;
   }
@@ -225,7 +222,6 @@ const seo = {
   .circle-summary {
     width: 200px;
     height: 200px;
-    border: 3px solid #e8d5c4;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -234,44 +230,38 @@ const seo = {
     cursor: pointer;
     list-style: none;
     position: relative;
-    transition: all 0.4s ease;
-    background: linear-gradient(135deg, #fefcfa 0%, #f9f3ed 100%);
-    box-shadow: 0 8px 25px rgba(160, 90, 44, 0.15);
+    transition: box-shadow 0.4s, border 0.4s, background 0.4s;
+    border: 3px solid rgba(255,255,255,0.3);
+    background: none;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
-  .circle-summary:hover {
-    border-color: #a05a2c;
-    box-shadow: 0 12px 35px rgba(160, 90, 44, 0.25);
-    transform: translateY(-5px) scale(1.05);
-    background: linear-gradient(135deg, #fefcfa 0%, #f5ebe0 100%);
-  }
-
-  .circle-summary::-webkit-details-marker {
-    display: none;
-  }
-
+  .circle-summary:hover,
   .program-circle[open] .circle-summary {
-    border-color: #a05a2c;
-    background: linear-gradient(135deg, #a05a2c 0%, #bf6f30 100%);
-    color: white;
-    transform: scale(0.9);
+    border: 3px solid var(--theme-primary);
+    box-shadow: 0 8px 32px 0 rgba(160,90,44,0.18), 0 0 0 8px rgba(255,128,128,0.10);
+    background: none;
+    animation: highlight 0.7s cubic-bezier(.4,0,.2,1);
   }
 
-  .program-circle[open] .circle-summary .circle-icon {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+  @keyframes highlight {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255,128,128,0.18);
+    }
+    60% {
+      box-shadow: 0 0 0 16px rgba(255,128,128,0.10);
+    }
+    100% {
+      box-shadow: 0 8px 32px 0 rgba(160,90,44,0.18), 0 0 0 8px rgba(255,128,128,0.10);
+    }
   }
 
   .program-circle[open] .circle-summary h3 {
-    color: white;
-  }
-
-  .program-circle[open] .circle-summary .expand-indicator {
-    color: white;
-    background: rgba(255, 255, 255, 0.2);
+    color: var(--theme-primary-hover);
   }
 
   .circle-icon {
@@ -280,48 +270,28 @@ const seo = {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, #a05a2c, #bf6f30);
-    border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(160, 90, 44, 0.3);
-    transition: all 0.3s ease;
+    width: 54px;
+    height: 54px;
   }
 
   .circle-summary h3 {
     margin: 0.5rem 0;
-    color: #a05a2c;
+    color: var(--theme-on-bg);
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.2;
     transition: color 0.3s ease;
-  }
-
-  .expand-indicator {
-    font-size: 1.2rem;
-    color: #a05a2c;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(160, 90, 44, 0.1);
-    margin-top: 0.5rem;
-  }
-
-  .program-circle[open] .expand-indicator {
-    transform: rotate(45deg);
+    font-family: var(--theme-font-family-serif);
   }
 
   .circle-content {
-    background: white;
-    border: 2px solid #a05a2c;
-    border-radius: 15px;
+    background: rgba(255,255,255,0.25);
+    border-radius: var(--theme-shape-radius, 1.5rem);
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
     padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(160, 90, 44, 0.1);
     animation: slideDown 0.4s ease-out;
     width: 100%;
     box-sizing: border-box;
@@ -430,23 +400,25 @@ const seo = {
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Náhodná rotace pro každé kolo
+    document.querySelectorAll('.circle-border').forEach(el => {
+      const deg = Math.floor(Math.random() * 360);
+      el.style.transform = `rotate(${deg}deg)`;
+    });
+
     const circles = document.querySelectorAll('.program-circle');
     const contents = document.querySelectorAll('.content-area .circle-content');
     const topics = ['zdravotnictvi', 'ekologie', 'vzdelavani', 'socialni', 'transparentnost'];
     
     circles.forEach((circle, index) => {
       const summary = circle.querySelector('.circle-summary');
-      
       summary.addEventListener('click', function(e) {
         e.preventDefault();
-        
         // Zavřít všechny ostatní kruhy
         circles.forEach(c => c.removeAttribute('open'));
         contents.forEach(c => c.classList.remove('active'));
-        
         // Otevřít kliknutý kruh
         circle.setAttribute('open', '');
-        
         // Zobrazit odpovídající obsah
         const targetContent = document.querySelector(`[data-topic="${topics[index]}"]`);
         if (targetContent) {

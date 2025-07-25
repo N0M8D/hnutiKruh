@@ -28,11 +28,11 @@ const availableDates = getNextWednesdays();
         
         <form name="Involvement Form" method="POST" action="/api/get-involved">
           <div class="form-container">
-            <FormInput name="Jmeno" placeholder="Jméno" required />
-            <FormInput name="Prijmeni" placeholder="Příjmení" required />
-            <FormInput name="Email" type="email" placeholder="hello@example.com" required />
-            <FormInput name="Telefon" type="tel" placeholder="+420 123 456 789" required />
-            
+            <FormInput name="Jmeno" label="Jméno" required />
+            <FormInput name="Prijmeni" label="Příjmení" required />
+            <FormInput name="Email" type="email" label="Email" required />
+            <FormInput name="Telefon" type="tel" label="Telefon" required />
+
             <div class="select-wrapper">
               <label for="meetingDate">Vyber termín online schůzky:</label>
               <select name="meetingDate" id="meetingDate" required>

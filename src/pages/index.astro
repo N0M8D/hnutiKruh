@@ -8,6 +8,8 @@ import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
 import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
 import NewsletterForm from '@components/forms/NewsletterForm.astro';
+// Importujeme ComingSoon komponentu
+import ComingSoon from '../components/animated/ComingSoon.astro';
 
 const seo = {
   title: 'Hnutí Kruh',
@@ -70,22 +72,15 @@ const posts = Object.values(postModules)
 ---
 
 <Layout {seo}>
+  <!-- Přidáme ComingSoon komponentu zde -->
+  <ComingSoon />
 
-{/* <div class="logo-glow-wrapper">
-  <div class="logo-glow"></div>
-  <img src="/assets/brand/kruh_png_logo.png" alt="Hnutí Kruh logo" class="landing-logo noShadow" />
-</div>*/}
-<!-- Banner -->
-<div class="banner">
-  <img src="/assets/brand/sukynky_short_transparent.png" alt="banner" class="noShadow" />
-</div> 
+  <!-- Banner -->
+  <div class="banner">
+    <img src="/assets/brand/sukynky_short_transparent.png" alt="banner" class="noShadow" />
+  </div> 
 
-{/* <div class="background-circles">
-<AnimatedCircle direction="left" offset="75%" delay="0.4s" depth="-15px" />
-<AnimatedCircle direction="right" offset="150%" delay="1s"depth="10px" image="/assets/brand/kolo+.png" />
-</div>*/}
-
-    <!-- Poslední články -->
+  <!-- Poslední články -->
   <div class="clanky">
     <TextSection narrow>
       <h2 id="clanky">Aktuality</h2>
@@ -96,16 +91,13 @@ const posts = Object.values(postModules)
     </TextSection>
   </div>
 
-    <!-- Akce -->
+  <!-- Akce -->
   <div class="akce">
     <TextSection narrow>
       <h2 id="akce">Kde nás můžete potkat</h2>
       <EventsList events={events} />
     </TextSection>
   </div>
-
-  
-
 
   <!-- Petice -->
   <div class="petice">
@@ -144,27 +136,21 @@ const posts = Object.values(postModules)
           ✍️ CHCI PODEPSAT
         </Button>
       </div>
-      
     </TextSection>
   </div>
 
-
   <!-- Lidé -->
-   <div class="lide-div">
+  <div class="lide-div">
     <TextSection narrow>
       <h2 id="lide">Naše tváře</h2>
       <Lide people={people} />
     </TextSection>
   </div>
-  
 
   <NewsletterForm/>
-
-
 </Layout>
 
 <style>
-
   .banner {
     text-align: center;
   }
@@ -172,8 +158,6 @@ const posts = Object.values(postModules)
     max-width: 100%;
     height: auto;
   }
-
-
 
   .petice {
     position: relative;
@@ -215,111 +199,41 @@ const posts = Object.values(postModules)
     margin: 2rem 0;
   }
 
-.logo-glow-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0.1rem auto -5rem auto;
-  width: 100%;
-  max-width: 700px;
-  height: 340px;
-}
-
-.landing-logo {
-  position: relative;
-  z-index: 1; /* logo nad září */
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  display: block;
-  background: transparent;
-}
-
-.logo-glow {
-  position: absolute;
-  z-index: 0; /* záře pod logem */
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 900px;
-  height: 500px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255,128,160,0.18) 0%,
-    rgba(255,128,128,0.10) 40%,
-    rgba(255,230,213,0.04) 70%,
-    rgba(255,255,255,0.01) 100%
-  );
-  filter: blur(18px);
-  opacity: 0;
-  animation: logo-glow-pulse 4.2s infinite;
-}
-
-@keyframes logo-glow-pulse {
-  0% {
-    opacity: 0;
-    filter: blur(6px);
+  .petition-counter-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1.2rem 0 1.8rem 0;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   }
-  70% {
-    opacity: 0;
-    filter: blur(6px);
-  }
-  75% {
-    opacity: 1;
-    filter: blur(16px);
-  }
-  80% {
-    opacity: 0.6;
-    filter: blur(10px);
-  }
-  85% {
-    opacity: 1;
-    filter: blur(16px);
-  }
-  100% {
-    opacity: 0;
-    filter: blur(6px);
-  }
-}
 
-.petition-counter-container {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 1.2rem 0 1.8rem 0;
-  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-}
+  .petition-counter-label {
+    font-size: 1.1rem;
+    color: #7a4a1b;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
 
-.petition-counter-label {
-  font-size: 1.1rem;
-  color: #7a4a1b;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
+  .petition-counter {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #a05a2c;
+    text-shadow: 0 2px 18px rgba(139,69,19,0.13), 0 1px 0 #fff;
+    margin: 0 0.2rem;
+    transition: color 0.3s;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px #ffe6d5aa);
+  }
 
-.petition-counter {
-  font-size: 2.6rem;
-  font-weight: 700;
-  color: #a05a2c;
-  text-shadow: 0 2px 18px rgba(139,69,19,0.13), 0 1px 0 #fff;
-  margin: 0 0.2rem;
-  transition: color 0.3s;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  filter: drop-shadow(0 0 8px #ffe6d5aa);
-}
-
-.petition-counter-goal {
-  font-size: 1.1rem;
-  color: #bfa07a;
-  font-weight: 400;
-  margin-left: 0.2rem;
-}
+  .petition-counter-goal {
+    font-size: 1.1rem;
+    color: #bfa07a;
+    font-weight: 400;
+    margin-left: 0.2rem;
+  }
 </style>
 
 <script type="text/javascript" is:inline>

@@ -1,0 +1,235 @@
+---
+// ComingSoon.astro - Komponenta pro zobrazení "coming soon" stránky
+// Cílové datum: 29.07.2025 18:00
+const releaseDate = new Date('2025-07-29T18:00:00');
+const now = new Date();
+const isReleased = now >= releaseDate;
+---
+
+{!isReleased && (
+  <div class="coming-soon-overlay">
+    <div class="emoji-container">
+      <div class="shush-emoji">
+        <img src="/assets/brand/secret.png" alt="Tajemství" class="secret-image noShadow" />
+      </div>
+    </div>
+    
+    <div class="countdown-container">
+      <div id="countdown" class="countdown">
+        <div class="countdown-item">
+          <span id="days" class="countdown-number">00</span>
+          <span class="countdown-label">dní</span>
+        </div>
+        <div class="countdown-item">
+          <span id="hours" class="countdown-number">00</span>
+          <span class="countdown-label">hodin</span>
+        </div>
+        <div class="countdown-item">
+          <span id="minutes" class="countdown-number">00</span>
+          <span class="countdown-label">minut</span>
+        </div>
+        <div class="countdown-item">
+          <span id="seconds" class="countdown-number">00</span>
+          <span class="countdown-label">sekund</span>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  .coming-soon-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000; /* Zajistí, že překryje vše ostatní */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #FFE6D5 0%, #FF8080 100%);
+    overflow: hidden;
+  }
+
+  .emoji-container {
+    position: relative;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .shush-emoji {
+    position: relative;
+    line-height: 1;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .secret-image {
+    width: clamp(350px, 85vw, 800px);
+    height: auto;
+    display: block;
+  }
+
+  .hnuti-kruh-logo {
+    position: absolute;
+    top: 30px;
+    transform: rotate(-15deg);
+    background-color: #e91e63;
+    padding: 5px;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+  }
+
+  .cap-logo {
+    width: 40px;
+    height: 40px;
+    display: block;
+  }
+
+  .release-date {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    margin: 1rem 0 3rem;
+    letter-spacing: 2px;
+  }
+
+  .countdown-container {
+    text-align: center;
+    color: white;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: nowrap; /* Prevent wrapping */
+    justify-content: center;
+  }
+
+  .countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    min-width: 80px;
+    transition: transform 0.3s ease;
+  }
+  
+  .countdown-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .countdown-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+  }
+
+  .countdown-label {
+    font-size: 0.9rem;
+    margin-top: 0.8rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  @media (max-width: 768px) {
+    .countdown {
+      gap: 0.6rem;
+    }
+    
+    .countdown-item {
+      padding: 0.8rem 0.4rem;
+      min-width: 60px;
+    }
+    
+    .countdown-number {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .secret-image {
+      width: clamp(280px, 95vw, 500px);
+    }
+    
+    .countdown {
+      gap: 0.4rem;
+    }
+    
+    .countdown-item {
+      padding: 0.6rem 0.2rem;
+      min-width: 50px;
+    }
+    
+    .countdown-number {
+      font-size: 2rem;
+    }
+    
+    .countdown-label {
+      font-size: 0.7rem;
+      margin-top: 0.4rem;
+    }
+    
+    .release-date {
+      margin: 1rem 0 2rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Countdown functionality
+  const releaseDate = new Date('2025-07-29T18:00:00').getTime();
+  
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const timeLeft = releaseDate - now;
+    
+    if (timeLeft > 0) {
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      
+      document.getElementById('days').textContent = days.toString().padStart(2, '0');
+      document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    } else {
+      // Reload page when countdown reaches zero
+      location.reload();
+    }
+  }
+  
+  // Check if we're showing coming soon overlay
+  if (document.querySelector('.coming-soon-overlay')) {
+    // Update countdown every second
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Initial call
+  }
+</script>

@@ -21,23 +21,31 @@ const Tag = href ? 'a' : 'button';
 <style>
   .btn {
     width: fit-content;
-    padding: 0.36rem 0.92rem;
+    padding: 0.44rem 1.2rem;
     margin-bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--theme-primary);
-    color: var(--theme-on-primary);
-    border: none;
+    background: linear-gradient(120deg, rgba(255,255,255,0.32) 60%, rgba(255,128,128,0.18) 100%);
+    color: var(--theme-on-bg);
+    border: 0.1px solid var(--theme-primary);
     border-radius: var(--theme-button-border-radius);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    box-shadow: 0 4px 16px 0 rgba(255,128,128,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   }
   /* Nová třída fullwidth */
   .btn--fullwidth {
     width: 100%;
   }
   .btn:hover {
-    background-color: var(--theme-primary-hover);
+    background: linear-gradient(120deg, rgba(255,255,255,0.44) 60%, rgba(255,128,128,0.28) 100%);
+    color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+    box-shadow: 0 6px 24px 0 rgba(255,128,128,0.18), 0 2px 12px 0 rgba(0,0,0,0.12);
   }
   .btn--unelevated {
     background-color: transparent;

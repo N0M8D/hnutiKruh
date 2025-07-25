@@ -8,6 +8,8 @@ import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
 import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
 import NewsletterForm from '@components/forms/NewsletterForm.astro';
+// Importujeme ComingSoon komponentu
+import ComingSoon from '../components/animated/ComingSoon.astro';
 
 const seo = {
   title: 'Hnutí Kruh',
@@ -16,10 +18,9 @@ const seo = {
 
 const events = [
   {
-    date: '10. 7.',
-    description: 'Petiční stánek před Thomayerovou nemocnicí v Praze, 08:00 - 14:00',
-    //googleMaps: 'https://mapy.com/cs/turisticka?source=coor&id=14.405042474945077%2C50.09398760721191&x=14.4015985&y=50.0930309&z=17'
-  },
+    date: '',
+    description: "Aktuálně nejsou plánované žádné akce.",
+  }
    /*{
     date: '24. 5.',
     description: 'Sociálně-ekologické fórum, 9:00-21:30, Impact Hub Praha',
@@ -71,19 +72,16 @@ const posts = Object.values(postModules)
 ---
 
 <Layout {seo}>
+  <!-- Přidáme ComingSoon komponentu zde -->
+  <ComingSoon />
 
-<!-- Banner -->
-<section class="banner">
-  <img src="/assets/brand/sukynky_short.png" alt="banner" />
-</section>
+  <!-- Banner -->
+  <div class="banner">
+    <img src="/assets/brand/sukynky_short_transparent.png" alt="banner" class="noShadow" />
+  </div> 
 
-<div class="background-circles">
-<AnimatedCircle direction="left" offset="75%" delay="0.4s" depth="-15px" />
-<AnimatedCircle direction="right" offset="150%" delay="1s"depth="10px" image="/assets/brand/kolo+.png" />
-</div>
-
-    <!-- Poslední články -->
-  <section class="clanky">
+  <!-- Poslední články -->
+  <div class="clanky">
     <TextSection narrow>
       <h2 id="clanky">Aktuality</h2>
       <BlogPostsList posts={posts} />
@@ -91,61 +89,25 @@ const posts = Object.values(postModules)
         Více článků
       </Button>
     </TextSection>
-  </section>
+  </div>
 
-    <!-- Akce -->
-  <section class="akce">
+  <!-- Akce -->
+  <div class="akce">
     <TextSection narrow>
       <h2 id="akce">Kde nás můžete potkat</h2>
       <EventsList events={events} />
     </TextSection>
-  </section>
-
-  <!-- Manifest -->
-  <section class="manifest">
-    <TextSection narrow>
-      <h1 hidden>HNUTÍ KRUH</h1>
-      
-      <h2 id="manifest">Manifest</h2>
-      <p><strong>Otevřenost, soudržnost a spolupráce</strong></p>
-      <p>
-        Spojujeme své síly ve jménu hodnot férové politiky tvořené všemi a pro všechny. Chceme společnost založenou na spolupráci, přímosti a poctivosti. Vytváříme politický systém, který zajistí dobrý život, beze strachu o budoucnost, nám všem.
-      </p>
-      <div class="boxes">
-        <div class="box">
-          Věříme ve svět, kde má každý férovou šanci uspět a nikdo netrpí jen proto, že se správně nenarodil. Práce a přínos musí být náležitě oceněny. Odmítáme úspěch na úkor druhých. Usilujeme o <strong>spravedlivé podmínky a rovné příležitosti.</strong>
-        </div>
-        <div class="box">
-          Stavíme se proti koncentraci moci v rukou vyvolených. Požadujeme transparentní rozhodování politiků. O budoucnosti musíme rozhodovat společně. Prosazujeme <strong>odpovědnost a otevřenost.</strong>
-        </div>
-        <div class="box">
-          Chceme férový daňový systém, který podporuje důstojný život. Danit se mají astronomické zisky, ne prospěšná práce obyčejných lidí. Daně jsou naše <strong>investice do budoucnosti.</strong>
-        </div>
-        <div class="box">
-          Víme, že <strong>společnost prospívá ze spolupráce.</strong> Chráníme volný přístup ke společné debatě za společným cílem. Oceňujeme rozdílné pohledy a odlišné zkušenosti. To přináší nejlepší výsledky pro celek i do budoucna.
-        </div>
-        <div class="box">
-          Stojíme na straně těch, kdo se nemohou bránit sami. Pomáháme růst – jedincům, i celku. Naše síla vychází ze vzájemné důvěry a podpory. <strong>Prosazujeme solidaritu, sounáležitost a empatii.</strong>
-        </div>
-        <div class="box">
-          Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi. <strong>Jsme odvážné a máme svou hrdost.</strong>
-        </div>
-      </div>
-      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
-
-      <Button href="/assets/docs/manifestA2.pdf" newTab fullWidth>
-        📄 Stáhnout Manifest
-      </Button>
-    </TextSection>
-
-  </section>
-  
-
+  </div>
 
   <!-- Petice -->
-  <section class="petice">
+  <div class="petice">
     <TextSection narrow>
       <h2 id="petice">Petice</h2>
+      <div class="petition-counter-container">
+        <span class="petition-counter-label">Počet podpisů:</span>
+        <span id="petition-counter" class="petition-counter">0</span>
+        <span class="petition-counter-goal">/ 1000</span>
+      </div>
       <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
       <p>
         Stáhněte si petici, sbírejte podpisy svých známých a petici nám doručte na některou z adres členek petičního výboru:
@@ -174,51 +136,27 @@ const posts = Object.values(postModules)
           ✍️ CHCI PODEPSAT
         </Button>
       </div>
-      
     </TextSection>
-  </section>
-
+  </div>
 
   <!-- Lidé -->
-   <section class="lide-section">
+  <div class="lide-div">
     <TextSection narrow>
       <h2 id="lide">Naše tváře</h2>
       <Lide people={people} />
     </TextSection>
-  </section>
-  
+  </div>
 
   <NewsletterForm/>
-
-
 </Layout>
 
 <style>
-
   .banner {
     text-align: center;
   }
   .banner img {
     max-width: 100%;
     height: auto;
-  }
-
-  .manifest {
-  position: relative;
-  margin: 2rem 0;
-  z-index: 1;
-}
-  .manifest .boxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin: 1rem 0;
-  }
-  .manifest .box {
-    background-color: var(--theme-surface-1, #f2f2f2);
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
   .petice {
@@ -246,7 +184,6 @@ const posts = Object.values(postModules)
   .akce {
     margin: 2rem 0;
     position: relative;
-    overflow: hidden; /* přidáno */
     margin: 2rem 0;
     z-index: 1;
   }
@@ -258,7 +195,89 @@ const posts = Object.values(postModules)
     margin-bottom: 0.5rem;
   }
 
-  .lide-section {
+  .lide-div {
     margin: 2rem 0;
   }
+
+  .petition-counter-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1.2rem 0 1.8rem 0;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  }
+
+  .petition-counter-label {
+    font-size: 1.1rem;
+    color: #7a4a1b;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .petition-counter {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #a05a2c;
+    text-shadow: 0 2px 18px rgba(139,69,19,0.13), 0 1px 0 #fff;
+    margin: 0 0.2rem;
+    transition: color 0.3s;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px #ffe6d5aa);
+  }
+
+  .petition-counter-goal {
+    font-size: 1.1rem;
+    color: #bfa07a;
+    font-weight: 400;
+    margin-left: 0.2rem;
+  }
 </style>
+
+<script type="text/javascript" is:inline>
+  // Nastavte zde aktuální počet podpisů
+  const targetCount = 953; // Změňte dle aktuálního stavu
+
+  let hasAnimated = false;
+
+  function animateCounter() {
+    const counter = document.getElementById('petition-counter');
+    if (!counter) return;
+    let current = 0;
+    const duration = 15000;
+    const frameRate = 30;
+    const totalFrames = Math.round(duration / (1000 / frameRate));
+    let frame = 0;
+
+    const animate = () => {
+      frame++;
+      const progress = Math.min(frame / totalFrames, 1);
+      const value = Math.floor(progress * targetCount);
+      counter.textContent = value.toLocaleString('cs-CZ');
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        counter.textContent = targetCount.toLocaleString('cs-CZ');
+      }
+    };
+    animate();
+  }
+
+  // Spustí animaci při zobrazení sekce Petice
+  function onScroll() {
+    if (hasAnimated) return;
+    const section = document.getElementById('petice');
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      hasAnimated = true;
+      animateCounter();
+      window.removeEventListener('scroll', onScroll);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll);
+  window.addEventListener('DOMContentLoaded', onScroll);
+</script>

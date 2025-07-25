@@ -29,8 +29,8 @@ const seo = {
             return (
               <a href={person.href} class="person-card">
                 <div class="photo-wrapper">
-                  <img src={frameImage} alt="" class="photo-frame" />
-                  <img src={person.photo} alt={person.name} class="person-photo" />
+                  <img src={frameImage} alt="" class="photo-frame noShadow" />
+                  <img src={person.photo} alt={person.name} class="person-photo noShadow" />
                 </div>
                 <h3>{person.name}</h3>
                 <p class="role">{person.role}</p>
@@ -82,6 +82,7 @@ const seo = {
   width: 120px;
   height: 120px;
   z-index: 1;
+  max-width: 100%;
 }
 .person-photo {
   position: absolute;
@@ -92,6 +93,7 @@ const seo = {
   object-fit: cover;
   border-radius: 50%;
   z-index: 2;
+  max-width: 100%;
 }
 .role {
   font-weight: bold;

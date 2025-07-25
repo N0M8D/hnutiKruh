@@ -47,10 +47,18 @@ const { events = [] } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fff8f6; /* světlý odstín lososové */
-    border: 1px solid #fdded9; /* jemná linka */
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-radius: 1rem;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
     padding: 1rem;
+    transition: box-shadow 0.2s, background 0.2s;
+  }
+  .event-item:hover {
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 4px 24px 0 rgba(255,128,128,0.10), 0 2px 12px 0 rgba(0,0,0,0.12);
   }
   
   .event-date {

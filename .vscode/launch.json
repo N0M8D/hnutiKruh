@@ -23,6 +23,24 @@
 			"skipFiles": [
 				"<node_internals>/**"
 			]
+		},
+		{
+			"name": "Debug Server",
+			"type": "node",
+			"request": "launch",
+			"runtimeExecutable": "ts-node-dev",
+			"args": [
+				"--respawn",
+				"--transpile-only",
+				"src/index.ts"
+			],
+			"cwd": "${workspaceFolder}/server",
+			"protocol": "inspector",
+			"restart": true,
+			"console": "integratedTerminal",
+			"skipFiles": [
+				"<node_internals>/**"
+			]
 		}
 	]
 }

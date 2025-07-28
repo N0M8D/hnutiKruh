@@ -39,21 +39,20 @@ const availableDates = getNextWednesdays();
           <p>Pokud máš zájem se jakkoliv podílet, více nás poznat nebo pomáhat, vyplň prosím tento formulář. V blízké době se ti ozveme s konkrétními možnostmi a dalšími kroky.</p>
         </div>
         
-        <form name="Involvement Form" method="POST" action="/api/get-involved">
+        <form name="Involvement Form" method="POST" action="/api/joinus">
           <div class="form-container">
             <FormInput name="Jmeno" label="Jméno" required />
             <FormInput name="Prijmeni" label="Příjmení" required />
             <FormInput name="Email" type="email" label="Email" required />
             <FormInput name="Telefon" type="tel" label="Telefon" required />
-            
+
             <div class="checkbox-container">
               <FormCheckbox 
                 name="newsletter" 
-                value="true"
                 labelHtml="Chci dostávat newsletter s novinkami a informacemi o aktivitách Hnutí Kruh"
               />
             </div>
-            
+
             <div class="checkbox-container">
               <FormCheckbox 
                 name="gdprConsent" 

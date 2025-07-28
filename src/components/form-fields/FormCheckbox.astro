@@ -1,5 +1,5 @@
 ---
-const {name, required, value = "", checked = false, labelHtml} = Astro.props;
+const {name, required, value = "true", checked = false, labelHtml} = Astro.props;
 const id = `field-${name}`;
 ---
 
@@ -57,3 +57,4 @@ const id = `field-${name}`;
     text-decoration: underline;
   }
 </style>
+

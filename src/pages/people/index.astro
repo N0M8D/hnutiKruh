@@ -2,29 +2,51 @@
 import { Container } from '@components/odyssey-theme';
 import Layout from '../../layouts/Page.astro';
 
+// Import all person profiles
 const peopleModules = import.meta.glob('../../pages/people/people-list/*.mdx', { eager: true });
 
-const people = Object.values(peopleModules).map((mod: any) => ({
+// Convert to usable array of person objects
+const allPeople = Object.values(peopleModules).map((mod: any) => ({
   name: mod.frontmatter.name,
   description: mod.frontmatter.description,
   photo: mod.frontmatter.featuredImage,
   href: mod.url,
-  role: mod.frontmatter.role
+  role: mod.frontmatter.role,
+  // Add slug to help with filtering
+  slug: mod.url.split('/').pop()
 }));
+
+// Define lists of people by their slugs (MDX filenames without extension)
+const boardMembers = [
+  'marta-martinova',
+  'michaela-nedory',
+  'klara-kadar',
+  'pavla-krausova',
+];
+
+// Filter people into different groups
+const predsednictvo = allPeople.filter(person => boardMembers.includes(person.slug));
 
 const seo = {
   title: 'Naše tváře | Hnutí kruh',
-  description: 'Toto jsou tváře kruhu',
+  description: 'Seznamte se s tvářemi Hnutí kruh',
 };
 ---
 
 <Layout {seo}>
-    <Container>
-      <section class="people-section">
-        <h1>Hlavní tváře Kruhu</h1>
-        <p>Seznam některých z tváří Hnutí kruh.</p>
+  <Container>
+
+          <h1>Naše tváře</h1>
+
+    <section class="people-section">
+
+      
+      <!-- Předsednictvo Section -->
+      <div class="people-category">
+        <h2>Předsednictvo</h2>
+        <p>Seznamte se s předsednictvem Hnutí kruh.</p>
         <div class="people-grid">
-          {people.map((person, index) => {
+          {predsednictvo.map((person, index) => {
             const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';
             return (
               <a href={person.href} class="person-card">
@@ -39,16 +61,37 @@ const seo = {
             );
           })}
         </div>
-      </section>
-    </Container>
-  </Layout>
+      </div>
+      
+      <!-- Here you can add more sections in the future, like:
+      <div class="people-category">
+        <h2>Experti</h2>
+        <div class="people-grid">
+          {experti.map((person, index) => {
+            // Render person cards
+          })}
+        </div>
+      </div>
+      -->
+      
+    </section>
+  </Container>
+</Layout>
   
-
 <style>
 .people-section {
   margin: var(--section-margin) auto;
   text-align: center;
 }
+
+.people-category {
+  margin-bottom: 4rem;
+}
+
+.people-category h2 {
+  margin-bottom: 0.5rem;
+}
+
 .people-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

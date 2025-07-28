@@ -17,25 +17,20 @@ const seo = {
 };
 
 const events = [
-  {
+  /*{
     date: '',
     description: "Aktuálně nejsou plánované žádné akce.",
-  }
-   /*{
-    date: '24. 5.',
-    description: 'Sociálně-ekologické fórum, 9:00-21:30, Impact Hub Praha',
-    googleMaps: 'https://maps.app.goo.gl/H3NuWuiXi4N3rKHV9'
+  }*/
+   {
+    date: '21. 08. - 24. 08.',
+    description: 'Kemp Budoucnosti v Chříči',
+    googleMaps: 'https://mapy.com/s/pepapesamu'
   },
    {
-    date: '24. 5.',
-    description: 'Petiční stánek u Psychiatrické nemocnice Bohnice 11:30 - 16:00',
-    googleMaps: 'https://mapy.com/s/bujudakasu'
+    date: '12. 09.',
+    description: 'Sjezd celostátního Kruhu',
   },
-   {
-    date: '25. 5.',
-    description: 'Petiční stánek u Psychiatrické nemocnice Bohnice 11:30 - 16:00',
-    googleMaps: 'https://mapy.com/s/bujudakasu'
-  },*/
+
 ];
 
 const peopleModules = import.meta.glob('../pages/people/people-list/*.mdx', { eager: true });
@@ -73,7 +68,7 @@ const posts = Object.values(postModules)
 
 <Layout {seo}>
   <!-- Přidáme ComingSoon komponentu zde -->
-  <ComingSoon />
+<ComingSoon />
 
   <!-- Banner -->
   <div class="banner">
@@ -99,45 +94,6 @@ const posts = Object.values(postModules)
     </TextSection>
   </div>
 
-  <!-- Petice -->
-  <div class="petice">
-    <TextSection narrow>
-      <h2 id="petice">Petice</h2>
-      <div class="petition-counter-container">
-        <span class="petition-counter-label">Počet podpisů:</span>
-        <span id="petition-counter" class="petition-counter">0</span>
-        <span class="petition-counter-goal">/ 1000</span>
-      </div>
-      <p>Chcete nám pomoci sehnat 1000 podpisů, které potřebujeme pro registraci hnutí?</p>
-      <p>
-        Stáhněte si petici, sbírejte podpisy svých známých a petici nám doručte na některou z adres členek petičního výboru:
-      </p>
-
-      <ul class="petice-adresy">
-        <li>
-          <strong>Marta Martinová</strong><br />
-          <Icon name="mdi:local-post-office" width={20} height={20} style="vertical-align: middle;" /> Pod Sokolovnou 252, 28921 Kostomlaty nad Labem
-        </li>
-        <li>
-          <strong>Jana Koláříková</strong><br />
-          <Icon name="mdi:local-post-office" width={20} height={20} style="vertical-align: middle;" /> Nádražní 137, 387 11 Katovice 
-        </li>
-        <li>
-          <strong>Klára Kadár</strong><br />
-          <Icon name="mdi:local-post-office" width={20} height={20} style="vertical-align: middle;" /> Terešov 17, 338 08 Terešov
-        </li>
-      </ul>
-
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
-        <Button href="/assets/docs/petice.pdf" newTab>
-          📄 STÁHNOUT PETICI
-        </Button>
-        <Button href="https://docs.google.com/forms/d/e/1FAIpQLSd7p3jaKfurl3mDHXh1ztL00cXLgbW4LoBOB1F8SYBV93X-nA/viewform" newTab>
-          ✍️ CHCI PODEPSAT
-        </Button>
-      </div>
-    </TextSection>
-  </div>
 
   <!-- Lidé -->
   <div class="lide-div">

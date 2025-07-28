@@ -1,0 +1,173 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '@layouts/Page.astro';
+import { Button, FormInput, TextSection, Container } from "@components/odyssey-theme";
+import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
+
+// Generate next 5 Wednesdays
+const getNextWednesdays = () => {
+  const wednesdays = [];
+  let date = new Date();
+  while (wednesdays.length < 5) {
+    date.setDate(date.getDate() + 1);
+    if (date.getDay() === 3) { // Wednesday is 3
+      wednesdays.push(new Date(date));
+    }
+  }
+  return wednesdays;
+};
+
+const availableDates = getNextWednesdays();
+---
+
+<Layout>
+  <Container>
+    <TextSection narrow>
+      <div class="involvement-form">
+        <h1>Zapoj se do Hnutí Kruh</h1>
+        <div class="intro-text">
+          <p>Rádi se s tebou setkáme a představíme ti možnosti zapojení do politické strany Hnutí Kruh. Zapojení může mít různé formy a nemusí nutně znamenat členství ve straně.</p>
+          
+          <p>Spolupracovat můžeš jako:</p>
+          <ul class="involvement-options">
+            <li>dobrovolník (pomoc s organizací akcí, kampaněmi)</li>
+            <li>podporovatel (finanční či materiální podpora)</li>
+            <li>expert v některé z našich pracovních skupin</li>
+            <li>člen strany (po splnění zákonných podmínek)</li>
+          </ul>
+          <p>Každá forma zapojení je důležitá a vážíme si každé pomoci.</p>
+          <p>Pokud máš zájem se jakkoliv podílet, více nás poznat nebo pomáhat, vyplň prosím tento formulář. V blízké době se ti ozveme s konkrétními možnostmi a dalšími kroky.</p>
+        </div>
+        
+        <form name="Involvement Form" method="POST" action="/api/get-involved">
+          <div class="form-container">
+            <FormInput name="Jmeno" label="Jméno" required />
+            <FormInput name="Prijmeni" label="Příjmení" required />
+            <FormInput name="Email" type="email" label="Email" required />
+            <FormInput name="Telefon" type="tel" label="Telefon" required />
+            
+            <div class="checkbox-container">
+              <FormCheckbox 
+                name="newsletter" 
+                value="true"
+                labelHtml="Chci dostávat newsletter s novinkami a informacemi o aktivitách Hnutí Kruh"
+              />
+            </div>
+            
+            <div class="checkbox-container">
+              <FormCheckbox 
+                name="gdprConsent" 
+                required={true}
+                labelHtml="Souhlasím se <a href='/organisation/legal' target='_blank'>zpracováním osobních údajů</a>*"
+              />
+            </div>
+
+            <div class="full-width-item">
+              <Button customIcon fullWidth>
+                Odeslat
+                <Fragment slot="icon">
+                  <Icon name="ic:baseline-chevron-right" />
+                </Fragment>
+              </Button>
+            </div>
+          </div>
+
+          <p class="form-disclaimer">
+            *Odesláním formuláře souhlasíte se zpracováním vašich osobních údajů pro účely komunikace ohledně zapojení do politické strany Hnutí Kruh. Více informací o zpracování osobních údajů najdete v našich <a href="/organisation/legal">Zásadách ochrany osobních údajů</a>.
+          </p>
+        </form>
+      </div>
+    </TextSection>
+  </Container>
+</Layout>
+
+<style>
+.involvement-form {
+  margin: 2rem 0;
+}
+
+.intro-text {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.intro-text p {
+  margin-bottom: 1rem;
+}
+
+.involvement-options {
+  margin: 0.5rem 0 1rem 1.5rem;
+  line-height: 1.6;
+}
+
+.involvement-options li {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.involvement-options li::before {
+  content: "•";
+  color: var(--theme-primary, #ff8080);
+  font-weight: bold;
+  position: absolute;
+  left: -1rem;
+}
+
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.full-width-item {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.checkbox-container {
+  width: 100%;
+}
+
+.select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.select-wrapper select {
+  padding: 0.5rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 0.25rem;
+  background-color: var(--theme-surface-1);
+}
+
+.form-disclaimer {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.form-disclaimer a {
+  color: var(--theme-primary, #ff8080);
+  text-decoration: none;
+}
+
+.form-disclaimer a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .form-container {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  /* Only the button gets its own row */
+  .full-width-item {
+    grid-column: 1 / -1;
+  }
+  
+  /* Let everything else flow naturally in the grid */
+}
+</style>

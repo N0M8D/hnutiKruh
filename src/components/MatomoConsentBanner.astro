@@ -1,0 +1,198 @@
+---
+// Banner pro souhlas s Matomo analytikou
+---
+
+<div id="matomo-consent-banner" class="consent-banner">
+  <h3 class="consent-heading">Analytické cookies</h3>
+  <p class="consent-text">
+    Tento web používá analytický nástroj Matomo pro zlepšování služeb. Sbíráme pouze anonymizovaná data, která nám pomáhají lépe pochopit, jaký obsah se našim sledujícím líbí.
+    <a href="/organisation/legal" class="consent-link">Více informací</a>
+  </p>
+  <div class="consent-actions">
+    <button id="consent-decline" class="btn-decline">Nesouhlasím</button>
+    <button id="consent-accept" class="btn-accept">Souhlasím</button>
+  </div>
+</div>
+
+<script>
+  // Bezpečný přístup k localStorage s fallbackem na cookies
+  const storage = {
+    getItem: function(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        // Fallback na cookies, pokud localStorage není dostupný
+        return this.getCookie(key);
+      }
+    },
+    setItem: function(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        // Fallback na cookies, pokud localStorage není dostupný
+        this.setCookie(key, value);
+      }
+    },
+    // Cookie pomocné funkce
+    getCookie: function(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    },
+    setCookie: function(name, value, days = 365) {
+      const expires = new Date(Date.now() + days*864e5).toUTCString();
+      document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
+    }
+  };
+
+  // Funkce pro inicializaci Matomo
+  function initMatomo() {
+    if (window._paq) {
+      window._paq.push(['trackPageView']);
+      window._paq.push(['enableLinkTracking']);
+      
+      (function() {
+        var u="//matomo.czechnomad.cz/";
+        window._paq.push(['setTrackerUrl', u+'matomo.php']);
+        window._paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; 
+        if (s && s.parentNode) s.parentNode.insertBefore(g,s);
+      })();
+    }
+  }
+
+  // Funkce pro vypnutí Matomo
+  function disableMatomo() {
+    if (window._paq) {
+      window._paq.push(['optUserOut']);
+    }
+  }
+
+  // Po načtení stránky
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const banner = document.getElementById('matomo-consent-banner');
+      const acceptBtn = document.getElementById('consent-accept');
+      const declineBtn = document.getElementById('consent-decline');
+      
+      if (!banner || !acceptBtn || !declineBtn) {
+        console.error("Některé elementy banneru nebyly nalezeny");
+        return;
+      }
+      
+      // Zkontrolujeme, jestli uživatel už neudělil souhlas
+      const consent = storage.getItem('matomoConsent');
+      
+      if (consent === null) {
+        // Souhlas ještě nebyl udělen ani zamítnut, zobrazíme banner
+        banner.style.display = 'block';
+      } else if (consent === 'accepted') {
+        // Souhlas už byl udělen, spustíme Matomo
+        initMatomo();
+      } else if (consent === 'rejected') {
+        // Uživatel explicitně odmítl, ujistíme se o opt-out
+        disableMatomo();
+      }
+      
+      // Obsluha tlačítek
+      acceptBtn.addEventListener('click', function() {
+        try {
+          storage.setItem('matomoConsent', 'accepted');
+          banner.style.display = 'none';
+          initMatomo();
+        } catch (e) {
+          console.error('Error setting consent:', e);
+        }
+      });
+      
+      declineBtn.addEventListener('click', function() {
+        try {
+          storage.setItem('matomoConsent', 'rejected');
+          banner.style.display = 'none';
+          disableMatomo();
+        } catch (e) {
+          console.error('Error setting consent:', e);
+        }
+      });
+    } catch (e) {
+      console.error('Error initializing consent banner:', e);
+    }
+  });
+</script>
+
+<style>
+  .consent-banner {
+    display: none;
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #333;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.25rem 1.5rem;
+    z-index: 1000;
+    max-width: 90vw;
+    width: 550px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .consent-heading {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #fe7d88;
+    font-size: 1.2rem;
+  }
+
+  .consent-text {
+    margin: 0 0 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .consent-link {
+    color: #fe7d88;
+    text-decoration: underline;
+  }
+
+  .consent-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .btn-decline {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+
+  .btn-accept {
+    padding: 0.5rem 1rem;
+    background: #fe7d88;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+
+  .btn-decline:hover {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .btn-accept:hover {
+    background: #ff8a95;
+  }
+</style>

@@ -57,7 +57,11 @@ const { navData, rightMenu } = Astro.props;
       {navData && <nav>
         <ul>
           {navData.map(navItem => (
-            (<li><a href={navItem.slug} >{navItem.title}</a></li>)
+            (<li>
+              <a href={navItem.slug} class={navItem.highlight ? 'highlight-button' : ''}>
+                {navItem.title}
+              </a>
+            </li>)
           ))}
         </ul>
       </nav>}
@@ -136,6 +140,21 @@ const { navData, rightMenu } = Astro.props;
   nav ul li a:hover {
     opacity: 1;
   }
+  nav ul li a.highlight-button {
+    background-color: var(--theme-primary, #fe7d88);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    opacity: 1;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  nav ul li a.highlight-button:hover {
+    background-color: var(--theme-primary-hover, #ff8a96);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
   @media(max-width: 768px) {
     nav {
       display: none;
@@ -191,5 +210,14 @@ const { navData, rightMenu } = Astro.props;
      header[mobile-menu-open] nav ul li a:hover {
        background-color: rgba(255, 128, 128, 0.1);
      }
+     header[mobile-menu-open] nav ul li a.highlight-button {
+      background-color: var(--theme-primary, #fe7d88);
+      color: white;
+      margin-top: 0.5rem;
+    }
+    
+    header[mobile-menu-open] nav ul li a.highlight-button:hover {
+      background-color: var(--theme-primary-hover, #ff8a96);
+    }
   }
 </style>

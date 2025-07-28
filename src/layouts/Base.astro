@@ -2,7 +2,7 @@
 import { SkipLink } from '@components/odyssey-theme';
 import BaseHead from '../components/head/BaseHead.astro';
 import type { Props as BaseHeadProps } from '../components/head/BaseHead.astro';
-import Analytics from '@vercel/analytics/astro';
+import MatomoConsentBanner from '../components/MatomoConsentBanner.astro';
 
 export interface Props {
 	seo?: BaseHeadProps;
@@ -14,16 +14,49 @@ const { seo } = Astro.props;
 <html lang="cs">
 	<head>
 		<BaseHead {...seo} />
-
-		<Analytics />
+		
+		<script is:inline>
+      // Inicializace _paq proměnné
+      window._paq = window._paq || [];
+      
+      // Bezpečný přístup k localStorage s fallbackem na cookies
+      const getConsent = function() {
+        try {
+          return localStorage.getItem('matomoConsent');
+        } catch (e) {
+          // Fallback na cookies, pokud localStorage není dostupný
+          return getCookie('matomoConsent');
+        }
+      };
+      
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+      }
+      
+      // Inicializace Matomo pouze pokud máme souhlas
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          const consent = getConsent();
+          if (consent === 'accepted') {
+            // Matomo se inicializuje v MatomoConsentBanner.astro
+          }
+        } catch (e) {
+          console.error('Error checking consent status:', e);
+        }
+      });
+		</script>
 	</head>
 	<body>
 		<SkipLink />
-    <slot name="announcement-bar" />
+		<slot name="announcement-bar" />
 		<slot name="header" />
 		<main id="content">
 			<slot />
 		</main>
 		<slot name="footer" />
+		<MatomoConsentBanner />
 	</body>
 </html>

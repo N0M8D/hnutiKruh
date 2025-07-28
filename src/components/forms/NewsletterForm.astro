@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Button, FormInput, TextSection } from "@components/odyssey-theme";
+import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
 ---
 
 <div class="newsletter">
@@ -10,20 +11,28 @@ import { Button, FormInput, TextSection } from "@components/odyssey-theme";
       <h2>Přihlášení k odběru newsletteru</h2>
       <form name="Newsletter Form" method="POST" action="/api/subscribe">
         <div class="newsletter-form__container">
-          <FormInput name="Jmeno" placeholder="Jméno" />
-          <FormInput name="Prijmeni" placeholder="Příjmení" />
-          <FormInput name="Email" placeholder="hello@example.com" required />
-          <Button customIcon fullWidth>
+          <FormInput name="Jmeno" label="Jméno" />
+          <FormInput name="Prijmeni" label="Příjmení" />
+          <FormInput name="Email" label="Email" placeholder="hello@example.com" required />
+                    <Button customIcon fullWidth>
             Přihlásit se k odběru
             <Fragment slot="icon">
               <Icon name="ic:baseline-chevron-right" />
             </Fragment>
           </Button>
+          <!-- Nový checkbox pro souhlas se zpracováním -->
+          <div class="consent-checkbox">
+            <FormCheckbox 
+              name="consent" 
+              required={true}
+              labelHtml="Souhlasím se <a href='/organisation/legal' target='_blank'>zpracováním osobních údajů</a> a zasíláním newsletteru"
+            />
+             <p class="newsletter-disclaimer">
+              *Vaše údaje budou využity výhradně pro zasílání novinek a informací o aktivitách Hnutí Kruh.
+            </p>
+          </div>
         </div>
-         <!-- Popisek pod formulářem -->
-         <p class="newsletter-disclaimer">
-          *Odesláním formuláře souhlasíte s tím, že vám bude zasílán newsletter a můžete být kontaktováni. Vaše údaje budou využity výhradně pro tento účel.
-        </p>
+        
       </form>
     </div>
   </TextSection>
@@ -40,7 +49,6 @@ import { Button, FormInput, TextSection } from "@components/odyssey-theme";
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  /* width: 100% a bez max-width, šířku řeší <TextSection narrow> */
   width: 100%;
   margin-top: 1rem;
 }
@@ -50,6 +58,13 @@ import { Button, FormInput, TextSection } from "@components/odyssey-theme";
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+/* Checkbox pro souhlas */
+.consent-checkbox {
+  grid-column: 1 / -1; /* Roztáhne se přes všechny sloupce */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Popisek (disclaimer) pod formulářem */
@@ -66,7 +81,7 @@ import { Button, FormInput, TextSection } from "@components/odyssey-theme";
   }
   /* Email a tlačítko se roztáhnou přes oba sloupce */
   .newsletter-form__container > :nth-child(3),
-  .newsletter-form__container > :nth-child(4) {
+  .newsletter-form__container > :nth-child(5) { /* Updated index for button */
     grid-column: span 2;
   }
 }

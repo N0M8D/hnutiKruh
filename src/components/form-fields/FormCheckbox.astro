@@ -1,0 +1,59 @@
+---
+const {name, required, value = "", checked = false, labelHtml} = Astro.props;
+const id = `field-${name}`;
+---
+
+<div class="form-checkbox__container">
+  <div class="form-checkbox__input-wrapper">
+    <input 
+      type="checkbox" 
+      id={id}
+      name={name} 
+      required={required} 
+      value={value}
+      checked={checked}
+      class="form-checkbox__input"
+    />
+    {labelHtml && <label for={id} class="form-checkbox__label" set:html={labelHtml}></label>}
+  </div>
+</div>
+
+<style>
+  .form-checkbox__container {
+    position: relative;
+    margin-bottom: 1.2rem;
+  }
+
+  .form-checkbox__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .form-checkbox__input {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin-top: 0.2rem;
+    margin-right: 0.75rem;
+    cursor: pointer;
+    accent-color: var(--theme-primary, #ff8080);
+  }
+
+  .form-checkbox__label {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--form-field-label-color, #555);
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  .form-checkbox__label a {
+    color: var(--theme-primary, #ff8080);
+    text-decoration: none;
+  }
+
+  .form-checkbox__label a:hover {
+    text-decoration: underline;
+  }
+</style>

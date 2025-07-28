@@ -15,4 +15,10 @@ export const nav = [
 		title: 'Aktuality',
 		slug: '/blog',
 	},
+	{
+		title: 'Zapoj se',
+		slug: '/forms/zapoj-se',
+		highlight: true,
+	},
+
 ];

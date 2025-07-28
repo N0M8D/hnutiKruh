@@ -5,6 +5,7 @@ import type { Props as BaseHeadProps } from '../components/head/BaseHead.astro';
 import Logo from '../components/Logo.astro';
 import settings from '../config/settings';
 import { footerLists, footerSocials, contactList } from '../config/footer';
+import MatomoConsentBanner from '../components/MatomoConsentBanner.astro';
 
 
 export interface Props {
@@ -25,6 +26,7 @@ const { seo } = Astro.props as Props;
 	</Header>
 	<div id="page">
 		<slot />
+		<MatomoConsentBanner />
 	</div>
 	<Footer
 		slot="footer"

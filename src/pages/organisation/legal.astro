@@ -55,7 +55,105 @@ const seo = {
       <li><strong>Příjemci údajů:</strong> Google (poskytovatel služby), členky hnutí pověřené komunikací</li>
     </ul>
 
-    <h3>4. Externí odkazy</h3>
+    <h3>4. Formulář k zapojení (Redmine API)</h3>
+    <ul>
+      <li><strong>Rozsah údajů:</strong> údaje vyplněné ve formuláři k zapojení (např. jméno, příjmení, e-mail, telefon, zájem o zapojení)</li>
+      <li><strong>Právní základ:</strong> souhlas subjektu údajů</li>
+      <li><strong>Účel:</strong> zpracování údajů za účelem zapojení do aktivit hnutí, komunikace o možnostech zapojení, informování o aktivitách a dalších organizačních záležitostech v rámci Hnutí Kruh</li>
+      <li><strong>Doba uchování:</strong> do odvolání souhlasu; souhlas lze kdykoliv zrušit zasláním žádosti na <a href="mailto:info@hnutikruh.cz">info@hnutikruh.cz</a></li>
+      <li><strong>Příjemci údajů:</strong> Redmine (redmine.hnutikruh.cz) jako systém pro správu aktivit, pověření členové hnutí</li>
+    </ul>
+
+    <h3>5. Analytická data (Matomo)</h3>
+    <ul>
+      <li><strong>Rozsah údajů:</strong> anonymizované analytické údaje o návštěvě webu (např. IP adresa, typ zařízení, chování na stránce)</li>
+      <li><strong>Právní základ:</strong> souhlas návštěvníka dle směrnice EU o ochraně soukromí v elektronických komunikacích</li>
+      <li><strong>Účel:</strong> analýza návštěvnosti, pochopení uživatelského chování a preferencí obsahu, zlepšování webových stránek a uživatelské zkušenosti</li>
+      <li><strong>Doba uchování:</strong> 13 měsíců (standardní nastavení Matomo pro respektování zásady minimalizace údajů)</li>
+      <li><strong>Příjemci údajů:</strong> provozovatel analytického systému Matomo (matomo.czechnomad.cz), správci webu</li>
+      <li><strong>Anonymizace:</strong> IP adresy jsou před uložením anonymizovány, neukládáme žádné osobně identifikovatelné informace</li>
+      <li><strong>Souhlas:</strong> Sběr analytických dat probíhá pouze na základě vašeho souhlasu, který můžete udělit nebo odvolat prostřednictvím banneru na webu nebo pomocí tlačítek níže.</li>
+    </ul>
+    
+    <div class="consent-box">
+      <h3>Správa souhlasu s analytickými cookies</h3>
+      <p>Zde můžete udělit nebo odvolat souhlas se sběrem anonymizovaných analytických dat prostřednictvím služby Matomo.</p>
+      <div class="consent-buttons">
+        <button id="enable-matomo" class="btn-primary">Udělit souhlas</button>
+        <button id="disable-matomo" class="btn-outline">Odvolat souhlas</button>
+      </div>
+      <p id="matomo-status">Zjišťuji stav...</p>
+    </div>
+
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', function() {
+        const statusEl = document.getElementById('matomo-status');
+        const enableBtn = document.getElementById('enable-matomo');
+        const disableBtn = document.getElementById('disable-matomo');
+
+        // Použijeme jednodušší přístup k localStorage
+        function getStorageItem(key) {
+          return localStorage.getItem(key);
+        }
+        
+        function setStorageItem(key, value) {
+          localStorage.setItem(key, value);
+        }
+        
+        function updateStatus() {
+          const consent = getStorageItem('matomoConsent');
+          if (consent === 'accepted') {
+            statusEl.textContent = 'Analytické cookies jsou povoleny.';
+            statusEl.style.color = 'green';
+          } else {
+            statusEl.textContent = 'Analytické cookies jsou zakázány.';
+            statusEl.style.color = '#666';
+          }
+        }
+        
+        updateStatus();
+        
+        // Inicializace Matomo - opravena syntaxe
+        function initMatomo() {
+          if (window._paq) {
+            window._paq.push(['trackPageView']);
+            window._paq.push(['enableLinkTracking']);
+            
+            var u = "//matomo.czechnomad.cz/";
+            window._paq.push(['setTrackerUrl', u + 'matomo.php']);
+            window._paq.push(['setSiteId', '2']);
+            
+            var d = document;
+            var g = d.createElement('script');
+            var s = d.getElementsByTagName('script')[0];
+            g.async = true;
+            g.src = u + 'matomo.js';
+            s.parentNode.insertBefore(g, s);
+          }
+        }
+        
+        // Opt-out z Matomo
+        function disableMatomo() {
+          if (window._paq) {
+            window._paq.push(['optUserOut']);
+          }
+        }
+        
+        enableBtn.addEventListener('click', function() {
+          setStorageItem('matomoConsent', 'accepted');
+          updateStatus();
+          initMatomo();
+        });
+        
+        disableBtn.addEventListener('click', function() {
+          setStorageItem('matomoConsent', 'rejected');
+          updateStatus();
+          disableMatomo();
+        });
+      });
+    </script>
+
+    <h3>6. Externí odkazy</h3>
     <p>
       Tyto webové stránky mohou obsahovat odkazy na webové stránky partnerů správce, sociálních sítí, 
       poskytovatelů reklamy nebo jiných třetích stran. Jestliže kliknete na tyto odkazy, mějte prosím na paměti, 
@@ -91,3 +189,65 @@ const seo = {
     </p>
   </TextSection>
 </Layout>
+
+<style>
+  /* Styly pro sekci souhlasu */
+  .consent-box {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-radius: var(--theme-shape-radius, 0.5rem);
+    background-color: var(--theme-bg-offset, #fff1ee);
+    border: 1px solid rgba(254, 125, 136, 0.2);
+  }
+  
+  .consent-box p {
+    margin-top: 0;
+    line-height: 1.5;
+  }
+  
+  .consent-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  
+  .btn-primary {
+    padding: 0.6rem 1.2rem;
+    background-color: var(--theme-primary, #fe7d88);
+    color: white;
+    border: none;
+    border-radius: var(--theme-button-radius, 0.25rem);
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--theme-font-family-sans);
+    transition: background-color 0.2s ease;
+  }
+  
+  .btn-outline {
+    padding: 0.6rem 1.2rem;
+    background-color: white;
+    color: var(--theme-text, #333);
+    border: 1px solid var(--theme-border, #ddd);
+    border-radius: var(--theme-button-radius, 0.25rem);
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--theme-font-family-sans);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--theme-primary-hover, #ff8a96);
+  }
+  
+  .btn-outline:hover {
+    background-color: #f8f8f8;
+    border-color: var(--theme-primary, #fe7d88);
+  }
+  
+  #matomo-status {
+    margin: 0.75rem 0 0 0;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+</style>
+  

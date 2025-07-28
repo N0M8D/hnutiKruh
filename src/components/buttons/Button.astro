@@ -21,11 +21,13 @@ const Tag = href ? 'a' : 'button';
 <style>
   .btn {
     width: fit-content;
-    padding: 0.44rem 1.2rem;
-    margin-bottom: 0;
+    padding: 0 1.2rem; /* Remove vertical padding to allow centering to work better */
+    margin: auto 0; /* Add margin auto for vertical centering in flex containers */
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 2.75rem; /* Match input field height */
+    line-height: 1;
     background: linear-gradient(120deg, rgba(255,255,255,0.32) 60%, rgba(255,128,128,0.18) 100%);
     color: var(--theme-on-bg);
     border: 0.1px solid var(--theme-primary);
@@ -36,6 +38,7 @@ const Tag = href ? 'a' : 'button';
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     box-shadow: 0 4px 16px 0 rgba(255,128,128,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.10);
     transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
   }
   /* Nová třída fullwidth */
   .btn--fullwidth {
@@ -69,6 +72,7 @@ const Tag = href ? 'a' : 'button';
     margin-left: 0.25rem;
     display: flex;
     align-items: center;
+    justify-content: center;
   }
   .custom-icon__span :global(svg) {
     width: 24px;
@@ -81,4 +85,5 @@ const Tag = href ? 'a' : 'button';
     cursor: pointer;
     outline: none;
   }
+</style>
 </style>

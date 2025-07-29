@@ -24,8 +24,20 @@ const boardMembers = [
   'pavla-krausova',
 ];
 
+// Shuffle boardMembers on each page load
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+shuffle(boardMembers);
+
 // Filter people into different groups
-const predsednictvo = allPeople.filter(person => boardMembers.includes(person.slug));
+const predsednictvoUnsorted = allPeople.filter(person => boardMembers.includes(person.slug));
+// Sort predsednictvo according to shuffled boardMembers order
+const predsednictvo = boardMembers.map(slug => predsednictvoUnsorted.find(person => person.slug === slug));
 
 const seo = {
   title: 'Naše tváře | Hnutí kruh',
@@ -36,6 +48,7 @@ const seo = {
 <Layout {seo}>
   <Container>
 
+    <br/><br/>
           <h1>Naše tváře</h1>
 
     <section class="people-section">
@@ -44,7 +57,6 @@ const seo = {
       <!-- Předsednictvo Section -->
       <div class="people-category">
         <h2>Předsednictvo</h2>
-        <p>Seznamte se s předsednictvem Hnutí kruh.</p>
         <div class="people-grid">
           {predsednictvo.map((person, index) => {
             const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';

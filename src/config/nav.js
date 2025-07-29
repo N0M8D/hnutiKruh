@@ -16,6 +16,10 @@ export const nav = [
 		slug: '/blog',
 	},
 	{
+		title: 'Rámeček kruhu',
+		slug: 'https://generator.hnutikruh.cz/'
+	},
+	{
 		title: 'Zapoj se',
 		slug: '/forms/zapoj-se',
 		highlight: true,

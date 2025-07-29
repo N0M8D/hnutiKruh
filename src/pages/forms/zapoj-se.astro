@@ -18,9 +18,14 @@ const getNextWednesdays = () => {
 };
 
 const availableDates = getNextWednesdays();
+
+const seo = {
+  title: 'Zapoj se do Hnutí Kruh',
+  description: 'Zjisti, jak se můžeš zapojit do Hnutí Kruh a pomoci nám měnit svět k lepšímu.'
+};
 ---
 
-<Layout>
+<Layout {seo}>
   <Container>
     <TextSection narrow>
       <div class="involvement-form">

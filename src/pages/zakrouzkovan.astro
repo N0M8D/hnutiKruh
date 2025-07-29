@@ -1,9 +1,14 @@
 ---
 import Layout from '@layouts/Page.astro';
 import { Container, TextSection } from "@components/odyssey-theme";
+
+const seo = {
+  title: 'Zakroužkován!',
+  description: 'Děkujeme, že máš zájem o Hnutí Kruh. Tvoje registrace byla úspěšně odeslána.',
+};
 ---
 
-<Layout>
+<Layout {seo}>
   <Container>
     <TextSection narrow>
       <h1>Děkujeme za váš zájem!</h1>

@@ -24,7 +24,19 @@ export const footerSocials = [
 
 
 export const footerLists = [
-
+	/*{
+		title: 'Transparentnost',
+		items: [
+			{
+				title: 'Financování',
+				slug: '/o-nas/kdo-jsme',
+			},
+			{
+				title: 'Kalendář',
+				slug: '/o-nas/nase-hodnoty',
+			},
+		],
+	},*/
 ];
 
 export const contactList = [
@@ -34,19 +46,24 @@ export const contactList = [
 		phone: '+420 724 020 585',
 	},
 	{
+		name: 'Klára Kadár',
+		email: 'klara.kadar@hnutikruh.cz',
+		phone: '+420 736 456 457',
+	},
+	{
 		name: 'Marta Martinová',
 		email: 'marta.martinova@hnutikruh.cz',
 		phone: '+420 724 020 585',
 	},
 	{
-		name: 'Jana Koláříková',
-		email: 'jana.kolarikova@hnutikruh.cz',
-		phone: '+420 722 419 534',
+		name: 'Pavla Krausová',
+		email: 'pavla.krausova@hnutikruh.cz',
+		phone: ''
 	},
 	{
-		name: 'Klára Kadár',
-		email: 'klara.kadar@hnutikruh.cz',
-		phone: '+420 736 456 457',
+		name: 'Michaela Nedory',
+		email: 'michaela.nedory@hnutikruh.cz',
+		phone: ''
 	},
 ];
 

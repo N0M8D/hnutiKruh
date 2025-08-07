@@ -1,0 +1,225 @@
+---
+// Seznam rychlých odkazů
+const quickLinks = [
+  { 
+    label: 'Kalendář',
+    url: '/calendar',
+    icon: 'calendar'
+  },
+  { 
+    label: 'Zapojte se',
+    url: '/joinus',
+    icon: 'users'
+  },
+  { 
+    label: 'Podpořte nás',
+    url: '/donate',
+    icon: 'heart'
+  },
+  { 
+    label: 'Kontakt',
+    url: '/contact',
+    icon: 'envelope'
+  }
+];
+---
+
+<div class="floating-menu-container">
+  <button id="floating-menu-toggle" aria-label="Rychlé odkazy" title="Rychlé odkazy">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="16"></line>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+    </svg>
+  </button>
+  
+  <div id="floating-menu-panel" class="floating-menu-panel">
+    <div class="menu-header">
+      <h3>Rychlé odkazy</h3>
+      <button id="close-menu" aria-label="Zavřít menu">×</button>
+    </div>
+    <div class="menu-links">
+      {quickLinks.map(link => (
+        <a href={link.url} class="quick-link">
+          <span class="icon">
+            {link.icon === 'calendar' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            )}
+            {link.icon === 'users' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            )}
+            {link.icon === 'heart' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            )}
+            {link.icon === 'envelope' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            )}
+          </span>
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('floating-menu-toggle');
+    const menuPanel = document.getElementById('floating-menu-panel');
+    const closeButton = document.getElementById('close-menu');
+    
+    toggleButton?.addEventListener('click', () => {
+      menuPanel?.classList.toggle('active');
+    });
+    
+    closeButton?.addEventListener('click', () => {
+      menuPanel?.classList.remove('active');
+    });
+    
+    // Zavře menu kliknutím mimo něj
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const isMenuClick = target.closest('.floating-menu-panel') || target.closest('#floating-menu-toggle');
+      
+      if (!isMenuClick && menuPanel?.classList.contains('active')) {
+        menuPanel.classList.remove('active');
+      }
+    });
+  });
+</script>
+
+<style>
+  .floating-menu-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    font-family: var(--theme-font-family-sans);
+  }
+  
+  #floating-menu-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--theme-primary, #fe7d88);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  #floating-menu-toggle:hover {
+    transform: scale(1.05);
+    background-color: var(--theme-primary-hover, #ff8a96);
+  }
+  
+  .floating-menu-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    overflow: hidden;
+  }
+  
+  .floating-menu-panel.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .menu-header {
+    padding: 15px 20px;
+    background-color: var(--theme-bg-offset, #fff1ee);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .menu-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--theme-text);
+    font-weight: 600;
+  }
+  
+  #close-menu {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--theme-text);
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .menu-links {
+    padding: 10px 0;
+  }
+  
+  .quick-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: var(--theme-text);
+    transition: background-color 0.2s;
+    gap: 12px;
+  }
+  
+  .quick-link:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    color: var(--theme-primary);
+  }
+  
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--theme-primary);
+  }
+
+  @media (max-width: 768px) {
+    .floating-menu-container {
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    #floating-menu-toggle {
+      width: 50px;
+      height: 50px;
+    }
+  }
+</style>

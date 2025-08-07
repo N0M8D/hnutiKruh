@@ -6,6 +6,7 @@ import Logo from '../components/Logo.astro';
 import settings from '../config/settings';
 import { footerLists, footerSocials, contactList } from '../config/footer';
 import MatomoConsentBanner from '../components/MatomoConsentBanner.astro';
+import FloatingMenu from '../components/FloatingMenu.astro';
 
 
 export interface Props {
@@ -40,4 +41,5 @@ const { seo } = Astro.props as Props;
 	>
 		<Logo slot="logo" />
 	</Footer>
+	{/*<FloatingMenu />*/}
 </Layout>

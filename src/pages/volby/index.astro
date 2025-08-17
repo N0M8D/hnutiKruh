@@ -29,7 +29,8 @@ const regionMapping = {
 // Function to fetch candidates for a specific region
 async function fetchCandidates(region: string) {
   try {
-    const response = await fetch(`http://localhost:4321/api/nocoDb?region=${encodeURIComponent(region)}&limit=100`);
+    const apiUrl = import.meta.env.PUBLIC_API_URL;
+    const response = await fetch(`${apiUrl}/api/nocoDb?region=${encodeURIComponent(region)}&limit=100`);
     if (!response.ok) {
       throw new Error(`Failed to fetch candidates for ${region}`);
     }

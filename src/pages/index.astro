@@ -97,7 +97,10 @@ const posts = Object.values(postModules)
   <div class="lide-div">
     <TextSection narrow>
       <h2 id="lide">Naše tváře</h2>
-      <Lide people={people} />
+      <Lide people={people.slice(0, 6)} /> <!-- Zobrazí pouze prvních 6 osob -->
+      <Button href="/people" fullWidth>
+        Další tváře
+      </Button>
     </TextSection>
   </div>
 

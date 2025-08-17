@@ -1,0 +1,530 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { TextSection, Container, Button } from '../../components/odyssey-theme';
+import { Icon } from 'astro-icon/components';
+import type { Candidate } from '../api/nocoDb';
+import { undefined } from 'astro:schema';
+
+// SEO metadata
+const seo = {
+  title: 'Volby | Hnutí Kruh',
+  description: 'Kandidáti Hnutí Kruh do poslanecké sněmovny 2025 - Praha, Středočeský a Jihomoravský kraj',
+};
+
+// Mapping between region display names and codes in the database
+const regionMapping = {
+  praha: {
+    name: "Praha",
+    code: "praha"
+  },
+  stredocesky: {
+    name: "Středočeský kraj",
+    code: "sck"
+  },
+  jihomoravsky: {
+    name: "Jihomoravský kraj",
+    code: "jmk"
+  }
+};
+
+// Function to fetch candidates for a specific region
+async function fetchCandidates(region: string) {
+  try {
+    const response = await fetch(`http://localhost:4321/api/nocoDb?region=${encodeURIComponent(region)}&limit=100`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch candidates for ${region}`);
+    }
+    const data = await response.json();
+    return data.list || [];
+  } catch (error) {
+    console.error(`Error fetching candidates for ${region}:`, error);
+    return [];
+  }
+}
+
+// Fetch candidates for all regions
+const candidatesByRegion: Record<string, Candidate[]> = {};
+for (const [key, region] of Object.entries(regionMapping)) {
+  candidatesByRegion[key] = await fetchCandidates(region.code);
+}
+
+// Process the candidates data into the format we need for display
+const regions = Object.entries(regionMapping).reduce((acc, [key, region]) => {
+  const candidates = (candidatesByRegion[key] || []).map((candidate: Candidate) => {
+
+    let detailHref = ""  ;
+    if(candidate.detail) {
+      detailHref = `/people/people-list/${candidate.firstName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}-${candidate.lastName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+    }
+
+    return {
+      name: candidate.fullName,
+      position: candidate.position,
+      age: candidate.age,
+      residence: candidate.residence,
+      occupation: candidate.occupation,
+      party: candidate.party,
+      photo: candidate.photo ?  `/assets/candidates/${candidate.photo}` : "/assets/candidates/placeholder.png", // Using placeholder images for now
+      bio: "", // We don't have bios in the data
+      featured: candidate.position <= 3, // First 3 candidates are featured
+      detailHref
+    };
+  }).sort((a, b) => a.position - b.position); // Sort by position
+  
+  acc[key] = {
+    name: region.name,
+    candidates
+  };
+  
+  return acc;
+}, {} as Record<string, { name: string, candidates: any[] }>);
+
+// Fallback to sample data if the API fails or no candidates are found
+// This ensures the page doesn't break if there's an API issue
+for (const key of Object.keys(regionMapping)) {
+  if (!regions[key] || !regions[key].candidates || regions[key].candidates.length === 0) {
+    console.warn(`No candidates found for ${regionMapping[key].name}, using fallback data`);
+    
+    // Define fallback data for each region
+    const fallbackData = [
+      {
+        name: "Kandidát Kandidátský",
+        position: 1,
+        age: 40,
+        residence: "Praha",
+        occupation: "Politik",
+        party: "Hnutí Kruh",
+        photo: "/assets/candidates/placeholder.jpg",
+        bio: "Tento kandidát je zobrazen jako záložní řešení, protože se nepodařilo načíst data z API.",
+        featured: true
+      },
+      {
+        name: "Jana Nováková",
+        position: 2,
+        age: 35,
+        residence: "Praha",
+        occupation: "Právnička",
+        party: "Hnutí Kruh",
+        photo: "/assets/candidates/placeholder.jpg",
+        bio: "",
+        featured: true
+      },
+      {
+        name: "Petr Svoboda",
+        position: 3,
+        age: 45,
+        residence: "Praha",
+        occupation: "Lékař",
+        party: "bez politické příslušnosti",
+        photo: "/assets/candidates/placeholder.jpg",
+        bio: "",
+        featured: true
+      }
+    ];
+    
+    regions[key] = {
+      name: regionMapping[key].name,
+      candidates: fallbackData
+    };
+  }
+}
+---
+
+<Layout {seo}>
+  <Container>
+    <TextSection>
+      <h1>Volby do poslanecké sněmovny 2025</h1>
+      
+      <p class="intro-text">
+        Představujeme vám naše kandidátky do voleb do poslanecké sněmovny České republiky. Hnutí Kruh přináší novou politickou kulturu 
+        založenou na otevřenosti, soudržnosti a spolupráci. Naším cílem je férová politika, která slouží 
+        občanům, nikoli zájmovým skupinám.
+      </p>
+
+     {/* } <div class="program-button-container">
+        <Button href="/program" customIcon>
+          Náš program
+          <Icon name="mdi:arrow-right" slot="icon" />
+        </Button>
+      </div>*/}
+      
+      <div class="region-tabs">
+        <div class="tab-buttons">
+          {Object.entries(regions).map(([regionKey, region], index) => (
+            <button 
+              class={`tab-button ${index === 0 ? 'active' : ''}`} 
+              data-region={regionKey}
+            >
+              {region.name}
+            </button>
+          ))}
+        </div>
+        
+        {Object.entries(regions).map(([regionKey, region], index) => (
+            <div class={`region-content ${index === 0 ? 'active' : ''}`} id={`region-${regionKey}`}>
+            <h2>{region.name}</h2>
+            
+            <div class="featured-candidates">
+              {region.candidates
+              .filter(candidate => candidate.featured)
+              .map(candidate => (
+              <div class="featured-candidate">
+                <div class="photo-wrapper">
+                <img src={candidate.photo} alt={candidate.name} class="candidate-photo noShadow" />
+                <div class="position-badge">{candidate.position}</div>
+                </div>
+                <div class="candidate-info">
+                <h3>{candidate.name}</h3>
+                <p class="candidate-details">
+                  <span class="candidate-residence">{candidate.residence}</span> • 
+                  <span class="candidate-age">{candidate.age} let</span>
+                </p>
+                <p class="candidate-occupation">{candidate.occupation}</p>
+                <p class="candidate-party">{candidate.party}</p>
+                {candidate.bio && <p class="candidate-bio">{candidate.bio}</p>}
+                {candidate.detailHref && (
+                          <Button href={candidate.detailHref} fullWidth>
+                            Zobrazit detail
+                          </Button>
+                        )}
+                </div>
+              </div>
+              ))}
+            </div>
+            
+            {region.candidates.some(candidate => !candidate.featured) && (
+              <>
+                <h3 class="other-candidates-title">Další kandidáti</h3>
+                
+                <div class="other-candidates">
+                  {region.candidates
+                  .filter(candidate => !candidate.featured)
+                  .map(candidate => (
+                    <div class="candidate-list-item">
+                      <div class="candidate-number">{candidate.position}</div>
+                      <div class="candidate-photo-small">
+                        <img src={candidate.photo} alt={candidate.name} class="noShadow" />
+                      </div>
+                      <div class="candidate-list-info">
+                        <h4>{candidate.name}</h4>
+                        <p>{candidate.residence}, {candidate.age} let • {candidate.occupation}</p>
+                        <p class="candidate-party-small">{candidate.party}</p>
+                        {candidate.detailHref && (
+                          <Button href={candidate.detailHref} outlined>
+                            Zobrazit detail
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+            </div>
+        ))}
+      </div>
+    </TextSection>
+  </Container>
+</Layout>
+
+<style>
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .intro-text {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+  
+  .program-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+  
+  .region-tabs {
+    margin-top: 2rem;
+  }
+  
+  .tab-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .tab-button {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--theme-button-border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: var(--g-box-shadow);
+  }
+  
+  .tab-button.active {
+    background: linear-gradient(120deg, rgba(255,255,255,0.32) 60%, rgba(255,128,128,0.18) 100%);
+    border-color: var(--theme-primary);
+    color: var(--theme-primary);
+    box-shadow: 0 4px 16px 0 rgba(255,128,128,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+  }
+  
+  .tab-button:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: var(--theme-primary-hover);
+  }
+  
+  .region-content {
+    display: none;
+  }
+  
+  .region-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--theme-primary);
+  }
+  
+  .featured-candidates {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: stretch; /* Zajistí, že všechny karty budou mít stejnou výšku */
+  }
+  
+  .featured-candidate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Zajistí, že tlačítko bude na spodku karty */
+    background: rgba(255,255,255,0.25);
+    border-radius: var(--theme-shape-radius, 1.5rem);
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: var(--g-box-shadow);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Zajistí stejnou výšku všech karet */
+  }
+  
+  .featured-candidate:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 28px 0 rgba(0,0,0,0.12);
+  }
+  
+  .photo-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1rem;
+  }
+  
+  .candidate-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--theme-primary);
+  }
+
+  img{
+    max-width: 100%;
+  }
+  
+  .position-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--theme-primary);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 3px solid white;
+  }
+  
+  .candidate-info {
+    flex-grow: 1; /* Zajistí, že obsah karty vyplní dostupný prostor */
+    text-align: center;
+  }
+  
+  .candidate-info h3 {
+    margin: 0.5rem 0;
+    font-size: 1.3rem;
+    color: var(--theme-primary);
+  }
+  
+  .candidate-details {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+    color: var(--theme-text-light);
+  }
+  
+  .candidate-occupation {
+    font-weight: 600;
+    margin: 0.3rem 0;
+  }
+  
+  .candidate-party {
+    font-style: italic;
+    margin: 0.3rem 0 1rem;
+    color: var(--theme-text-light);
+  }
+  
+  .candidate-bio {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+  }
+  
+  .featured-candidate button {
+    margin-bottom: auto; /* Tlačítko bude vždy na spodku karty */
+  }
+  
+  .other-candidates-title {
+    text-align: center;
+    margin: 2rem 0 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .other-candidates {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .candidate-list-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    transition: background 0.3s ease;
+    box-shadow: var(--g-box-shadow);
+  }
+  
+  .candidate-list-item:hover {
+    background: rgba(255,255,255,0.3);
+  }
+  
+  .candidate-number {
+    width: 35px;
+    height: 35px;
+    background: var(--theme-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .candidate-photo-small {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .candidate-photo-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .candidate-list-info {
+    flex-grow: 1;
+  }
+  
+  .candidate-list-info h4 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+  }
+  
+  .candidate-list-info p {
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .candidate-party-small {
+    font-style: italic;
+    color: var(--theme-text-light);
+    font-size: 0.85rem !important;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .featured-candidates {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .tab-buttons {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .candidate-list-item {
+      flex-wrap: wrap;
+    }
+    
+    .candidate-list-info {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const regionContents = document.querySelectorAll('.region-content');
+    
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Hide all region contents
+        regionContents.forEach(content => content.classList.remove('active'));
+        
+        // Show the selected region content
+        const regionId = `region-${this.getAttribute('data-region')}`;
+        document.getElementById(regionId).classList.add('active');
+      });
+    });
+  });
+</script>
+

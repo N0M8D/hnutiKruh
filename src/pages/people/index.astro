@@ -75,16 +75,28 @@ const seo = {
         </div>
       </div>
       
-      <!-- Here you can add more sections in the future, like:
+      <!-- Další tváře Section -->
       <div class="people-category">
-        <h2>Experti</h2>
+        <h2>Další tváře</h2>
         <div class="people-grid">
-          {experti.map((person, index) => {
-            // Render person cards
-          })}
+          {allPeople
+        .filter(person => !boardMembers.includes(person.slug))
+        .map((person, index) => {
+          const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';
+          return (
+            <a href={person.href} class="person-card">
+          <div class="photo-wrapper">
+            <img src={frameImage} alt="" class="photo-frame noShadow" />
+            <img src={person.photo} alt={person.name} class="person-photo noShadow" />
+          </div>
+          <h3>{person.name}</h3>
+          <p class="role">{person.role}</p>
+          <p class="description">{person.description}</p>
+            </a>
+          );
+        })}
         </div>
       </div>
-      -->
       
     </section>
   </Container>
@@ -116,7 +128,7 @@ const seo = {
   border-radius: 12px;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* menší stín */
+  box-shadow: var(--g-box-shadow);
   transition: transform 0.2s ease;
 }
 

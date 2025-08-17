@@ -44,6 +44,9 @@
 			rgba(255, 128, 128, 0.32) 100%
 			/* hlavní růžová, více sytá */
 		);
+
+	--g-box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+	--g-glass-bg: rgba(255, 255, 255, 0.25);
 }
 
 body {
@@ -67,7 +70,7 @@ article {
 	-webkit-backdrop-filter: blur(12px) saturate(180%);
 	border-radius: var(--theme-shape-radius);
 	border: 1px solid rgba(255, 255, 255, 0.3);
-	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+	box-shadow: var(--g-box-shadow);
 }
 
 h1,

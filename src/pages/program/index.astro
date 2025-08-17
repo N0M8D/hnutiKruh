@@ -22,6 +22,12 @@ const seo = {
 
       <h2>Klíčové oblasti našeho programu</h2>
       
+      <!--
+        Každý kruh níže představuje hlavní programovou oblast. Po kliknutí
+        na kruh se zobrazí podrobnější přehled priorit. Obsah je sestaven
+        podle interních pracovních podkladů hnutí. Stručné seznamy lze
+        kdykoliv rozšířit stažením kompletního programu ve formátu PDF.
+      -->
       <div class="program-circles">
         <div class="circles-row">
           <details class="program-circle" name="program-topics">
@@ -35,16 +41,8 @@ const seo = {
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
               <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🌱</div>
-              <h3>Ekologie a udržitelnost</h3>
-            </summary>
-          </details>
-
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🏫</div>
-              <h3>Vzdělávání</h3>
+              <div class="circle-icon">👥</div>
+              <h3>Společnost a lidská práva</h3>
             </summary>
           </details>
 
@@ -52,97 +50,251 @@ const seo = {
             <summary class="circle-summary">
               <span class="circle-border noShadow"></span>
               <div class="circle-icon">🏘️</div>
-              <h3>Sociální spravedlnost</h3>
+              <h3>Bydlení</h3>
             </summary>
           </details>
 
           <details class="program-circle" name="program-topics">
             <summary class="circle-summary">
               <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🏛️</div>
-              <h3>Transparentnost a participace</h3>
+              <div class="circle-icon">🏫</div>
+              <h3>Školství, věda a sport</h3>
+            </summary>
+          </details>
+          
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
+              <div class="circle-icon">🌱</div>
+              <h3>Životní prostředí</h3>
+            </summary>
+          </details>
+          
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
+              <div class="circle-icon">🏙️</div>
+              <h3>Místní rozvoj a regiony</h3>
+            </summary>
+          </details>
+          
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
+              <div class="circle-icon">🛡️</div>
+              <h3>Bezpečnost a zahraniční politika</h3>
+            </summary>
+          </details>
+          
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
+              <div class="circle-icon">🚆</div>
+              <h3>Doprava</h3>
+            </summary>
+          </details>
+          
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
+              <div class="circle-icon">🎭</div>
+              <h3>Kultura</h3>
+            </summary>
+          </details>
+          
+          <details class="program-circle" name="program-topics">
+            <summary class="circle-summary">
+              <span class="circle-border noShadow"></span>
+              <div class="circle-icon">💰</div>
+              <h3>Daně a ekonomika</h3>
             </summary>
           </details>
         </div>
 
         <div class="content-area">
-          <div class="circle-content" data-topic="zdravotnictvi">
+          <!-- Zdravotnictví a sociální péče -->
+          <div class="circle-content" data-topic="zdravotnictvi-socialni">
             <h4>Zdravotnictví a sociální péče</h4>
             <p>
-              Prosazujeme dostupné a kvalitní zdravotnictví pro všechny. Podporujeme 
-              investice do prevence a psychické péče, která je dlouhodobě zanedbávána.
+              Dostupné a kvalitní zdravotnictví je základním pilířem důstojného života. Chceme
+              propojit <strong>sociální</strong> a <strong>zdravotní služby</strong>, výrazně zkrátit <strong>čekací lhůty</strong> a klást důraz na
+              <strong>duševní zdraví</strong> i <strong>reprodukční práva</strong>. Podporujeme moderní centra "one‑stop‑shop",
+              která lidem zajistí pomoc bez zbytečné byrokracie.
             </p>
-            <h5>Konkrétní cíle:</h5>
+            <h5>Naše priority:</h5>
             <ul>
-              <li>Zkrácení čekacích dob u specialistů</li>
-              <li>Rozvoj komunitní a preventivní péče</li>
-              <li>Dostupná psychologická pomoc pro všechny věkové kategorie</li>
-              <li>Lepší podmínky pro zdravotnický personál</li>
-              <li>Modernizace zdravotnických zařízení</li>
+              <li><strong>Regionální integrační centra:</strong> Lékaři, psychologové a sociální pracovníci pod jednou střechou.</li>
+              <li><strong>Digitální portál:</strong> Online žádosti o dávky, rezervace návštěv a video‑konzultace.</li>
+              <li><strong>Jednodušší přístup k dávkám:</strong> Jeden formulář místo několika úřadů a automatické napojení na registry.</li>
+              <li><strong>Multidisciplinární týmy:</strong> Sdílená elektronická dokumentace pro plynulou kontinuitu péče.</li>
+              <li><strong>Duševní zdraví:</strong> Psychologové hrazené z pojištění, krizová centra 24/7 a mobilní týmy i pro odlehlé oblasti.</li>
+              <li><strong>Preventivní kampaň:</strong> „Znám své hranice“ a partnerství s neziskovkami podporujícími komunitní aktivity.</li>
+              <li><strong>Antikoncepce a menstruační pomůcky:</strong> Cílené hrazení, snížení DPH a bezplatné automaty ve školách a nemocnicích.</li>
+              <li><strong>Dostupné interrupce:</strong> Mobilní týmy, telekonzultace a ústavní garance práva na interrupci do 12. týdne.</li>
+              <li><strong>Eutanazie:</strong> Legislativní rámec pro důstojný odchod ze života při nevyléčitelných onemocněních za přísných podmínek.</li>
             </ul>
           </div>
 
-          <div class="circle-content" data-topic="ekologie">
-            <h4>Ekologie a udržitelnost</h4>
+          <!-- Společnost, práce a lidská práva -->
+          <div class="circle-content" data-topic="spolecnost">
+            <h4>Společnost, práce a lidská práva</h4>
             <p>
-              Chráníme životní prostředí pro budoucí generace. Podporujeme obnovitelné 
-              zdroje energie, udržitelnou dopravu a odpovědné hospodaření s přírodními zdroji.
+              Naší vizí je <strong>spravedlivá společnost</strong> založená na <strong>rovnosti</strong> a <strong>respektu</strong>. Každý člověk
+              musí mít možnost rozhodovat o svém těle a životě, užívat si <strong>férové podmínky</strong>
+              na trhu práce a podílet se na rozhodování o věcech veřejných. Chceme odstranit
+              <strong>diskriminaci</strong> a posílit <strong>práva menšin</strong> i <strong>pracovníků</strong>.
             </p>
-            <h5>Konkrétní cíle:</h5>
+            <h5>Naše priority:</h5>
             <ul>
-              <li>Přechod na obnovitelné zdroje energie</li>
-              <li>Rozvoj veřejné dopravy a cyklostezek</li>
-              <li>Ochrana biodiverzity a zelených ploch</li>
-              <li>Podpora cirkulární ekonomiky</li>
-              <li>Snížení emisí a zlepšení kvality ovzduší</li>
+              <li><strong>Ústavní zakotvení:</strong> Právo na interrupci a respekt k reprodukční volbě každého člověka.</li>
+              <li><strong>Bezplatné antikoncepce:</strong> Dostupné menstruační pomůcky pro všechny.</li>
+              <li><strong>Zákon o eutanazii:</strong> Důstojný odchod při nevyléčitelném utrpení za přísných odborných a etických podmínek.</li>
+              <li><strong>Rovné příležitosti:</strong> Férové odměňování bez ohledu na pohlaví, věk, původ nebo zdravotní stav.</li>
+              <li><strong>Ochrana menšin:</strong> LGBTQ+ osoby, Romové a další znevýhodněné skupiny, včetně aktivní prevence diskriminace.</li>
+              <li><strong>Flexibilita pracovního trhu:</strong> Sladění rodinného a pracovního života, důraz na well‑being a duševní zdraví zaměstnanců.</li>
+              <li><strong>Živá občanská společnost:</strong> Participativní rozpočty, referenda a transparentní rozhodování v samosprávách.</li>
+              <li><strong>Digitální práva:</strong> Suverenita nad daty chrání před zneužitím a zahraničními korporacemi.</li>
+              <li><strong>Dostupnost služeb:</strong> Infrastruktura pro osoby se zdravotním postižením, včetně bezbariérovosti a asistivních technologií.</li>
             </ul>
           </div>
 
-          <div class="circle-content" data-topic="vzdelavani">
-            <h4>Vzdělávání</h4>
+          <!-- Bydlení -->
+          <div class="circle-content" data-topic="bydleni">
+            <h4>Bydlení</h4>
             <p>
-              Kvalitní vzdělání je základem demokratické společnosti. Podporujeme 
-              modernizaci školství, lepší ohodnocení učitelů a dostupnost vzdělání pro všechny.
+              Dostupné a důstojné bydlení je klíčovou podmínkou <strong>sociální stability</strong>. Usilujeme
+              o politiku, která podporuje <strong>obecní</strong> a <strong>družstevní bydlení</strong>, bojuje proti <strong>obchodu s chudobou</strong> a zabraňuje spekulacím s nemovitostmi. Každý má právo na domov.
             </p>
-            <h5>Konkrétní cíle:</h5>
+            <h5>Naše priority:</h5>
             <ul>
-              <li>Zvýšení platů učitelů a jejich společenského postavení</li>
-              <li>Modernizace výuky s využitím digitálních technologií</li>
-              <li>Rozvoj kritického myšlení a mediální gramotnosti</li>
-              <li>Dostupné celoživotní vzdělávání</li>
-              <li>Podpora inkluzivního vzdělávání</li>
+              <li><strong>Housing First:</strong> Ukončení bezdomovectví a prevence jeho vzniku.</li>
+              <li><strong>Obecní nájemní fond:</strong> 20 % nových bytů bude patřit obcím.</li>
+              <li><strong>Družstevní bydlení:</strong> Podpora komunitních projektů na obecních pozemcích.</li>
+              <li><strong>Daňové úlevy:</strong> Snížení daní pro vlastní bydlení, vyšší daně pro prázdné byty.</li>
+              <li><strong>Progresivní zdanění:</strong> První nemovitost minimální sazba, další nemovitosti zdaněny jako podnikání.</li>
+              <li><strong>Podpora rekonstrukcí:</strong> Energetická modernizace bytů a snižování spotřeby.</li>
+              <li><strong>Zrychlení výstavby:</strong> Reforma územního plánování pro více dostupných bytů.</li>
+              <li><strong>Smíšené čtvrti:</strong> Dostupné služby a prevence segregovaných satelitů.</li>
+              <li><strong>Monitoring dat:</strong> Systematické sledování a evaluace účinnosti opatření.</li>
             </ul>
           </div>
 
-          <div class="circle-content" data-topic="socialni">
-            <h4>Sociální spravedlnost</h4>
+          <!-- Školství, věda a sport -->
+          <div class="circle-content" data-topic="skolstvi">
+            <h4>Školství, věda a sport</h4>
             <p>
-              Prosazujeme rovné příležitosti bez ohledu na původ, pohlaví nebo sociální 
-              status. Bojujeme proti všem formám diskriminace a podporujeme sociální soudržnost.
+              Vzdělání pro 21. století musí být <strong>spravedlivé</strong>, <strong>inkluzivní</strong> a <strong>kvalitní</strong>. Chceme, aby
+              školství vychovávalo <strong>svobodné osobnosti</strong> schopné <strong>kritického myšlení</strong> a
+              spolupráce, a aby věda a sport byly přirozenou součástí života společnosti.
             </p>
-            <h5>Konkrétní cíle:</h5>
+            <h5>Naše priority:</h5>
             <ul>
-              <li>Dostupné bydlení pro všechny příjmové skupiny</li>
-              <li>Rovné příležitosti na trhu práce</li>
-              <li>Podpora rodin a sladění rodinného a pracovního života</li>
-              <li>Ochrana práv menšin a zranitelných skupin</li>
-              <li>Sociální služby orientované na člověka</li>
+              <li><strong>Rovný přístup:</strong> Pomůcky, učebnice i školní obědy hrazené z veřejných prostředků.</li>
+              <li><strong>Podpora učitelů:</strong> Vyšší platy, lepší podmínky a profesní vzdělávání.</li>
+              <li><strong>Inkluze bez byrokracie:</strong> Maximálně dva asistenti pedagoga na třídu.</li>
+              <li><strong>Školní sociální pedagog:</strong> Propojení škol s orgány sociální péče.</li>
             </ul>
           </div>
 
-          <div class="circle-content" data-topic="transparentnost">
-            <h4>Transparentnost a participace</h4>
+          <!-- Životní prostředí -->
+          <div class="circle-content" data-topic="zivotni-prostredi">
+            <h4>Životní prostředí</h4>
             <p>
-              Věříme v otevřenou politiku, kde občané mají skutečný vliv na rozhodování. 
-              Podporujeme transparentnost veřejných financí a participativní demokratické procesy.
+              Ochrana přírody a zodpovědné hospodaření v krajině jsou investicí do
+              budoucnosti. Naším cílem je <strong>zdravá krajina</strong>, která poskytuje <strong>potraviny</strong>,
+              <strong>energii</strong> i prostor pro život a zároveň chrání <strong>klima</strong> a <strong>biodiverzitu</strong>.
             </p>
-            <h5>Konkrétní cíle:</h5>
+            <h5>Naše priority:</h5>
             <ul>
-              <li>Otevřená data a transparentní hospodaření</li>
-              <li>Participativní rozpočty na všech úrovních</li>
-              <li>Posílení místní samosprávy</li>
-              <li>Digitalizace veřejné správy</li>
-              <li>Aktivní zapojení občanů do rozhodování</li>
+              <li><strong>Ekologické zemědělství:</strong> Zvýšení podílu ekologicky obhospodařované půdy.</li>
+              <li><strong>Reforma lesnictví:</strong> Podpora přirozené obnovy a druhové rozmanitosti.</li>
+              <li><strong>Obnovitelné zdroje:</strong> Přechod na obnovitelné zdroje energie a energetickou soběstačnost obcí.</li>
+              <li><strong>Cirkulární ekonomika:</strong> Snižování produkce jednorázových plastů.</li>
+            </ul>
+          </div>
+
+          <!-- Místní rozvoj -->
+          <div class="circle-content" data-topic="mistni-rozvoj">
+            <h4>Místní rozvoj</h4>
+            <p>
+              Vyvážený rozvoj všech regionů je klíčem k omezení <strong>nerovností</strong> a posílení
+              <strong>identity</strong>. Podporujeme silnou místní samosprávu, spravedlivé rozdělení
+              zdrojů a spolupráci obcí namísto rivality.
+            </p>
+            <h5>Naše priority:</h5>
+            <ul>
+              <li><strong>Fond spravedlivého rozvoje:</strong> Podpora znevýhodněných okresů.</li>
+              <li><strong>Regionální test dopadů:</strong> Hodnocení účinků zákonů na malé obce.</li>
+              <li><strong>Daňové motivace:</strong> Zrychlené odpisy a podpora regionálních investic.</li>
+              <li><strong>Ochrana tradic:</strong> Podpora místních spolků a komunitních akcí.</li>
+            </ul>
+          </div>
+
+          <!-- Bezpečnost -->
+          <div class="circle-content" data-topic="bezpecnost">
+            <h4>Bezpečnost</h4>
+            <p>
+              Bezpečnostní politika musí být založena na <strong>prevenci</strong>, ochraně práv a
+              <strong>mezinárodní spolupráci</strong>. Chceme evidence‑based přístup k rizikovému
+              chování a drogové politice.
+            </p>
+            <h5>Naše priority:</h5>
+            <ul>
+              <li><strong>Harm reduction:</strong> Přesun od represe k prevenci.</li>
+              <li><strong>Racionalizace drogových politik:</strong> Legalizace a regulace na základě rizikovosti.</li>
+              <li><strong>Mezinárodní spolupráce:</strong> Prosazování principů harm reduction v EU.</li>
+              <li><strong>Ochrana práv:</strong> Respekt k lidským právům a soukromí.</li>
+            </ul>
+          </div>
+
+          <!-- Doprava -->
+          <div class="circle-content" data-topic="doprava">
+            <h4>Doprava</h4>
+            <p>
+              Mobilita je základní veřejnou službou. Usilujeme o <strong>bezpečnou</strong>, <strong>dostupnou</strong>
+              a <strong>moderní dopravu</strong>, která podporuje ekonomiku a zároveň respektuje
+              životní prostředí.
+            </p>
+            <h5>Naše priority:</h5>
+            <ul>
+              <li><strong>Pražský okruh:</strong> Dokončení do roku 2032.</li>
+              <li><strong>Veřejná doprava:</strong> Dostupná do 60 minut z každého ORP do krajského města.</li>
+              <li><strong>Cyklostezky:</strong> Rozvoj cyklostezek a pěší infrastruktury.</li>
+              <li><strong>Nízkoemisní vozidla:</strong> Podpora dobíjecí infrastruktury.</li>
+            </ul>
+          </div>
+
+          <!-- Kultura -->
+          <div class="circle-content" data-topic="kultura">
+            <h4>Kultura</h4>
+            <p>
+              Kultura je nositelem naší <strong>identity</strong> a zdrojem <strong>kreativity</strong>. Podporujeme
+              živou, rozmanitou a dostupnou kulturu, která respektuje tradice a
+              zároveň hledá nové cesty.
+            </p>
+            <h5>Naše priority:</h5>
+            <ul>
+              <li><strong>Veřejné výdaje:</strong> Navýšení na úroveň vyspělých evropských zemí.</li>
+              <li><strong>Nezávislá scéna:</strong> Podpora mladých umělců a místních projektů.</li>
+              <li><strong>Kulturní dědictví:</strong> Digitalizace archivů a otevřený přístup.</li>
+              <li><strong>Ekologické akce:</strong> Minimalizace odpadů a využití obnovitelných zdrojů.</li>
+            </ul>
+          </div>
+
+          <!-- Daně a ekonomika -->
+          <div class="circle-content" data-topic="dane">
+            <h4>Daně a ekonomika</h4>
+            <p>
+              Spravedlivý a transparentní daňový systém je základem fungujícího státu.
+              Prosazujeme ekonomiku, která podporuje <strong>inovace</strong>, <strong>podnikání</strong> a zároveň
+              zajišťuje <strong>férové rozdělení</strong> společného bohatství.
+            </p>
+            <h5>Naše priority:</h5>
+            <ul>
+              <li><strong>Progresivní zdanění:</strong> Vyšší sazby pro nadstandardní příjmy.</li>
+              <li><strong>Podpora podniků:</strong> Snížení odvodů a rozšíření paušální daně.</li>
+              <li><strong>Digitální infrastruktura:</strong> Investice do vědy a zelené ekonomiky.</li>
+              <li><strong>Daňové úniky:</strong> Potlačení agresivního daňového plánování.</li>
             </ul>
           </div>
         </div>
@@ -151,14 +303,15 @@ const seo = {
       <h2>Naše vize</h2>
       <p>
         Chceme vytvořit společnost, kde se každý člověk může svobodně rozvíjet a 
-        přispívat k společnému dobru. Společnost založenou na vzájemné úctě, 
+        přispívat ke společnému dobru. Společnost založenou na vzájemné úctě, 
         solidaritě a odpovědnosti vůči budoucím generacím.
       </p>
 
       <p>
         <em>
           Náš program se neustále vyvíjí na základě dialogu s občany a odborníky. 
-          Pokud máte náměty nebo připomínky, neváhejte nás kontaktovat.
+          Podrobnější verzi programu připravujeme ke stažení ve formátu PDF. Pokud máte 
+          náměty nebo připomínky, neváhejte nás kontaktovat.
         </em>
       </p>
     </TextSection>
@@ -408,7 +561,18 @@ const seo = {
 
     const circles = document.querySelectorAll('.program-circle');
     const contents = document.querySelectorAll('.content-area .circle-content');
-    const topics = ['zdravotnictvi', 'ekologie', 'vzdelavani', 'socialni', 'transparentnost'];
+    const topics = [
+      'zdravotnictvi-socialni', 
+      'spolecnost', 
+      'bydleni', 
+      'skolstvi', 
+      'zivotni-prostredi', 
+      'mistni-rozvoj', 
+      'bezpecnost', 
+      'doprava', 
+      'kultura', 
+      'dane'
+    ];
     
     circles.forEach((circle, index) => {
       const summary = circle.querySelector('.circle-summary');
@@ -420,9 +584,11 @@ const seo = {
         // Otevřít kliknutý kruh
         circle.setAttribute('open', '');
         // Zobrazit odpovídající obsah
-        const targetContent = document.querySelector(`[data-topic="${topics[index]}"]`);
-        if (targetContent) {
-          targetContent.classList.add('active');
+        if (topics[index]) {
+          const targetContent = document.querySelector(`[data-topic="${topics[index]}"]`);
+          if (targetContent) {
+            targetContent.classList.add('active');
+          }
         }
       });
     });

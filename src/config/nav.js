@@ -1,5 +1,9 @@
 export const nav = [
 	{
+		title: 'Volby',
+		slug: '/volby',
+	},
+	{
 		title: 'Manifest',
 		slug: '/manifest',
 	},

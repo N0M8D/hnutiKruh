@@ -8,7 +8,7 @@ export const nav = [
 		slug: '/program',
 	},*/
 	{
-		title: 'Tváře kruhu',
+		title: 'Tváře Kruhu',
 		slug: '/people',
 	},
 	{
@@ -16,7 +16,7 @@ export const nav = [
 		slug: '/blog',
 	},
 	{
-		title: 'Rámeček kruhu',
+		title: 'Rámeček Kruhu',
 		slug: 'https://generator.hnutikruh.cz/'
 	},
 	{

@@ -1,0 +1,413 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { TextSection } from '@components/odyssey-theme';
+
+interface ColorItem {
+  name: string;
+  hex: string;
+  rgb: string;
+  note?: string;
+}
+const colors: ColorItem[] = [
+  { name: 'Peach Light', hex: '#FFE6D5', rgb: '255 230 213' },
+  { name: 'Pink Light', hex: '#FFBFBF', rgb: '255 191 191' },
+  { name: 'Teal Base', hex: '#64B4B4', rgb: '100 180 180' },
+  { name: 'Sand Light', hex: '#EAD67E', rgb: '234 214 126' },
+  { name: 'Red Mid', hex: '#D35F5F', rgb: '211 95 95' },
+  { name: 'Red Accent', hex: '#FF8080', rgb: '255 128 128' },
+  { name: 'Teal Dark', hex: '#4B8C91', rgb: '75 140 145' },
+  { name: 'Sand Dark', hex: '#E3B754', rgb: '227 183 84' },
+];
+
+function luminance(hex: string) {
+  const c = hex.replace('#','');
+  const rgb = [0,1,2].map(i => parseInt(c.slice(i*2,i*2+2),16)/255)
+    .map(v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4));
+  return 0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2];
+}
+function pickFg(hex: string) {
+  return luminance(hex) > 0.6 ? '#1b1b1b' : '#ffffff';
+}
+const palette = colors.map(c => ({ ...c, fg: pickFg(c.hex) }));
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+const brandPath = '/assets/brand/';
+const brandDir = path.join(process.cwd(), 'public', 'assets', 'brand');
+
+function walk(dir: string): string[] {
+  return fs.readdirSync(dir).flatMap(name => {
+    const fp = path.join(dir, name);
+    const st = fs.statSync(fp);
+    return st.isDirectory() ? walk(fp) : [fp];
+  });
+}
+
+function formatSize(bytes: number) {
+  if (bytes < 1024) return bytes + ' B';
+  const kb = bytes / 1024;
+  if (kb < 1024) return kb.toFixed(1) + ' KB';
+  return (kb/1024).toFixed(2) + ' MB';
+}
+
+let allFiles: { rel: string; size: number }[] = [];
+if (fs.existsSync(brandDir)) {
+  allFiles = walk(brandDir).map(fp => {
+    const rel = path.relative(brandDir, fp).replace(/\\/g,'/');
+    return { rel, size: fs.statSync(fp).size };
+  }).sort((a,b) => a.rel.localeCompare(b.rel));
+}
+
+const electionPrefix = 'volby2025/';
+const electionAssets = allFiles.filter(f => f.rel.startsWith(electionPrefix));
+const baseAssets = allFiles.filter(f => !f.rel.startsWith(electionPrefix));
+
+const priorityOrder = ['logo.svg','logo.png','logo_bila.png','logo_bila_losos.png','symbol.svg','symbol.png'];
+baseAssets.sort((a,b) => {
+  const ai = priorityOrder.findIndex(p => a.rel === p);
+  const bi = priorityOrder.findIndex(p => b.rel === p);
+  const av = ai === -1 ? Infinity : ai;
+  const bv = bi === -1 ? Infinity : bi;
+  return av - bv || a.rel.localeCompare(b.rel);
+});
+
+const seo = {
+  title: 'Grafika & Styleguide | Hnutí Kruh',
+  description: 'Mini styleguide: fonty, barvy, logotyp a ke stažení brand assety Hnutí Kruh.',
+};
+---
+
+<Layout {seo}>
+  <div class="styleguide">
+    <!-- MINI NAV -->
+   { /*<nav class="localNav" aria-label="Obsah">
+      <a href="#fonty">Fonty</a>
+      <a href="#barvy">Barvy</a>
+      <a href="#logo">Logo</a>
+      <a href="#download">Ke stažení</a>
+      {electionAssets.length > 0 && <a href="#volby2025">Volby 2025</a>}
+    </nav>*/}
+
+    <TextSection>
+      <h1>Grafika hnutí</h1>
+      <p class="lead">
+        Přehled základních vizuálních prvků Hnutí Kruh: fonty, barvy, logotyp a soubory ke stažení.
+        Slouží jako rychlá pomůcka pro konzistentní použití značky.
+      </p>
+
+       <h2 id="fonty">Fonty</h2>
+      <!-- NOVÁ STRUKTURA TYPE SAMPLES -->
+      <div class="typeSamples">
+        <p class="fontHeadline">FONT - <span>Berlin Sans FB Demi</span></p>
+        <p class="fontSerif">
+          FONT - <span>Noto Serif</span>
+          <span class="variantList">
+            <span class="w-normal">Normal</span> /
+            <span class="w-light">Light</span> /
+            <span class="w-bold">Bold</span> /
+            <span class="italic">Italic</span>
+          </span>
+        </p>
+        <!-- PŮVODNÍ VZORKY – můžeš smazat pokud nechceš -->
+        <div class="samplesBody">
+          <p class="serif normal">Odstavec – Noto Serif Regular. Krátký text pro demonstraci prokladu a čitelnosti.</p>
+          <p class="serif light w-light">Light – Noto Serif Light, jemnější pro doprovodné pasáže.</p>
+          <p class="serif bold w-bold">Bold – Noto Serif Bold pro zvýraznění.</p>
+          <p class="serif italic italic">Italic – Noto Serif Italic pro citace.</p>
+        </div>
+      </div>
+
+        <h2 id="barvy">Barvy</h2>
+      <p>Hlavní a doplňková paleta. Text uvnitř dlaždic má automaticky volený kontrast.</p>
+      <div class="swatches">
+        {palette.map(c => (
+          <div class="swatch" style={`--col:${c.hex};--fg:${c.fg}`}>
+            <div class="swatch-inner">
+              <span class="name">{c.name}</span>
+              <strong>{c.hex}</strong>
+              <span class="rgb">RGB {c.rgb}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+            <h2 id="logo">Použití loga</h2>
+      <ul class="guidelines">
+        <li>Neotáčet ani nedeformovat poměry stran.</li>
+        <li>Zachovat ochrannou zónu (min. výška symbolu okolo loga).</li>
+        <li>Na světlém pozadí plnobarevná varianta; na tmavém možnost inverzní.</li>
+        <li>Minimální šířka: tisk ≥ 25&nbsp;mm, web ≥ 160&nbsp;px.</li>
+        <li>Bez dodatečných neautorizovaných efektů.</li>
+      </ul>
+      <div class="logoPreview">
+        <figure class="logoItem">
+          <img src="/assets/brand/logo_ruzova.png" alt="Logo Hnutí Kruh" loading="lazy" class="noShadow" />
+          <figcaption>Logo</figcaption>
+        </figure>
+        <figure class="logoItem">
+          <img src="/assets/brand/kolo.png" alt="Symbol Hnutí Kruh" loading="lazy" class="noShadow" />
+          <figcaption>Symbol</figcaption>
+        </figure>
+      </div>
+
+         <h2 id="download">Ke stažení (Brand)</h2>
+      {baseAssets.length === 0 && <p><em>Žádné soubory ve složce /public/assets/brand.</em></p>}
+      {baseAssets.length > 0 && (
+        <ul class="assetGrid">
+          {baseAssets.map(a => {
+            const url = brandPath + encodeURI(a.rel);
+            const isImg = /\.(png|jpe?g|svg|webp|gif)$/i.test(a.rel);
+            const ext = a.rel.split('.').pop()?.toUpperCase();
+            return (
+              <li>
+                <a href={url} download>
+                  <div class="thumb">
+                    {isImg
+                      ? <img src={url} alt={a.rel} loading="lazy" />
+                      : <span class="ext">{ext}</span>
+                    }
+                  </div>
+                  <span class="file">{a.rel}</span>
+                  <span class="size">{formatSize(a.size)}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+          {electionAssets.length > 0 && (
+        <>
+          <h2 id="volby2025">Volby 2025 – volební grafika</h2>
+          <ul class="assetGrid">
+            {electionAssets.map(a => {
+              const url = brandPath + encodeURI(a.rel);
+              const isImg = /\.(png|jpe?g|svg|webp|gif)$/i.test(a.rel);
+              const ext = a.rel.split('.').pop()?.toUpperCase();
+              return (
+                <li>
+                  <a href={url} download>
+                    <div class="thumb">
+                      {isImg
+                        ? <img src={url} alt={a.rel} loading="lazy" />
+                        : <span class="ext">{ext}</span>
+                      }
+                    </div>
+                    <span class="file">{a.rel}</span>
+                    <span class="size">{formatSize(a.size)}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+    )}
+    </TextSection>
+
+</Layout>
+
+<style>
+
+  /* MINI NAV */
+  .localNav {
+    display:flex; flex-wrap:wrap; gap:.6rem; padding:.75rem 1rem; margin:0 auto 1.2rem;
+    background:linear-gradient(135deg,#ffffff80,#ffd5d580);
+    border:1px solid #ffffff70; border-radius:999px; width:fit-content; font-size:.8rem;
+    box-shadow:var(--g-box-shadow);
+  }
+  .localNav a { text-decoration:none; font-weight:600; color:var(--theme-text,#333); padding:.3rem .9rem; border-radius:999px; transition:.25s background,color; }
+  .localNav a:hover { background:#fff; color:var(--theme-primary,#c05050); }
+
+  /* === TYPE SAMPLES (updated alignment) === */
+  .typeSamples {
+    display:block;
+    text-align:left;
+    margin: 2.5rem 0 2rem;
+  }
+  .typeSamples .variantList { text-align:left; }
+  .samplesBody { max-width:68ch; margin:0; }
+  .typeSamples .fontHeadline {
+    font-family:"Berlin Sans FB Demi","Arial Rounded MT Bold",Arial,sans-serif;
+    font-size: clamp(2.4rem, 5.2vw, 3.6rem);
+    font-weight:600;
+    line-height:1.05;
+    letter-spacing:.5px;
+    margin:0 0 1.2rem;
+  }
+  .typeSamples .fontHeadline span {
+    font-weight:600;
+  }
+  .typeSamples .fontSerif {
+    font-family:"Noto Serif", Georgia, serif;
+    font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+    font-weight:400;
+    line-height:1.15;
+    margin:0 0 1.6rem;
+  }
+  .typeSamples .fontSerif span:first-child {
+    font-weight:400;
+  }
+  .typeSamples .variantList {
+    display:inline-block;
+    font-size: clamp(.9rem, 1.4vw, 1.1rem);
+    margin-left:.5rem;
+    letter-spacing:.3px;
+  }
+  .w-light { font-weight:300; }
+  .w-normal { font-weight:400; }
+  .w-bold { font-weight:700; }
+  .italic { font-style:italic; }
+  .samplesBody {
+    max-width: 68ch;
+    font-size:.9rem;
+  }
+  .samplesBody p { margin:.35rem 0; }
+
+  /* SWATCHES (nový vzhled) */
+  .swatches {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:1rem;
+    margin-top:1.2rem;
+    margin-bottom: 1rem;
+  }
+  .swatch {
+    position:relative;
+    border-radius:1rem;
+    overflow:hidden;
+    background:var(--col);
+    color:var(--fg);
+    min-height:110px;
+    box-shadow:0 2px 6px -1px rgba(0,0,0,.15),0 0 0 1px rgba(0,0,0,.05);
+    display:flex;
+    align-items:flex-end;
+  }
+  .swatch-inner {
+    width:100%;
+    padding:.55rem .7rem .6rem;
+    backdrop-filter:blur(2px) brightness(1.05);
+    display:flex;
+    flex-direction:column;
+    gap:.15rem;
+  }
+  .swatch .name { font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; font-weight:600; opacity:.9; }
+  .swatch strong { font-size:.9rem; line-height:1; }
+  .swatch .rgb { font-size:.65rem; opacity:.85; font-weight:500; letter-spacing:.03em; }
+
+  /* ASSETS GRID */
+  .assetGrid {
+    --gap: .6rem;
+    list-style:none;
+    padding:0;
+    margin:2rem;
+    display:grid;
+    gap:var(--gap);
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  }
+  .assetGrid li a {
+    display:flex;
+    flex-direction:column;
+    gap:.35rem;
+    border:1px solid #ffffffd0;
+    padding:.75rem .85rem .7rem;
+    border-radius:.9rem;
+    text-decoration:none;
+    font-size:.8rem;
+    font-weight:600;
+    position:relative;
+    min-height:160px;
+    box-shadow:var(--g-box-shadow,0 2px 4px rgba(0,0,0,.08));
+    transition:.25s box-shadow, .25s transform;
+  }
+  .assetGrid li a:hover {
+    box-shadow:0 4px 18px -2px rgba(0,0,0,.16);
+    transform:translateY(-3px);
+  }
+  .assetGrid .thumb {
+    width:100%;
+    aspect-ratio: 4 / 3;
+    border:1px solid #ffffffb0;
+    border-radius:.6rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+  .assetGrid .thumb img {
+    max-width:70%;
+    max-height:70%;
+    object-fit:contain;
+    display:block;
+    box-shadow: none;
+    border:none;
+    border-radius: 0;
+  }
+  .assetGrid .thumb .ext {
+    font-size:.9rem;
+    font-weight:700;
+    letter-spacing:.08em;
+  }
+  .assetGrid .file { margin-top:.3rem; }
+  .assetGrid .size {
+    font-weight:500;
+    font-size:.65rem;
+    padding:.25rem .5rem;
+    border-radius:6px;
+    background:rgba(0,0,0,.08);
+    align-self:flex-start;
+    letter-spacing:.04em;
+  }
+
+  /* LOGO GUIDELINES */
+  .guidelines {
+    margin: 0 0 1.2rem;
+    padding-left: 1.2rem;
+  }
+  .guidelines li { margin:.3em 0; }
+
+  .logoPreview {
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.8rem;
+    align-items:flex-start;
+  }
+  .logoPreview .logoItem {
+    margin:0;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.4rem;
+    max-width:240px;
+  }
+  .logoPreview .logoItem img {
+    height:200px;
+    max-width:100%;
+    object-fit:contain;
+    padding:.7rem 1rem 0;
+  }
+  .logoPreview .logoItem figcaption {
+    font-size:.7rem;
+    font-weight:600;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--theme-text-light,#555);
+  }
+
+  /* DARK MODE */
+  @media (prefers-color-scheme:dark) {
+    .localNav { background:linear-gradient(135deg,#202020,#2d1f1f); border-color:#3a3a3a; }
+    .localNav a { color:#ddd; }
+    .localNav a:hover { background:#333; color:#ffbfbf; }
+    .swatch { box-shadow:0 2px 6px -1px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08); }
+    .swatch-inner { backdrop-filter:blur(3px) brightness(1.1); }
+    .assetGrid .thumb {
+      background:linear-gradient(145deg,#242424,#3a2d2d);
+      border-color:#333;
+    }
+    .assetGrid .thumb .ext { color:#ddd; }
+    .logoPreview .logoItem figcaption { color:#888; }
+  }
+</style>

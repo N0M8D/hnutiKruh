@@ -1,0 +1,679 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { TextSection } from '@components/odyssey-theme';
+import fs from 'node:fs';
+import path from 'node:path';
+import { accounts } from '../../config/ucty.js';
+
+// SEO
+const seo = {
+  title: 'Financování | Hnutí Kruh',
+  description: 'Transparentnost financování Hnutí Kruh – bankovní účty, smlouvy a transakce volebního účtu.'
+};
+
+// 2) Načtení smluv z /public/assets/contracts
+interface ContractFile {
+  file: string;
+  size: number;
+  mtime: Date;
+  ext: string;
+  url: string;
+}
+const contractsDir = path.join(process.cwd(), 'public', 'assets', 'contracts');
+let contracts: ContractFile[] = [];
+if (fs.existsSync(contractsDir)) {
+  contracts = fs.readdirSync(contractsDir)
+    .filter(f => /\.(pdf|docx?|odt)$/i.test(f))
+    .map(f => {
+      const fp = path.join(contractsDir, f);
+      const st = fs.statSync(fp);
+      return {
+        file: f,
+        size: st.size,
+        mtime: st.mtime,
+        ext: f.split('.').pop()!.toLowerCase(),
+        url: `/assets/contracts/${encodeURIComponent(f)}`
+      };
+    })
+    .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+}
+
+// 3) Načtení transakcí volebního účtu
+// Umožníme dvě varianty:
+// - PUBLIC_ELECTION_ACCOUNT_API (plná URL na JSON endpoint banky / proxy)
+// - PUBLIC_ELECTION_ACCOUNT_JSON (statický JSON string nebo relative path)
+// Pokud není nic dostupné -> fallback.
+interface RawTx {
+  id: string;
+  date: string;
+  sender?: string;
+  recipient?: string;
+  amount: number;
+  currency?: string;
+  message?: string;
+  vs?: string;
+  type?: 'IN' | 'OUT';
+}
+
+let electionTransactions: RawTx[] = [];
+let fetchError: string | null = null;
+
+async function tryLoadElection() {
+  const api = import.meta.env.PUBLIC_ELECTION_ACCOUNT_API;
+  const rawJson = import.meta.env.PUBLIC_ELECTION_ACCOUNT_JSON;
+  try {
+    if (api) {
+      const res = await fetch(api);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      // Očekáváme pole transakcí; když ne, zkusíme data.transactions
+      const list = Array.isArray(data) ? data : (Array.isArray(data.transactions) ? data.transactions : []);
+      electionTransactions = list.map((t: any, i: number) => ({
+        id: t.id || String(i),
+        date: t.date || t.bookingDate || t.posted || new Date().toISOString().slice(0,10),
+        sender: t.sender || t.from || t.partnerName || '',
+        recipient: t.recipient || t.to || '',
+        amount: parseFloat(t.amount || t.value || 0),
+        currency: t.currency || 'CZK',
+        message: t.message || t.note || t.description || '',
+        vs: t.variableSymbol || t.vs || '',
+        type: (t.amount || t.value || 0) >= 0 ? 'IN' : 'OUT'
+      }));
+      return;
+    }
+    if (rawJson) {
+      const data = JSON.parse(rawJson);
+      const list = Array.isArray(data) ? data : (Array.isArray(data.transactions) ? data.transactions : []);
+      electionTransactions = list.map((t: any, i: number) => ({
+        id: t.id || String(i),
+        date: t.date || t.bookingDate || new Date().toISOString().slice(0,10),
+        sender: t.sender || t.from || '',
+        recipient: t.recipient || t.to || '',
+        amount: parseFloat(t.amount || t.value || 0),
+        currency: t.currency || 'CZK',
+        message: t.message || t.note || '',
+        vs: t.variableSymbol || t.vs || '',
+        type: (t.amount || t.value || 0) >= 0 ? 'IN' : 'OUT'
+      }));
+      return;
+    }
+    // fallback sample
+    electionTransactions = [
+      /*{
+        id: 'SAMPLE1',
+        date: '2025-01-15',
+        sender: 'Jan Novák',
+        recipient: 'Hnutí Kruh',
+        amount: 2500,
+        currency: 'CZK',
+        message: 'Dar volební kampaň',
+        vs: '20250115',
+        type: 'IN'
+      },
+      {
+        id: 'SAMPLE2',
+        date: '2025-01-20',
+        sender: 'Hnutí Kruh',
+        recipient: 'Tiskárna XYZ s.r.o.',
+        amount: -4800,
+        currency: 'CZK',
+        message: 'Tisk letáků',
+        vs: '444555',
+        type: 'OUT'
+      },
+      {
+        id: 'SAMPLE3',
+        date: '2025-01-22',
+        sender: 'Petra Svobodová',
+        recipient: 'Hnutí Kruh',
+        amount: 1000,
+        currency: 'CZK',
+        message: 'Podpora kampaně',
+        vs: '20250122',
+        type: 'IN'
+      }*/
+    ];
+  } catch (e: any) {
+    fetchError = e.message;
+  }
+}
+await tryLoadElection();
+
+// Agregace
+const totalIn = electionTransactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+const totalOut = electionTransactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0);
+const balance = totalIn + totalOut;
+
+// Utility
+function formatCurrency(v: number) {
+  return v.toLocaleString('cs-CZ', { style: 'currency', currency: 'CZK', minimumFractionDigits: 2 });
+}
+function formatDate(d: string) {
+  try {
+    return new Date(d).toLocaleDateString('cs-CZ');
+  } catch {
+    return d;
+  }
+}
+function formatSize(bytes: number) {
+  if (bytes < 1024) return bytes + ' B';
+  const kb = bytes / 1024;
+  if (kb < 1024) return kb.toFixed(1) + ' KB';
+  return (kb / 1024).toFixed(2) + ' MB';
+}
+---
+
+<Layout {seo}>
+  <TextSection>
+    <h1>Financování a smlouvy</h1>
+    <p>
+      Otevřenost považujeme za základ důvěry. Níže naleznete naše účty, přehled transakcí
+      volebního (transparentního) účtu a seznam zveřejněných smluv.
+    </p>
+
+    <h2 id="ucty">Bankovní účty</h2>
+    {accounts.length === 0 ? (
+      <p class="noAccounts">Aktuálně nejsou zveřejněny žádné bankovní účty.</p>
+    ) : (
+      <div class="accounts">
+        {accounts.map(acc => (
+          <div class={`acc acc--${acc.type || 'other'}`}>
+            <div class="acc-head">
+              <h3 class="acc-label">{acc.label}</h3>
+              <p class="purpose">{acc.purpose}</p>
+            </div>
+            <div class="acc-number-row">
+              <code class="acc-num" data-copy={acc.number}>{acc.number}</code>
+              <button class="copyBtn" data-copy={acc.number}>Kopírovat</button>
+            </div>
+            {acc.iban && (
+              <div class="iban-row">
+                <span class="iban-tag">IBAN</span>
+                <code class="iban-code" data-copy={acc.iban}>{acc.iban}</code>
+                <button class="copyBtn small" data-copy={acc.iban}>📋</button>
+              </div>
+            )}
+            {acc.note && <p class="note">{acc.note}</p>}
+            {acc.transparent && acc.bankUrl && (
+              <p class="bankLink">
+                <a href={acc.bankUrl} target="_blank" rel="noopener">Online výpis →</a>
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <h2 id="volebni-ucet">Transparentní (volební) účet</h2>
+    {fetchError && <p class="warn">Nepodařilo se načíst živá data: {fetchError}. Zobrazeny fallback/ukázkové položky.</p>}
+    <div class="totals">
+      <div><span class="label">Příjmy</span><span class="value in">{formatCurrency(totalIn)}</span></div>
+      <div><span class="label">Výdaje</span><span class="value out">{formatCurrency(totalOut)}</span></div>
+      <div><span class="label">Zůstatek</span><span class="value bal">{formatCurrency(balance)}</span></div>
+      <div><span class="label">Transakcí</span><span class="value">{electionTransactions.length}</span></div>
+    </div>
+    <div class="tableWrap">
+      <table class="txTable" aria-describedby="volebni-ucet">
+        <caption class="visually-hidden">Transakce transparentního volebního účtu</caption>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Od / Komu</th>
+            <th class="number-col">Částka</th>
+            <th>Zpráva</th>
+            <th>VS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {electionTransactions.map(tx => (
+            <tr class={tx.amount < 0 ? 'out' : 'in'}>
+              <td>{formatDate(tx.date)}</td>
+              <td>{tx.amount < 0 ? (tx.recipient || '—') : (tx.sender || '—')}</td>
+              <td class="amt number-col">{formatCurrency(tx.amount)}</td>
+              <td class="msg">{tx.message || '—'}</td>
+              <td class="number-col">{tx.vs || '—'}</td>
+            </tr>
+          ))}
+          {electionTransactions.length === 0 && (
+            <tr>
+              <td colspan={5} style="text-align:center; opacity:.7;">Žádné transakce k zobrazení.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="smlouvy">Smlouvy</h2>
+    {contracts.length === 0 && <p>Momentálně nejsou zveřejněny žádné soubory.</p>}
+    {contracts.length > 0 && (
+      <ul class="contracts">
+        {contracts.map(c => (
+          <li>
+            <a href={c.url} download>
+              <span class="file">{c.file}</span>
+              <span class="meta">
+                <span>{formatSize(c.size)}</span>
+                <span>{c.mtime.toLocaleDateString('cs-CZ')}</span>
+                <span class="ext">{c.ext.toUpperCase()}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </TextSection>
+</Layout>
+
+<style>
+  /* ACCESSIBILITY HELPERS */
+  .visually-hidden {
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+  }
+
+  /* HEADINGS */
+  h1,h2,h3 { text-align:center; }
+
+  /* === ACCOUNTS REDESIGN === */
+  .accounts {
+    display:grid;
+    gap:1.4rem;
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+    margin:1.4rem 0 2.6rem;
+  }
+  .acc {
+    --acc-bg: #ffffff;
+    --acc-border: #e5d5cb;
+    --acc-accent: #6a4d34;
+    --acc-accent-soft: #ffe6d5;
+    position:relative;
+    border:1px solid var(--acc-border);
+    border-radius:12px;
+    background:linear-gradient(180deg,var(--acc-bg),var(--acc-bg)) padding-box,
+               radial-gradient(circle at 110% -10%,var(--acc-accent-soft),transparent 70%) border-box;
+    box-shadow:0 4px 10px -3px rgba(0,0,0,.08),0 1px 0 rgba(255,255,255,.6) inset;
+    display:flex;
+    flex-direction:column;
+    gap:.85rem;
+    padding:1rem 1.05rem 1.15rem;
+    overflow:hidden;
+  }
+  .acc::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(140deg,rgba(255,255,255,.35),rgba(255,255,255,0) 35%),
+      linear-gradient(to top,rgba(0,0,0,.05),rgba(0,0,0,0));
+    mix-blend-mode:overlay;
+    opacity:.65;
+  }
+  .acc-head { display:flex; flex-direction:column; gap:.15rem; }
+  .acc-label {
+    margin:0;
+    font-size:.95rem;
+    font-weight:650;
+    letter-spacing:.3px;
+    line-height:1.15;
+    color:var(--acc-accent);
+    text-transform:uppercase;
+  }
+  .purpose {
+    margin:0;
+    font-size:.62rem;
+    letter-spacing:.12em;
+    font-weight:600;
+    text-transform:uppercase;
+    color:var(--acc-accent);
+    opacity:.78;
+  }
+  .acc-number-row {
+    display:flex;
+    align-items:center;
+    gap:.55rem;
+    flex-wrap:wrap;
+  }
+  .acc-num {
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-weight:600;
+    font-size:.88rem;
+    background:#1d1d1d;
+    color:#fff;
+    padding:.45rem .65rem;
+    border-radius:8px;
+    letter-spacing:.6px;
+    line-height:1;
+    box-shadow:0 2px 4px rgba(0,0,0,.25);
+  }
+  .iban-row {
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    flex-wrap:wrap;
+    margin-top:-.3rem;
+  }
+  .iban-tag {
+    font-size:.55rem;
+    font-weight:700;
+    letter-spacing:.14em;
+    background:var(--acc-accent);
+    color:#fff;
+    padding:.28rem .55rem .26rem;
+    border-radius:999px;
+  }
+  .iban-code {
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:.68rem;
+    letter-spacing:.12em;
+    background:#f4ebe6;
+    padding:.35rem .55rem;
+    border-radius:6px;
+    font-weight:500;
+    max-width:100%;
+    overflow:auto;
+  }
+  .copyBtn {
+    font-size:.62rem;
+    line-height:1;
+    padding:.5rem .75rem .45rem;
+    border:1px solid var(--acc-accent);
+    background:var(--acc-accent);
+    color:#fff;
+    font-weight:600;
+    border-radius:999px;
+    cursor:pointer;
+    letter-spacing:.08em;
+    position:relative;
+    transition:background .25s,border-color .25s,box-shadow .25s,transform .25s;
+  }
+  .copyBtn.small { padding:.38rem .55rem .34rem; font-size:.58rem; }
+  .copyBtn:hover { background:var(--theme-primary); border-color:var(--theme-primary); }
+  .copyBtn:active { transform:translateY(1px); }
+  .copyBtn:focus-visible {
+    outline:none;
+    box-shadow:0 0 0 3px #fff,0 0 0 5px var(--theme-primary);
+  }
+  .copyBtn.copied {
+    background:#2f913f;
+    border-color:#2f913f;
+  }
+  .acc .note {
+    margin:.2rem 0 0;
+    font-size:.6rem;
+    line-height:1.35;
+    color:#402d22;
+    opacity:.85;
+    padding-top:.35rem;
+    border-top:1px dashed #d8c9bd;
+  }
+
+  /* High‑contrast override for primary (Hlavní účet) card */
+  .acc--primary .acc-label,
+  .acc--primary .purpose {
+    color:#ffe6d5 !important;
+    text-shadow:0 1px 2px rgba(0,0,0,.55);
+  }
+
+  /* Optional: slightly warmer accent tint just for this card (keeps other usage) */
+  .acc--primary {
+    --acc-accent:#ffb79a;
+  }
+
+  /* TYPE COLOR VARIANTS */
+  .acc--primary {
+    --acc-accent:#6a4d34;
+    --acc-accent-soft:#ffe6d5;
+  }
+  .acc--election {
+    --acc-accent:#ff8080;
+    --acc-accent-soft:#ffd1d1;
+  }
+  .acc--donations {
+    --acc-accent:#4b8c91;
+    --acc-accent-soft:#d7f1f3;
+  }
+
+  /* TOTALS */
+  .totals {
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.4rem;
+    justify-content:center;
+    margin:1.6rem 0 1rem;
+    font-size:.8rem;
+    background:#ffffff;
+    border:1px solid #d8c9bd;
+    border-radius:32px;
+    padding:.6rem 1.3rem .55rem;
+    box-shadow:0 2px 4px rgba(0,0,0,.06);
+  }
+  .totals > div {
+    display:flex;
+    gap:.4rem;
+    align-items:baseline;
+    position:relative;
+    padding:0 .5rem;
+  }
+  .totals > div:not(:last-child)::after {
+    content:"";
+    position:absolute;
+    right:0;
+    top:10%;
+    height:80%;
+    width:1px;
+    background:#decfc4;
+  }
+  .totals .label {
+    font-weight:600;
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#6a4d34;
+  }
+  .totals .value { font-weight:600; font-variant-numeric:tabular-nums; }
+  .totals .value.in { color:#0c6b2d; }
+  .totals .value.out { color:#b42323; }
+  .totals .value.bal { color:#4b3a2d; }
+
+  /* TABLE */
+  .tableWrap {
+    overflow-x:auto;
+    border:1px solid #d8c9bd;
+    border-radius:10px;
+    background:#fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.05);
+    margin-bottom:2.3rem;
+  }
+  .txTable {
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    font-size:.75rem;
+    letter-spacing:.15px;
+  }
+  .txTable thead th {
+    background:#6a4d34;
+    color:#fff;
+    font-weight:600;
+    padding:.55rem .65rem;
+    position:sticky;
+    top:0;
+    z-index:2;
+    text-align:left;
+    font-size:.7rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .txTable th:first-child { border-top-left-radius:10px; }
+  .txTable th:last-child { border-top-right-radius:10px; }
+  .txTable tbody td {
+    padding:.5rem .65rem;
+    border-bottom:1px solid #efe3db;
+    background:#fff;
+    line-height:1.25;
+    vertical-align:top;
+  }
+  .txTable tbody tr:nth-child(even) td { background:#faf5f2; }
+  .txTable tbody tr:hover td { background:#ffece4; }
+  .txTable tbody tr:last-child td { border-bottom:none; }
+  .txTable tbody tr.in .amt { color:#0c6b2d; font-weight:600; }
+  .txTable tbody tr.out .amt { color:#b42323; font-weight:600; }
+  .txTable .msg { max-width:260px; }
+  .number-col, .amt { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+  /* CONTRACTS */
+  .contracts {
+    list-style:none;
+    padding:0;
+    margin:1.2rem 0 1.4rem;
+    display:grid;
+    gap:.65rem;
+  }
+  @media (min-width:760px) {
+    .contracts { grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
+  }
+  .contracts li a {
+    display:flex;
+    justify-content:space-between;
+    gap:.9rem;
+    text-decoration:none;
+    background:#ffffff;
+    border:1px solid #d9c9bd;
+    padding:.7rem .85rem;
+    border-radius:8px;
+    font-size:.68rem;
+    line-height:1.2;
+    color:#4b3a2d;
+    transition:background .2s, border-color .2s, box-shadow .2s;
+  }
+  .contracts li a:hover {
+    background:#fff6f2;
+    border-color:#c9b3a2;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);
+  }
+  .contracts .file {
+    font-weight:600;
+    word-break:break-word;
+    font-size:.7rem;
+  }
+  .contracts .meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:.45rem;
+    align-items:center;
+    opacity:.85;
+  }
+  .contracts .ext {
+    background:#6a4d34;
+    color:#fff;
+    font-weight:600;
+    padding:.18rem .55rem;
+    border-radius:12px;
+    letter-spacing:.05em;
+    font-size:.55rem;
+  }
+
+  /* WARN BOX */
+  .warn {
+    background:#fff4f4;
+    border:1px solid #e8b5b5;
+    padding:.6rem .8rem;
+    border-radius:8px;
+    font-size:.7rem;
+    margin-top:.8rem;
+  }
+
+  /* DARK MODE */
+  @media (prefers-color-scheme:dark) {
+    .acc {
+      --acc-bg:#272220;
+      --acc-border:#3c322d;
+      background:linear-gradient(180deg,var(--acc-bg),#221c1a) padding-box,
+                 radial-gradient(circle at 110% -10%,var(--acc-accent-soft,rgba(255,255,255,.06)),transparent 70%) border-box;
+      box-shadow:0 4px 10px -3px rgba(0,0,0,.65),0 1px 0 rgba(255,255,255,.05) inset;
+    }
+    .acc-label,
+    .purpose { color:var(--acc-accent); }
+    .acc-num { background:#111; color:#ffe6d5; }
+    .iban-code { background:#332a26; color:#fbeee7; }
+    .acc .note { color:#e9dbd4; border-top-color:#4a3d36; }
+    .copyBtn:hover { background:var(--acc-accent); border-color:var(--acc-accent); }
+    .acc--election .copyBtn:hover { background:#ff9090; }
+  }
+
+  /* RESPONSIVE TWEAK */
+  @media (max-width:520px){
+    .acc-number-row { flex-direction:column; align-items:flex-start; }
+    .copyBtn { align-self:flex-start; }
+  }
+
+  /* NO ACCOUNTS MESSAGE */
+  .noAccounts {
+    font-size:.85rem;
+    background:#ffffff;
+    border:1px solid #e5d5cb;
+    padding:.9rem 1rem;
+    border-radius:8px;
+    text-align:center;
+    margin:1rem 0 2.6rem;
+    box-shadow:0 2px 4px rgba(0,0,0,.05);
+  }
+
+  @media (prefers-color-scheme:dark){
+    .noAccounts {
+      background:#272220;
+      border-color:#3c322d;
+      color:#e9dbd4;
+      box-shadow:0 2px 4px rgba(0,0,0,.6);
+    }
+  }
+
+  .bankLink {
+    margin:.35rem 0 0;
+    font-size:.62rem;
+    font-weight:600;
+    letter-spacing:.05em;
+  }
+  .bankLink a {
+    text-decoration:none;
+    border-bottom:1px solid currentColor;
+    padding-bottom:1px;
+  }
+  .bankLink a:hover { border-bottom-width:2px; }
+</style>
+
+<script is:inline>
+  document.addEventListener('click', e => {
+    const btn = (e.target as HTMLElement).closest('.copyBtn');
+    if(!btn) return;
+    const value = btn.getAttribute('data-copy');
+    if(!value) return;
+    navigator.clipboard.writeText(value.replace(/\s+/g,'')).then(()=>{
+      const orig = btn.textContent;
+      btn.classList.add('copied');
+      btn.textContent = 'OK';
+      setTimeout(()=>{
+        btn.classList.remove('copied');
+        btn.textContent = orig || 'Kopírovat';
+      },1400);
+    });
+  });
+</script>
+<script is:inline>
+  document.addEventListener('click', e => {
+    const btn = (e.target as HTMLElement).closest('.copyBtn');
+    if(!btn) return;
+    const value = btn.getAttribute('data-copy');
+    if(!value) return;
+    navigator.clipboard.writeText(value.replace(/\s+/g,'')).then(()=>{
+      const orig = btn.textContent;
+      btn.classList.add('copied');
+      btn.textContent = 'OK';
+      setTimeout(()=>{
+        btn.classList.remove('copied');
+        btn.textContent = orig || 'Kopírovat';
+      },1400);
+    });
+  });
+</script>

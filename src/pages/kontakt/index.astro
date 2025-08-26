@@ -1,0 +1,212 @@
+---
+import Layout from '../../layouts/Page.astro';
+import { TextSection, Button } from '@components/odyssey-theme';
+import { accounts } from '../../config/ucty.js';
+
+const seo = {
+  title: 'Kontakt | Hnutí Kruh',
+  description: 'Kontaktní údaje Hnutí Kruh – sídlo, IČO, datová schránka, e-maily a kontakty pro média.',
+};
+
+interface ContactItem { label:string; value:string; note?:string; href?:string; }
+
+const orgData = {
+  name: 'Hnutí Kruh',
+  short: 'Kruh',
+  seat: ['Pod Sokolovnou 252', '289 21 Kostomlaty nad Labem', 'Česká republika'],
+  ico: '23528214',
+  datovka: 'nfjtzqm',
+  infoMail: 'info@hnutikruh.cz',
+  mediaMail: 'info@hnutikruh.cz',
+  mediaPhone: '+420 724 020 585',
+  web: 'https://www.hnutikruh.cz'
+};
+
+const general: ContactItem[] = [
+  { label: 'Název hnutí', value: orgData.name },
+  { label: 'Zkratka', value: orgData.short },
+  { label: 'Sídlo', value: orgData.seat.join(', ') },
+  { label: 'Fakturační adresa', value: 'Adresa pro zasílání účetních dokladů je shodná se sídlem hnutí.' },
+  { label: 'IČO', value: orgData.ico },
+  { label: 'Datová schránka', value: orgData.datovka },
+  { label: 'Web', value: orgData.web.replace(/^https?:\/\//,''), href: orgData.web },
+  { label: 'E-mail (obecný)', value: orgData.infoMail, href: `mailto:${orgData.infoMail}` },
+];
+
+const media: ContactItem[] = [
+  { label: 'E-mail pro média', value: orgData.mediaMail, href: `mailto:${orgData.mediaMail}` },
+  { label: 'Telefon', value: orgData.mediaPhone, href: `tel:${orgData.mediaPhone.replace(/\s+/g,'')}` },
+];
+
+const transparentAccounts = accounts
+  .filter(a => a.transparent)
+  .map(a => ({
+    label: a.label,
+    number: a.number,
+    iban: a.iban,
+    bankUrl: a.bankUrl
+  }));
+---
+
+<Layout {seo}>
+  <TextSection>
+    <h1>Kontakt</h1>
+    <p class="lead">
+      Máte dotaz, chcete se zapojit nebo potřebujete mediální vyjádření? Tady najdete všechny důležité údaje.
+    </p>
+
+    <section aria-labelledby="org" class="contactCard">
+      <h2 id="org">Základní údaje</h2>
+      <dl class="contacts">
+        {general.map(item => (
+          <div class="row">
+            <dt>{item.label}</dt>
+            <dd>{item.href ? <a href={item.href} rel="noopener">{item.value}</a> : item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    {transparentAccounts.length > 0 && (
+      <section aria-labelledby="trans" class="contactCard">
+        <h2 id="trans">Transparentní účty</h2>
+        <dl class="contacts">
+          {transparentAccounts.map(acc => (
+            <div class="row">
+              <dt>{acc.label}</dt>
+              <dd>
+                <span class="acct-line">{acc.number}{acc.iban && ` (IBAN ${acc.iban})`}</span>
+                {acc.bankUrl && (
+                  <small class="acct-link">
+                    <a href={acc.bankUrl} target="_blank" rel="noopener">Online výpis</a>
+                  </small>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    <section aria-labelledby="media" class="contactCard">
+      <h2 id="media">Pro média</h2>
+      <dl class="contacts">
+        {media.map(item => (
+          <div class="row">
+            <dt>{item.label}</dt>
+            <dd>{item.href ? <a href={item.href}>{item.value}</a> : item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="note">Preferujeme e‑mail – do předmětu uveďte “MEDIA”.</p>
+    </section>
+
+    <section aria-labelledby="join" class="contactCard">
+      <h2 id="join">Zapoj se</h2>
+      <p>Chceš se stát součástí KRUHU? Napiš nám nebo sleduj naše kanály.</p>
+      <div class="cta">
+        <Button href="mailto:info@hnutikruh.cz" fullWidth>E-mail info@hnutikruh.cz</Button>
+        <Button href="/manifest" outlined fullWidth>Manifest</Button>
+        <Button href="/people" outlined fullWidth>Lidé hnutí</Button>
+        <Button href="/forms/zapoj-se" outlined fullWidth>Zapoj se</Button>
+      </div>
+    </section>
+  </TextSection>
+</Layout>
+
+<style>
+/* ...existing global styles apply... */
+
+/* Karty pro lepší čitelnost (bez změny barev textu) */
+.contactCard {
+  padding:1.25rem 1.3rem 1.4rem;
+  margin:2.2rem 0;
+  border:1px solid rgba(0,0,0,0.05);
+  border-radius:20px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 20px -6px rgba(0,0,0,.12);
+}
+@media (prefers-color-scheme:dark){
+  .contactCard {
+    border-color:rgba(255,255,255,0.08);
+    box-shadow:0 4px 24px -8px rgba(0,0,0,.7);
+  }
+}
+
+/* Nadpisy sekcí – pouze spacing */
+.contactCard h2 { margin:0 0 1rem; }
+
+/* Kontaktní seznam */
+.contacts {
+  display:grid;
+  gap:.4rem 1.2rem;
+  margin:0;
+}
+.contacts .row {
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:1.2rem;
+  padding:.55rem 0;
+  border-bottom:1px solid rgba(0,0,0,0.12);
+}
+.contacts .row:last-child { border-bottom:none; }
+@media (prefers-color-scheme:dark){
+  .contacts .row { border-color:rgba(255,255,255,0.12); }
+}
+
+/* Typografie struktur – nepřepisujeme barvy / font-family */
+dt {
+  font-size:.65rem;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  font-weight:600;
+  margin:0;
+  line-height:1.2;
+}
+dd {
+  margin:0;
+  font-size:.88rem;
+  line-height:1.45;
+}
+dd small {
+  display:block;
+  font-size:.6rem;
+  letter-spacing:.05em;
+  margin-top:.3rem;
+  opacity:.75;
+}
+
+/* Odkazy – zachovat globální barvy; jen jemné underline na hover */
+dd a {
+  text-decoration:none;
+  border-bottom:1px solid currentColor;
+  padding-bottom:1px;
+}
+dd a:hover { border-bottom-width:2px; }
+
+/* Poznámka */
+.note {
+  font-size:.62rem;
+  margin:.6rem 0 0;
+  line-height:1.3;
+  opacity:.75;
+}
+
+/* CTA */
+.cta {
+  display:grid;
+  gap:.7rem;
+  margin:1rem 0 0;
+}
+
+/* Účty */
+.acct-line { display:inline-block; }
+.acct-link { display:block; margin-top:.25rem; font-size:.58rem; letter-spacing:.05em; }
+
+/* Mobile */
+@media (max-width:640px){
+  .contacts .row { grid-template-columns:1fr; padding:.6rem 0; }
+  dt { order: -1; }
+  .contactCard { padding:1.1rem 1rem 1.25rem; }
+}
+</style>

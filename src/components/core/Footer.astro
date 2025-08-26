@@ -17,65 +17,78 @@ const {
 <footer>
   <Container>
     <div class="footer-grid__container">
-      <div class="footer-brand__container">
-        <div>
+      <!-- Col 1: Logo + socials -->
+      <div class="footer-col footer-col--brand">
+        <div class="footer-brand__container">
           <slot name="logo" />
         </div>
-        <ul class="footer-socials__list">
-          {footerSocials.map((social) => (
-            <li class="footer-socials__item">
-              <a
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="footer-socials__link"
-                title={`Open ${social.name} profile`}
-              >
-                <Icon name={social.icon} viewBox="0 0 402 402" width={48} height={48} />
-              </a>
-            </li>
-          ))}
-        </ul>
+        {footerSocials?.length > 0 && (
+          <ul class="footer-socials__list">
+            {footerSocials.map((social) => (
+              <li class="footer-socials__item">
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="footer-socials__link"
+                  title={`Open ${social.name} profile`}
+                >
+                  <Icon name={social.icon} viewBox="0 0 402 402" width={48} height={48} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
-      {footerLists.map((list) => (
-        <div>
-          <p><strong>{list.title}</strong></p>
-          <ul class="footer-link__list">
-            {list.items.map((item) => (
-              <li>
-                <a href={item.slug}>{item.title}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <!-- Col 2: Footer lists -->
+      <div class="footer-col footer-col--lists">
+        {footerLists.map((list) => (
+          <div class="footer-list-block">
+            <p><strong>{list.title}</strong></p>
+            <ul class="footer-link__list">
+              {list.items.map((item) => (
+                <li>
+                  <a href={item.slug}>{item.title}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
 
-      <!-- New contactList column -->
+      <!-- Col 3: Contacts -->
       {contactList && (
-        <div>
+        <div class="footer-col footer-col--contact">
           <p><strong>Kontakt</strong></p>
-          <ul class="footer-contact__list">
-            {contactList.map((person) => (
-              <li class="footer-contact__item">
-                <span class="contact-name">{person.name}</span>
-                <span class="contact-separator">|</span>
-                <a href={`mailto:${person.email}`} class="contact-email">{person.email}</a>
-                <span class="contact-separator">|</span>
-                <a href={`tel:${person.phone.replace(/\s+/g, '')}`} class="contact-phone">{person.phone}</a>
-              </li>
-            ))}
-          </ul>
+            <ul class="footer-contact__list">
+              {contactList.map((person) => (
+                <li class="footer-contact__item">
+                  <span class="contact-name">{person.name}</span>
+                  {person.email && <>
+                    <span class="contact-separator">|</span>
+                    <a href={`mailto:${person.email}`} class="contact-email">{person.email}</a>
+                  </>}
+                  {person.phone && <>
+                    <span class="contact-separator">|</span>
+                    <a href={`tel:${person.phone.replace(/\s+/g, '')}`} class="contact-phone">{person.phone}</a>
+                  </>}
+                </li>
+              ))}
+            </ul>
         </div>
       )}
-      
     </div>
-    <div class="footer-copyright__container">
+
+    <div class="footer-bottom">
       {showPlug && <Plug />}
-      <p>
-        Copy, right? @{new Date().getFullYear()} {copyrightName} | <a href="/organisation/legal" >Zásady ochrany osobních údajů</a>
+      <p class="footer-legal">
+        Copy, right? @{new Date().getFullYear()} {copyrightName}
+        <span class="divider">|</span>
+        <a href="/organisation/legal">Zásady ochrany osobních údajů</a>
+        <span class="divider">|</span>
+        Zadavatel & Zpracovatel: Hnutí Kruh
       </p>
-      <p> Zadavatel | Zpracovatel: Hnutí Kruh</p>
     </div>
   </Container>
 </footer>
@@ -94,11 +107,60 @@ const {
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
   }
   .footer-grid__container {
-    padding: 3vh 0 1rem 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    /* původně: repeat(3,minmax(0,1fr)) */
+    display:grid;
+    grid-template-columns:
+      minmax(160px, clamp(14%, 18vw, 220px))
+      minmax(150px, clamp(14%, 16vw, 220px))
+      1fr;
+    gap:2rem clamp(1rem,4vw,3rem);
+    padding:3vh 0 1rem 0;
+    align-items:start;
   }
+  .footer-col { display:flex; flex-direction:column; gap:1rem; }
+  .footer-col--lists { gap:1.4rem; }
+  .footer-list-block + .footer-list-block { margin-top:.4rem; }
+
+  /* Reflow na menších šířkách */
+  @media (max-width: 980px) {
+    .footer-grid__container {
+      /* místo 2 stejných sloupců dáme širší druhý pro kontakty */
+      grid-template-columns: minmax(220px, 40%) minmax(0, 1fr);
+    }
+    .footer-col--contact { order:3; grid-column:1 / -1; }
+  }
+  @media (max-width: 640px) {
+    .footer-grid__container { grid-template-columns:1fr; }
+    .footer-col--brand, .footer-col--lists, .footer-col--contact { order:initial; }
+  }
+
+  /* Spodní pruh */
+  .footer-bottom {
+    margin-top:.75rem; /* původně 2rem */
+    padding-top:.5rem; /* původně 1rem */
+    border-top:1px solid rgba(0,0,0,0.06); /* jemnější */
+    display:flex;
+    flex-direction:column;
+    gap:.4rem; /* mírně menší */
+  }
+  .footer-legal {
+    margin:0;
+    font-size:var(--font-size-sm);
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem;
+    align-items:center;
+  }
+  .footer-legal a { text-decoration:none; border-bottom:1px solid currentColor; padding-bottom:1px; }
+  .footer-legal a:hover { border-bottom-width:2px; }
+  .divider { opacity:.45; }
+
+  @media (prefers-color-scheme:dark){
+    .footer-bottom { border-top-color:rgba(255,255,255,0.12); }
+    .footer-legal a { border-color:transparent; }
+    .footer-legal a:hover { border-color:currentColor; }
+  }
+
   .footer-socials__list {
     margin: 1rem 0;
     padding: 0;

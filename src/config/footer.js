@@ -24,19 +24,23 @@ export const footerSocials = [
 
 
 export const footerLists = [
-	/*{
+	{
 		title: 'Transparentnost',
 		items: [
 			{
-				title: 'Financování',
-				slug: '/o-nas/kdo-jsme',
+				title: 'Financování a smlouvy',
+				slug: '/financovani',
 			},
 			{
+				title: 'Kontakt',
+				slug: '/kontakt',
+			},
+			/*{
 				title: 'Kalendář',
 				slug: '/o-nas/nase-hodnoty',
-			},
+			},*/
 		],
-	},*/
+	},
 ];
 
 export const contactList = [

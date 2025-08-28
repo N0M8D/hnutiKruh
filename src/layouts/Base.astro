@@ -3,6 +3,7 @@ import { SkipLink } from '@components/odyssey-theme';
 import BaseHead from '../components/head/BaseHead.astro';
 import type { Props as BaseHeadProps } from '../components/head/BaseHead.astro';
 import MatomoConsentBanner from '../components/MatomoConsentBanner.astro';
+import FloatingMenu from '@components/FloatingMenu.astro';
 
 export interface Props {
 	seo?: BaseHeadProps;
@@ -54,6 +55,7 @@ const { seo } = Astro.props;
 		<slot name="announcement-bar" />
 		<slot name="header" />
 		<main id="content">
+     { /*<FloatingMenu />*/}
 			<slot />
 		</main>
 		<slot name="footer" />

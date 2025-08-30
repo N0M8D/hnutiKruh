@@ -1,9 +1,9 @@
 export const accounts = [
-    /*{
+    {
         label: 'Hlavní účet',
         purpose: 'Provoz, členské příspěvky',
-        number: '000000-1234567890/0100',
-        iban: 'CZ00 0100 0000 0012 3456 7890',
+        number: '2803303733/2010',
+        iban: null,
         type: 'primary',
         transparent: false,
         bankUrl: null,
@@ -11,22 +11,22 @@ export const accounts = [
     },
     {
         label: 'Volební účet',
-        purpose: 'Financování volební kampaně 2025',
-        number: '000000-9876543210/0300',
-        iban: 'CZ00 0300 0000 0098 7654 3210',
+        purpose: 'Financování volební kampaně',
+        number: '2403303750/2010',
+        iban: null,
         type: 'election',
         transparent: true,
-        bankUrl: 'https://fio.example/volebni-ucet', // TODO: nahradit skutečnou URL
-        note: 'Transakce zveřejňujeme níže.'
+        bankUrl: null,
+        note: 'Financování kampaně hnutí.'
     },
     {
         label: 'Dárcovský účet',
         purpose: 'Veřejné dary a podpora',
-        number: '000000-2468135790/5500',
-        iban: 'CZ00 5500 0000 0024 6813 5790',
+        number: '2003303743/2010',
+        iban: null,
         type: 'donations',
         transparent: true,
-        bankUrl: 'https://fio.example/darcovsky-ucet', // TODO: nahradit skutečnou URL
-        note: 'Podpora činnosti mimo kampaň.'
-    }*/
+        bankUrl: null,
+        note: 'Podpora činnosti hnutí.'
+    }
 ];

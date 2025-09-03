@@ -16,7 +16,7 @@ export const accounts = [
         iban: null,
         type: 'election',
         transparent: true,
-        bankUrl: null,
+        bankUrl: 'https://ib.fio.cz/ib/transparent?a=2403303750',
         note: 'Financování kampaně hnutí.'
     },
     {

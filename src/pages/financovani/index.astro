@@ -196,7 +196,7 @@ function formatSize(bytes: number) {
             {acc.note && <p class="note">{acc.note}</p>}
             {acc.transparent && acc.bankUrl && (
               <p class="bankLink">
-                <a href={acc.bankUrl} target="_blank" rel="noopener">Online výpis →</a>
+                <a href={acc.bankUrl} target="_blank" rel="noopener">Online výpis</a>
               </p>
             )}
           </div>
@@ -634,6 +634,7 @@ function formatSize(bytes: number) {
     font-size:.62rem;
     font-weight:600;
     letter-spacing:.05em;
+    color: #e9dbd4;
   }
   .bankLink a {
     text-decoration:none;
@@ -644,36 +645,40 @@ function formatSize(bytes: number) {
 </style>
 
 <script is:inline>
-  document.addEventListener('click', e => {
-    const btn = (e.target as HTMLElement).closest('.copyBtn');
-    if(!btn) return;
-    const value = btn.getAttribute('data-copy');
-    if(!value) return;
-    navigator.clipboard.writeText(value.replace(/\s+/g,'')).then(()=>{
-      const orig = btn.textContent;
+// Single working copy handler (pure JS)
+function copyPlain(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  // Fallback
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.top = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch {}
+  document.body.removeChild(ta);
+  return Promise.resolve();
+}
+
+document.addEventListener('click', (e) => {
+  const target = e.target;
+  if (!(target instanceof Element)) return;
+  const btn = target.closest('.copyBtn');
+  if (!btn) return;
+  const val = btn.getAttribute('data-copy');
+  if (!val) return;
+  copyPlain(val.replace(/\s+/g,''))
+    .then(() => {
       btn.classList.add('copied');
+      const original = btn.textContent;
       btn.textContent = 'OK';
-      setTimeout(()=>{
+      setTimeout(() => {
         btn.classList.remove('copied');
-        btn.textContent = orig || 'Kopírovat';
-      },1400);
+        btn.textContent = original || 'Kopírovat';
+      }, 1400);
     });
-  });
-</script>
-<script is:inline>
-  document.addEventListener('click', e => {
-    const btn = (e.target as HTMLElement).closest('.copyBtn');
-    if(!btn) return;
-    const value = btn.getAttribute('data-copy');
-    if(!value) return;
-    navigator.clipboard.writeText(value.replace(/\s+/g,'')).then(()=>{
-      const orig = btn.textContent;
-      btn.classList.add('copied');
-      btn.textContent = 'OK';
-      setTimeout(()=>{
-        btn.classList.remove('copied');
-        btn.textContent = orig || 'Kopírovat';
-      },1400);
-    });
-  });
+});
 </script>

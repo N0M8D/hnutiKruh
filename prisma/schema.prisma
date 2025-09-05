@@ -17,3 +17,40 @@ model Involvement {
     gdprConsent Boolean
     created_at  DateTime @default(now())
 }
+
+model Donation {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    Jmeno             String
+    Prijmeni          String
+    DatumNarozeni     DateTime
+    StatniPrislusnost String
+    Ulice             String
+    Obec              String
+    PSC               String
+    Stat              String
+    Email             String
+    Telefon           String
+
+    Castka           Decimal @db.Decimal(14, 2)
+    VariabilniSymbol String  @unique @db.VarChar(10) // now required; generated in API
+    Poznamka         String?
+
+    ZapojitSe  Boolean @default(false)
+    Newsletter Boolean @default(false)
+
+    paymentStatus PaymentStatus @default(PENDING)
+    paidAt        DateTime?
+    bankRef       String?
+}
+
+enum PaymentStatus {
+    PENDING // čekáme na platbu
+    PAID // platba dorazila a částka sedí
+    UNDERPAID // platba dorazila, ale menší částka
+    OVERPAID // platba dorazila, ale větší částka
+    FAILED // pokus o platbu selhal / zamítnuto bankou
+    CANCELED // zrušeno (např. chybně vyplněný formulář, ruční zásah)
+}

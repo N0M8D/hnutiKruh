@@ -7,7 +7,7 @@ export const accounts = [
         type: 'primary',
         transparent: false,
         bankUrl: null,
-        note: 'Do poznámky uveď “Příspěvek – jméno”'
+        note: 'Do poznámky uveď “Příspěvek – jméno a”'
     },
     {
         label: 'Volební účet',
@@ -26,7 +26,7 @@ export const accounts = [
         iban: null,
         type: 'donations',
         transparent: true,
-        bankUrl: null,
+        bankUrl: 'https://ib.fio.cz/ib/transparent?a=2003303743',
         note: 'Podpora činnosti hnutí.'
     }
 ];

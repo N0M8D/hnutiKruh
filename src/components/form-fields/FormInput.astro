@@ -1,5 +1,5 @@
 ---
-const {type = "text", label, name, placeholder = "", required, value = ""} = Astro.props;
+const {type = "text", label, name, placeholder = "", required, value = "", pattern, maxlength, min, max} = Astro.props;
 const id = `field-${name}`;
 ---
 
@@ -14,11 +14,21 @@ const id = `field-${name}`;
       required={required} 
       value={value}
       class="form-field__input"
+      {...(pattern && { pattern })}
+      {...(maxlength && { maxlength })}
+      {...(min && { min })}
+      {...(max && { max })}
     />
   </div>
 </div>
 
 <style>
+  input:valid {
+  
+}
+  input:invalid {
+  background-color: rgb(255, 197, 206);
+}
   .form-field__container {
     position: relative;
     margin-bottom: 1.2rem; /* Reduced overall spacing between form fields */

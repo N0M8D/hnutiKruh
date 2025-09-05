@@ -1,0 +1,164 @@
+---
+import Layout from '@layouts/Page.astro';
+import { Container, TextSection, Button, FormInput } from '@components/odyssey-theme';
+import FormCheckbox from '@components/form-fields/FormCheckbox.astro';
+
+const seo = {
+  title: 'Daruj Hnutí Kruh',
+  description: 'Formulář pro poskytnutí daru politické straně Hnutí Kruh v souladu s legislativou.',
+};
+
+function todayISO() {
+  return new Date().toISOString().slice(0,10);
+}
+---
+
+<Layout {seo}>
+  <Container>
+    <TextSection narrow>
+      <div class="donation-form">
+        <h1>Daruj Hnutí Kruh</h1>
+        <p class="lead">
+          Děkujeme, že chcete podpořit naši činnost. Odesláním formuláře předáte údaje nutné k zákonné evidenci daru politické strany.
+        </p>
+        <div class="legal-info">
+          <p><strong>Povinné identifikační údaje:</strong> Jméno, příjmení, datum narození, adresa trvalého pobytu (ulice, obec, PSČ, stát), státní příslušnost, kontaktní e‑mail a telefon – vyžaduje zákon o politických stranách a volební zákony.</p>
+          <p><strong>Dobrovolné volby:</strong> Zaškrtnete‑li „Zapojit se“, použijeme (navíc k evidenci daru) Vaše jméno, příjmení, e‑mail, telefon a obec pro kontaktování ohledně aktivit. U newsletteru použijeme jméno, příjmení a e‑mail k zasílání novinek. Vše dle <a href="/organisation/legal" target="_blank" rel="noopener">Zásad zpracování osobních údajů</a>.</p>
+        </div>
+
+        <form method="POST" action="/api/daruj">
+          <div class="grid">
+            <!-- Sekce: Identifikace -->
+            <div class="group full">
+              <h2 class="g-head">Identifikace dárce</h2>
+            </div>
+            <FormInput name="Jmeno" label="Jméno" required />
+            <FormInput name="Prijmeni" label="Příjmení" required />
+            <FormInput name="DatumNarozeni" type="date" label="Datum narození" max={todayISO()} required />
+            <FormInput name="StatniPrislusnost" value="CZ" label="Státní příslušnost" required />
+
+            <!-- Sekce: Trvalý pobyt -->
+            <div class="group full">
+              <h2 class="g-head">Adresa trvalého pobytu</h2>
+            </div>
+            <FormInput name="Ulice" label="Ulice a č.p." required />
+            <FormInput name="Obec" label="Obec" required />
+            <FormInput name="PSC" label="PSČ" pattern="\\d{1,5}" maxlength="5"required />
+            <FormInput name="Stat" label="Stát" value="Česká republika" required />
+
+            <!-- Sekce: Kontaktní údaje -->
+            <div class="group full">
+              <h2 class="g-head">Kontaktní údaje</h2>
+            </div>
+            <FormInput name="Email" type="email" label="E‑mail" required />
+            <FormInput name="Telefon" type="tel" label="Telefon" required />
+
+            <!-- Sekce: Dar -->
+            <div class="group full">
+              <h2 class="g-head">Informace o daru</h2>
+            </div>
+            <FormInput name="Castka" type="number" step="1" min="1" label="Částka (CZK)" required />
+            <!-- VariabilniSymbol pole odstraněno - generuje se automaticky -->
+            <!-- Textarea s počítadlem -->
+            <div class="textarea-field full">
+              <label for="Poznamka" class="tx-label">Vzkaz (nepovinné)</label>
+              <textarea id="Poznamka" name="Poznamka" maxlength="300" rows="4" class="tx-input" placeholder="Máte pro nás poznámku?"></textarea>
+              <div class="tx-meta">
+                <small class="help">Vzkaz je jen pro interní tým; bez Vašeho souhlasu nebude zveřejněn.</small>
+                <small class="char-left" data-counter="Poznamka">Zbývá 300 znaků.</small>
+              </div>
+            </div>
+
+            <!-- Opt‑in sekce -->
+            <div class="full group">
+              <h2 class="g-head">Souhlasy a volby</h2>
+            </div>
+            <div class="full optin-group">
+              <FormCheckbox
+                name="ZapojitSe"
+                labelHtml="Chci se také <strong>zapojit do aktivit</strong>. Souhlasím, aby Hnutí Kruh pro tento účel využilo mé <em>jméno, příjmení, obec, e‑mail a telefon</em> k následnému kontaktu (podobně jako ve formuláři „Zapoj se“). Další informace viz <a href='/organisation/legal' target='_blank' rel='noopener'>Zásady</a>."
+              />
+              <FormCheckbox
+                name="Newsletter"
+                labelHtml="Chci <strong>odebírat newsletter</strong>. Souhlasím s použitím mého <em>jména, příjmení a e‑mailu</em> k zasílání novinek (možnost odhlášení kdykoli). Viz <a href='/organisation/legal' target='_blank' rel='noopener'>Zásady</a>."
+              />
+              <FormCheckbox
+                name="GDPR"
+                required={true}
+                labelHtml="Souhlasím se <a href='/organisation/legal' target='_blank' rel='noopener'>zpracováním osobních údajů</a> pro zákonnou evidenci daru.*"
+              />
+            </div>
+
+            <div class="full">
+              <Button fullWidth type="submit">Odeslat dar</Button>
+            </div>
+          </div>
+          <p class="disclaimer">
+            * Bez povinných identifikačních údajů dar nemůže být podle zákona přijat. Přesné znění zásad naleznete v sekci
+            <a href="/organisation/legal" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a>.
+          </p>
+        </form>
+      </div>
+    </TextSection>
+  </Container>
+</Layout>
+
+<style>
+  .donation-form { margin:2rem 0; }
+  .lead { margin-bottom:1.2rem; line-height:1.5; }
+  .legal-info { line-height:1.45; padding:1rem 1.1rem; border-radius:14px; margin-bottom:1.8rem; font-size:.85rem; }
+  .grid { display:grid; gap:1rem; grid-template-columns:1fr; }
+  .full { grid-column:1/-1; }
+
+  .g-head {
+    margin:.2rem 0 .4rem;
+    font-size:1rem;
+    font-weight:600;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+
+  .group + .group { margin-top:.6rem; }
+
+  .textarea-field { display:flex; flex-direction:column; gap:.4rem; }
+  .tx-label { font-size:.75rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; }
+  .tx-input {
+    width:100%; resize:vertical; min-height:120px;
+    padding:.65rem .75rem; border:1px solid var(--theme-on-bg, #5555); border-radius:10px;
+    font:inherit; line-height:1.4;
+    background:rgba(255,255,255,.6);
+  }
+  .tx-meta { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+  .char-left {  opacity:.65; }
+  .help { font-size:.6rem; opacity:.6; }
+
+  .optin-group > * { margin:.55rem 0; }
+  .disclaimer { margin-top:1.2rem; font-size:.6rem; opacity:.7; line-height:1.35; }
+
+  @media (min-width:760px){
+    .grid { grid-template-columns:repeat(2,1fr); }
+  }
+  @media (min-width:1024px){
+    .grid { grid-template-columns:repeat(3,1fr); }
+    .bank-note { font-size:.7rem; }
+  }
+  @media (prefers-color-scheme:dark){
+    .tx-input { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.25); }
+    .bank-note { background:rgba(255,255,255,.08); }
+  }
+</style>
+
+<script is:inline>
+  // Počítadlo znaků pro textarea
+  const limit = 300;
+  const ta = document.getElementById('Poznamka');
+  const counter = document.querySelector('[data-counter="Poznamka"]');
+  if (ta && counter) {
+    const update = () => {
+      const left = limit - ta.value.length;
+      counter.textContent = `Zbývá ${left} znaků.`;
+    };
+    ta.addEventListener('input', update);
+    update();
+  }
+</script>

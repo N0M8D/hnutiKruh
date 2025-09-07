@@ -28,5 +28,10 @@ export const nav = [
 		slug: '/forms/zapoj-se',
 		highlight: true,
 	},
+	{
+		title: 'Daruj',
+		slug: '/forms/daruj',
+		highlight: true,
+	},
 
 ];

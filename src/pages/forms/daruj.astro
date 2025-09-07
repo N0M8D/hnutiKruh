@@ -34,7 +34,7 @@ function todayISO() {
             </div>
             <FormInput name="Jmeno" label="Jméno" required />
             <FormInput name="Prijmeni" label="Příjmení" required />
-            <FormInput name="DatumNarozeni" type="date" label="Datum narození" max={todayISO()} required />
+            <FormInput name="DatumNarozeni" type="date" label="Datum narození (dd.mm.rrrr)" max={todayISO()} required />
             <FormInput name="StatniPrislusnost" value="CZ" label="Státní příslušnost" required />
 
             <!-- Sekce: Trvalý pobyt -->
@@ -96,6 +96,7 @@ function todayISO() {
           <p class="disclaimer">
             * Bez povinných identifikačních údajů dar nemůže být podle zákona přijat. Přesné znění zásad naleznete v sekci
             <a href="/organisation/legal" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a>.
+            Jméno a příjmení, datum narození, obec trvalého pobytu a informace o specifikaci daru budou zveřejněny z důvodu plnění právních povinností a zároveň z důvodu našeho transparentního financování. Proti zveřejnění těchto údajů nad rámec zákonných povinností je možné vznést námitku v souladu se čl. 21 GDPR
           </p>
         </form>
       </div>

@@ -58,6 +58,22 @@ const posts = Object.values(postModules)
     <img src="/assets/brand/sukynky_short_transparent.png" alt="banner" class="noShadow" />
   </div> 
 
+  <!-- Rychlé odkazy: Volby + Program -->
+  <div class="quick-links">
+    <TextSection narrow>
+      <div class="panel">
+        <h2>Volby 2025</h2>
+        <p>
+          Seznamte se s našimi kandidátkami do Poslanecké sněmovny a přečtěte si, co chceme prosazovat a kam směřujeme.
+        </p>
+        <div class="actions">
+          <Button href="/volby">Kandidátky do PS 2025</Button>
+          <Button href="/program">Náš program</Button>
+        </div>
+      </div>
+    </TextSection>
+  </div>
+
   <!-- Poslední články -->
   <div class="clanky">
     <TextSection narrow>
@@ -82,7 +98,7 @@ const posts = Object.values(postModules)
           aria-label="Otevřít celý kalendář v novém okně"
           title="Otevřít celý kalendář"
         >
-          <Icon name="mdi:open-in-new" width="18" height="18" />
+          <Icon name="mdi:open-in-new" width={18} height={18} />
           <span>Otevřít kalendář</span>
         </a>
       </div>
@@ -111,6 +127,26 @@ const posts = Object.values(postModules)
   .banner img {
     max-width: 100%;
     height: auto;
+  }
+
+  .quick-links { margin: 1rem 0 0; }
+
+  .quick-links .panel h3 {
+    margin: 0 0 .35rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+  .quick-links .panel p {
+    margin: 0 0 .75rem;
+    color: #5f4c46;
+    opacity: .9;
+  }
+  .quick-links .actions {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .petice {

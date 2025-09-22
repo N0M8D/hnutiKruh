@@ -35,10 +35,10 @@ export const footerLists = [
 				title: 'Kontakt',
 				slug: '/kontakt',
 			},
-			/*{
-				title: 'Kalendář',
-				slug: '/o-nas/nase-hodnoty',
-			},*/
+			{
+				title: 'Grafika',
+				slug: '/grafika',
+			},
 		],
 	},
 ];

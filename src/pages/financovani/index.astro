@@ -1,8 +1,8 @@
 ---
 import Layout from '../../layouts/Page.astro';
 import { TextSection } from '@components/odyssey-theme';
-import fs from 'node:fs';
-import path from 'node:path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { accounts } from '../../config/ucty.js';
 
 // SEO
@@ -59,80 +59,62 @@ let electionTransactions: RawTx[] = [];
 let fetchError: string | null = null;
 
 async function tryLoadElection() {
-  const api = import.meta.env.PUBLIC_ELECTION_ACCOUNT_API;
-  const rawJson = import.meta.env.PUBLIC_ELECTION_ACCOUNT_JSON;
+  const apiToken = import.meta.env.FIO_ELECTION_TOKEN || '';
+  // Dynamicky posledních 45 dní
+  const to = new Date();
+  const from = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000);
+  const fmt = (d: Date) => d.toISOString().slice(0,10);
+  const apiUrl = apiToken ? `https://fioapi.fio.cz/v1/rest/periods/${apiToken}/${fmt(from)}/${fmt(to)}/transactions.xml` : '';
   try {
-    if (api) {
-      const res = await fetch(api);
+    if (apiToken) {
+      const res = await fetch(apiUrl, { headers: { 'Accept': 'application/xml,text/xml,*/*' } });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      // Očekáváme pole transakcí; když ne, zkusíme data.transactions
-      const list = Array.isArray(data) ? data : (Array.isArray(data.transactions) ? data.transactions : []);
-      electionTransactions = list.map((t: any, i: number) => ({
-        id: t.id || String(i),
-        date: t.date || t.bookingDate || t.posted || new Date().toISOString().slice(0,10),
-        sender: t.sender || t.from || t.partnerName || '',
-        recipient: t.recipient || t.to || '',
-        amount: parseFloat(t.amount || t.value || 0),
-        currency: t.currency || 'CZK',
-        message: t.message || t.note || t.description || '',
-        vs: t.variableSymbol || t.vs || '',
-        type: (t.amount || t.value || 0) >= 0 ? 'IN' : 'OUT'
-      }));
+      const xml = await res.text();
+      // Parsování XML bez externí knihovny – jednoduché, zaměřené na <Transaction> bloky
+      const transactions: RawTx[] = [];
+      const txRegex = /<Transaction>([\s\S]*?)<\/Transaction>/g;
+      let match: RegExpExecArray | null;
+      while ((match = txRegex.exec(xml)) !== null) {
+        const block = match[1];
+        const colRegex = /<column_(\d+)([^>]*)>([\s\S]*?)<\/column_\1>/g;
+        const cols: Record<string,string> = {};
+        let c: RegExpExecArray | null;
+        while ((c = colRegex.exec(block)) !== null) {
+          const id = c[1];
+          let val = c[3].trim();
+            // odstranit HTML entity základně
+          val = val.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+          cols[id] = val;
+        }
+        // Mapování podle ID z dokumentace
+        const idVal = cols['22'] || cols['25'] || cols['17'] || ''; // fallback
+        let dateRaw = cols['0'] || '';
+        if (dateRaw.includes('+')) dateRaw = dateRaw.split('+')[0];
+        const amountStr = cols['1'] || '0';
+        const amount = parseFloat(amountStr.replace(',', '.')) || 0;
+        const currency = cols['14'] || 'CZK';
+        const counterAcc =  cols['10'] || cols['2'] || '';
+        // Variabilní symbol – ve výpisu bývá někdy column_5 / 10 podle verze; zkusíme více ID
+        const vs = cols['5']  || cols['15'] || '';
+        // Zpráva / komentář
+        const message = cols['25'] || cols['16'] || cols['8'] || '';
+        const type: 'IN' | 'OUT' = amount >= 0 ? 'IN' : 'OUT';
+        transactions.push({
+          id: idVal || String(transactions.length),
+          date: dateRaw || new Date().toISOString().slice(0,10),
+          sender: type === 'IN' ? counterAcc : undefined,
+          recipient: type === 'OUT' ? counterAcc : undefined,
+            amount,
+          currency,
+          message,
+          vs,
+          type
+        });
+      }
+      electionTransactions = transactions;
       return;
     }
-    if (rawJson) {
-      const data = JSON.parse(rawJson);
-      const list = Array.isArray(data) ? data : (Array.isArray(data.transactions) ? data.transactions : []);
-      electionTransactions = list.map((t: any, i: number) => ({
-        id: t.id || String(i),
-        date: t.date || t.bookingDate || new Date().toISOString().slice(0,10),
-        sender: t.sender || t.from || '',
-        recipient: t.recipient || t.to || '',
-        amount: parseFloat(t.amount || t.value || 0),
-        currency: t.currency || 'CZK',
-        message: t.message || t.note || '',
-        vs: t.variableSymbol || t.vs || '',
-        type: (t.amount || t.value || 0) >= 0 ? 'IN' : 'OUT'
-      }));
-      return;
-    }
-    // fallback sample
-    electionTransactions = [
-      /*{
-        id: 'SAMPLE1',
-        date: '2025-01-15',
-        sender: 'Jan Novák',
-        recipient: 'Hnutí Kruh',
-        amount: 2500,
-        currency: 'CZK',
-        message: 'Dar volební kampaň',
-        vs: '20250115',
-        type: 'IN'
-      },
-      {
-        id: 'SAMPLE2',
-        date: '2025-01-20',
-        sender: 'Hnutí Kruh',
-        recipient: 'Tiskárna XYZ s.r.o.',
-        amount: -4800,
-        currency: 'CZK',
-        message: 'Tisk letáků',
-        vs: '444555',
-        type: 'OUT'
-      },
-      {
-        id: 'SAMPLE3',
-        date: '2025-01-22',
-        sender: 'Petra Svobodová',
-        recipient: 'Hnutí Kruh',
-        amount: 1000,
-        currency: 'CZK',
-        message: 'Podpora kampaně',
-        vs: '20250122',
-        type: 'IN'
-      }*/
-    ];
+    electionTransactions = [];
   } catch (e: any) {
     fetchError = e.message;
   }

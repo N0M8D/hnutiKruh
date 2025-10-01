@@ -1,10 +1,10 @@
 ---
 // File: Button.astro
-const { href, unelevated, outlined, customIcon, onPrimary, newTab, fullWidth, style } = Astro.props;
+const { href, unelevated, outlined, customIcon, onPrimary, newTab, fullWidth, style, campaign } = Astro.props;
 const Tag = href ? 'a' : 'button';
 ---
 <Tag
-  class={`btn ${unelevated ? "btn--unelevated" : ""} ${outlined ? "btn--outlined" : ""} ${onPrimary ? "btn--on-primary" : ""} ${fullWidth ? "btn--fullwidth" : ""}`}
+  class={`btn ${unelevated ? "btn--unelevated" : ""} ${outlined ? "btn--outlined" : ""} ${campaign ? "campaign-btn" : ""} ${onPrimary ? "btn--on-primary" : ""} ${fullWidth ? "btn--fullwidth" : ""}`}
   href={href}
   target={newTab ? '_blank' : undefined}
   rel={newTab ? 'noopener noreferrer' : undefined}
@@ -85,5 +85,34 @@ const Tag = href ? 'a' : 'button';
     cursor: pointer;
     outline: none;
   }
-</style>
+
+  /* Dočasný styl pro kampaň "Nepřehlédni to" – křídová tabule */
+  .campaign-btn {
+    position: relative;
+    background: linear-gradient(145deg,#252a25 0%, #1f2420 55%, #1a1d1a 100%);
+    border:1px solid #3a4239;
+    color:#f8f8f5;
+    box-shadow:0 1px 3px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05);
+    text-shadow:0 1px 2px rgba(255,255,255,.08), 0 0 2px rgba(255,255,255,.12);
+    letter-spacing:.02em;
+    overflow:hidden;
+  }
+  .campaign-btn::after{
+    content:"";
+    position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+    background:
+      radial-gradient(circle at 28% 22%,rgba(255,255,255,.07),transparent 60%),
+      radial-gradient(circle at 75% 68%,rgba(255,255,255,.05),transparent 65%),
+      repeating-linear-gradient(92deg,rgba(255,255,255,.05)_0_2px,transparent_2px_6px);
+    mix-blend-mode:overlay;
+    opacity:.45;
+  }
+  .campaign-btn:hover,
+  .campaign-btn:focus-visible {
+    background: linear-gradient(145deg,#2d332d 0%, #242a25 55%, #202320 100%);
+    border-color:#485248;
+    color:#ffffff;
+  }
+  .campaign-btn:active { transform:translateY(1px); }
+  .campaign-btn:focus-visible { outline:2px solid #ffffff; outline-offset:2px; }
 </style>

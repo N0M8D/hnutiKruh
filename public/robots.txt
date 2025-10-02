@@ -11,8 +11,44 @@ Disallow: /soukrome/
 Disallow: /thank-you/
 
 Allow: /
+Allow: /organisation/
 Allow: /organisation/legal
+Allow: /program/
+Allow: /volby/
+Allow: /people/
+Allow: /people/people-list/
+Allow: /people/people-list/alice-hamalova/
+Allow: /people/people-list/emma-strouhalova/
+Allow: /people/people-list/eva-novakova/
+Allow: /people/people-list/helena-buchtova/
+Allow: /people/people-list/jana-kolarikova/
+Allow: /people/people-list/klara-kadar/
+Allow: /people/people-list/marta-martinova/
+Allow: /people/people-list/michaela-nedory/
+Allow: /people/people-list/pavla-krausova/
+Allow: /manifest/
+Allow: /financovani/
+Allow: /kontakt/
+Allow: /forms/
 Allow: /forms/newsletter-form
+Allow: /grafika/
+Allow: /theme/
+Allow: /landing-pages/
+Allow: /zakrouzkovan
+
+# Blog root and individual posts (explicitly allowed for clarity)
+Allow: /blog/
+Allow: /blog/posts/
+Allow: /blog/posts/24072025_neformalni_pece/
+Allow: /blog/posts/blokada_pochodu_hnuti_pro_zivot/
+Allow: /blog/posts/FES/
+Allow: /blog/posts/interrupce/
+Allow: /blog/posts/kruhobrani_2025/
+Allow: /blog/posts/neprehlednito/
+Allow: /blog/posts/pece_neni_zbytny_luxus/
+Allow: /blog/posts/politika_jako_konicek_klara/
+Allow: /blog/posts/superdavka_1/
+Allow: /blog/posts/vznik_kruhu/
 
 # Blokace parametrů URL (např. sledovací kódy nebo stránkování)
 Disallow: /*?*

@@ -1,6 +1,29 @@
 # build output
 dist/
 .output/
+.astro
+.vercel/
+
+# Astro cache variations
+.astro/**
+
+# Prisma generated client (kept in node_modules but ignore any local engines if output custom)
+prisma/generated/
+
+# Temporary caches
+.cache/
+cache/
+
+# IDE / tooling
+.idea/
+*.swp
+*.swo
+
+# Coverage / test outputs (if added later)
+coverage/
+
+# Vercel build output legacy
+.output/**
 
 # dependencies
 node_modules/

@@ -1,0 +1,577 @@
+﻿<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml">
+<head><script type="text/javascript" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.jquery.JQuery/js/jquery-3.6.0.min-ver-CE8F684A284EDB4E0F59F8333915FFF3.js"></script>
+<link rel="stylesheet" type="text/css" href="./fio/resource/cz.fio.ib2.common.wicket.web.layout.jqueryUI.JQueryUI/jquery-ui-1.13.1.min-ver-3809AB2F81BAF761459F5E66F169A5D7.css" media="screen" />
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.jqueryUI.JQueryUI/jquery-ui-1.13.1.min-ver-1174ABB1D3A146BA5ABD4E6FD5F94B41.js"></script>
+<link rel="stylesheet" type="text/css" href="./fio/resource/cz.fio.ib2.common.wicket.web.layout.bootstrap.Bootstrap/css/bootstrap_341.min-ver-4BE1CDB6FF8DBD79BE777AD52F309349.css" media="screen, print" />
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.bootstrap.Bootstrap/js/bootstrap_341.min-ver-2F34B630FFE30BA2FF2B91E3F3C322A1.js"></script>
+<link rel="stylesheet" type="text/css" href="./fio/resource/cz.fio.ib2.common.wicket.web.layout.bootstrapSelect.BsSelect/css/bootstrap-select.min-ver-2212BC6B437F27E6F6AC3FE2D30BF349.css" media="screen, print" />
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.bootstrapSelect.BsSelect/js/bootstrap-select.min-ver-F20D3F02E2FBAD79845F3AB4C458AA20.js"></script>
+<script type="text/javascript" src="./fio/resource/org.apache.wicket.ajax.AbstractDefaultAjaxBehavior/res/js/wicket-ajax-jquery-ver-8CD946166F47E5DD4EADD165939FF57D.js"></script>
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.web.component.datePicker.DatePicker/DatePicker_cs-ver-B53E393FD0791540160DFB834FE263AD.js"></script>
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.web.js.jqueryquicksearch.JQueryQuickSearch/jquery.quicksearch.min-ver-32644867ABC85E264DF411DCA3A60FFF.js"></script>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" sizes="16x16" type="image/x-icon" href="./fio/resource/cz.fio.ib2.common.wicket.web.layout.image.FioImage/png/favicon-ver-BED52CBBA61C3C2EFBCD2A3F722B3146.ico">
+	<title>Internetové bankovnictví | Fio banka</title>
+	
+
+<link rel="stylesheet" type="text/css" href="./fio/resource/cz.fio.ib2.common.wicket.web.layout.fontawesome.FontAwesome/css/font-awesome.min-ver-269550530CC127B6AA5A35925A7DE6CE.css" media="screen" />
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.scripts.Scripts/defaultJsFunctions-ver-339D32B737C5D376645BE9AAFB9F2B0E.js"></script>
+<script type="text/javascript" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.scripts.Scripts/defaultLocalizedJsFunctions-ver-57244FFEF2516F1B0F7E5D0F00C28E1C.js"></script>
+<link rel="stylesheet" type="text/css" href="./fio/resource/cz.fio.ib2.web.layout.BasePage/style-ver-DDB108BAFE1F43E019041F70DEFC916C.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="./fio/resource/cz.fio.ib2.web.layout.BasePage/print-ver-98E7EA0529EA6D60F27CD68E8A462E77.css" media="print" />
+<meta name="description" content="Přihlášení do internetového bankovnictví Fio banky. Kromě plateb si zde můžete založit i další účty, požádat o půjčku, kontokorent a další služby." />
+<script type="text/javascript">
+/*<![CDATA[*/
+Wicket.Event.add(window, "load", function(event) { 
+$("#idc17854e3f567077c1").nextAll("button").first().remove();
+$("#idc17854e3f567077c1").nextAll(".dropdown-menu").first().remove();
+$("#idc17854e3f567077c1").selectpicker({dropupAuto: false, showSubtext: true});;
+$('#id2d43c841ecdeb7732').datepicker({minDate: -1096,maxDate: 0}); $('#id6892568511e9967e3').click(function(){$(this).closest('.input-group').children('.form-control').datepicker('show');});;
+$('#idc322d5f0ab9340624').datepicker({minDate: -1096,maxDate: 0}); $('#idcd46f4ed46e9a89c5').click(function(){$(this).closest('.input-group').children('.form-control').datepicker('show');});;
+(function() {
+
+	var oldValFrom = null;
+	var oldValTo = null;
+	
+	function checkRadioRychlaVolba() {
+		if ($("#id66e60d962ce13eae6 .radioTYDEN").is(':checked')) {
+			$("#id66e60d962ce13eae6 .datepickerFrom").datepicker("setDate", "-7d");
+			$("#id66e60d962ce13eae6 .datepickerTo").datepicker("setDate", "0");
+		}
+
+		if ($("#id66e60d962ce13eae6 .radioMESIC").is(':checked')) {
+			$("#id66e60d962ce13eae6 .datepickerFrom").datepicker("setDate", "-1m");
+			$("#id66e60d962ce13eae6 .datepickerTo").datepicker("setDate", "0");
+		}
+
+		if ($("#id66e60d962ce13eae6 .radioVLASTNI").is(':checked')) {
+			$("#id66e60d962ce13eae6 .datepickerFrom").datepicker('enable');
+			$("#id66e60d962ce13eae6 .datepickerTo").datepicker('enable');
+		}
+		
+		oldValFrom = $("#id66e60d962ce13eae6 .datepickerFrom").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+		oldValTo = $("#id66e60d962ce13eae6 .datepickerTo").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+	}
+	;
+
+	checkRadioRychlaVolba();
+	$("#id66e60d962ce13eae6 .radios").change(function() {
+		checkRadioRychlaVolba();
+	});
+
+	$("#id66e60d962ce13eae6 .datepickerFrom").on('change keypress paste focus textInput input', function() {
+		var val = ($("#id66e60d962ce13eae6 .datepickerFrom").datepicker({dateFormat : 'yy-mm-dd'}).val());
+		if (val !== oldValFrom) {
+			oldValFrom = val;
+			$("#id66e60d962ce13eae6 .radioVLASTNI").prop("checked", true);
+		}
+	});
+	
+	$("#id66e60d962ce13eae6 .datepickerTo").on('change keypress paste focus textInput input', function() {
+		var val = ($("#id66e60d962ce13eae6 .datepickerTo").datepicker({ dateFormat: 'yy-mm-dd' }).val());        
+		if (val != oldValTo) {
+        	oldValFrom = val;
+        	$("#id66e60d962ce13eae6 .radioVLASTNI").prop("checked", true);
+        }
+	});
+})();;
+(function() {
+
+	$("#id8b4e23df6ad8c3c67").on("focus", function() {
+		$(this).prev(".input-group-addon").css("border-color", "#66AFE9");
+	});
+
+	$("#id8b4e23df6ad8c3c67").on("focusout", function() {
+		$(this).prev(".input-group-addon").css("border-color", "#CCCCCC");
+	});
+	
+	var qs = $("#id8b4e23df6ad8c3c67").quicksearch('#id495a499c58d256a68 tbody tr:not(".sumacniRadek")', {});
+	
+	function showHideRemove(){
+		 if($.trim($("#id8b4e23df6ad8c3c67").val()).length) { // mame text
+			 $("#id8b4e23df6ad8c3c67").parent().find(".deleteText").show();
+	     }
+		 else{
+			 $("#id8b4e23df6ad8c3c67").parent().find(".deleteText").hide();
+		 }
+	}
+	showHideRemove();
+	$("#id8b4e23df6ad8c3c67").on("keyup", function() {
+		showHideRemove();
+    });
+	$("#id8b4e23df6ad8c3c67").parent().find(".deleteText").on("click", function(){
+		$("#id8b4e23df6ad8c3c67").val("");
+		showHideRemove();
+		$("#id8b4e23df6ad8c3c67").trigger("focus");
+		qs.reset();
+    });
+
+	
+	
+})();
+;
+setMinimalContentSize();;
+;});
+/*]]>*/
+</script>
+</head>
+<body>
+	
+	<div class="wrapperPage wrapperPageTrans">
+		<div class="wrapperHeader">
+			<div class="green_border"></div>
+			<div class="container" style="margin-bottom: 20px">
+				<div class="row">
+					<div class="col-md-4 col-xs-6" style="line-height: 50px;">
+						<img class="logo_header img-responsive" src="./fio/resource/cz.fio.ib2.common.wicket.web.layout.image.FioImage/png/logo_fio-ver-894B2A39F77CABA34D70A4AC4C0FE0B6.png"/>
+					</div>
+					<div class="col-md-8 nav_header">
+						<div>
+	<form class="form-inline pull-right" id="idb641bd5ee50c92559" method="post" action="./transparent?-1.-languageSelector-form&amp;a=2403303750&amp;f=03.06.2025&amp;t=03.01.2026"><div id="idb641bd5ee50c92559_hf_0" hidden="" class="hidden-fields"></div>
+		<div class="form-group languageDropDown">
+			<select class="form-control pull-right" name="languageDropDown" id="idc17854e3f567077c1" onchange="this.form.submit()">
+<option selected="selected" value="CZECH"data-content="<img src='./fio/resource/cz.fio.ib2.common.wicket.web.layout.image.FioImage/png/VlajkaCzMala-ver-425A2FE80A90297180F0DCC77B3F66B6.png'>&nbsp;Česky&nbsp;"data-tokens="Česky">Česky</option>
+<option value="SLOVAK"data-content="<img src='./fio/resource/cz.fio.ib2.common.wicket.web.layout.image.FioImage/png/VlajkaSkMala-ver-54AA18CD9834A48A7616BB29EA79F102.png'>&nbsp;Slovensky&nbsp;"data-tokens="Slovensky">Slovensky</option>
+<option value="ENGLISH"data-content="<img src='./fio/resource/cz.fio.ib2.common.wicket.web.layout.image.FioImage/png/VlajkaGbMala-ver-E4896565595FC22E344FD619C0ED15BB.png'>&nbsp;English&nbsp;"data-tokens="English">English</option>
+</select>
+		</div>
+	</form>
+</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container wrapperBody" style="padding-bottom: 69px">
+			<div class="row">
+				<div class="col-lg-12 content">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="page-header">
+								<h1 style="display: block; text-align: center;">
+									Pohyby na transparentním účtu
+								</h1>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							
+								<div>
+									<strong>Číslo účtu:</strong>
+									
+    2403303750 / 2010
+    
+
+								</div>
+							
+							<div>
+								<strong>Majitel účtu:</strong>
+								Hnutí Kruh
+							</div>
+							<div>
+								<strong>Název účtu:</strong>
+								Hnutí Kruh - volební účet
+							</div>
+							
+						</div>
+						<div class="col-md-6 hidden-print">
+							<div>
+		<div class="input-group">
+			<span class="input-group-addon inputAddonPre">
+				<i class="fa fa-search"></i>
+				<i class="fa fa-times deleteText"></i>
+			</span> 
+			<input style="border-left: medium none;" type="text" autocomplete="off" class="form-control searchInput" id="id8b4e23df6ad8c3c67" placeholder="Co hledáte?"/>
+		</div>
+	</div>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-9 pohybySum">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Stav k: <span>03.06.2025</span></th>
+										<th>Stav k: <span>03.01.2026</span></th>
+										<th>Suma příjmů</th>
+										<th>Suma výdajů</th>
+										<th>Suma celkem</th>
+										<th>Běžný zůstatek</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+		0,00&nbsp;CZK
+	</td>
+										<td>
+		0,00&nbsp;CZK
+	</td>
+										<td>
+		17 067,14&nbsp;CZK
+	</td>
+										<td class="negative">
+		-17 067,14&nbsp;CZK
+	</td>
+										<td>
+		0,00&nbsp;CZK
+	</td>
+										<td>
+		0,00&nbsp;CZK
+	</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-3">
+							<div class="row">
+								<div style="position: relative; top: -8px;" class="col-md-12">
+									<a class="pull-right btn btn-transparent hidden-print" href="#"
+										onclick="window.print();"><i class="fa fa-print fa-lg"></i>
+									</a>
+								</div>
+							</div>
+							<div class="row">
+								<div style="position: relative; top: -6px;"
+									class="col-md-12 hidden-print">
+									<div class="btn-group dropdownCloseBox pull-right">
+										<button class="btn btn-default dropdownCloseBtn" type="button">
+											<span>03.06.2025</span>&nbsp;-&nbsp;<span>03.01.2026</span>
+											<div class="caret"></div>
+										</button>
+										<div class="dropdown-menu pohybySelectDate dropdownClose">
+											<form class="form-inline" id="id66e60d962ce13eae6" method="post" action="./transparent?-1.-dateForm&amp;a=2403303750&amp;f=03.06.2025&amp;t=03.01.2026"><div id="id66e60d962ce13eae6_hf_0" hidden="" class="hidden-fields"></div>
+												<div class="row">
+													<div class="col-md-12 text-center">
+														<div class="radio">
+															<label><input type="radio" name="rychlaVolba"
+																class="radios radioMESIC"> <span>poslední měsíc</span></label>
+														</div>
+														<div class="radio">
+															<label><input type="radio" name="rychlaVolba"
+																class="radios radioTYDEN"> <span>poslední týden</span></label>
+														</div>
+														<div class="radio">
+															<label><input type="radio" name="rychlaVolba"
+																checked="checked" class="radios radioVLASTNI"> <span>vlastní</span></label>
+														</div>
+
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-12">
+														<div
+															style="background: none repeat scroll 0% 0% rgb(255, 255, 255); padding: 10px;">
+															<div class="row">
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label for="id2d43c841ecdeb7732">Od</label>
+																		<div class="input-group">
+		<input type="text" class="form-control input-sm datepicker datepickerFrom" value="03.06.2025" name="datumOd:inputField" id="id2d43c841ecdeb7732"/>
+		<span class="input-group-addon" style="cursor: pointer" id="id6892568511e9967e3"> <i class="fa fa-calendar"></i>
+		</span>
+	</div>
+																	</div>
+																</div>
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label for="idc322d5f0ab9340624">Do</label>
+																		<div class="input-group">
+		<input type="text" class="form-control input-sm datepicker datepickerTo" value="03.01.2026" name="datumDo:inputField" id="idc322d5f0ab9340624"/>
+		<span class="input-group-addon" style="cursor: pointer" id="idcd46f4ed46e9a89c5"> <i class="fa fa-calendar"></i>
+		</span>
+	</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<hr />
+												<div class="row">
+													<div class="col-md-12">
+														<button type="submit"
+															class="btn greenBtn btn-sm pull-left">
+															Zobrazit
+														</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					
+					
+					<table class="table" id="id495a499c58d256a68">
+		<thead>
+			<tr>
+		
+			<th>Datum</th>
+		
+			<th class="text-right">Částka</th>
+		
+			<th>Typ</th>
+		
+			<th>Název protiúčtu</th>
+		
+			<th>Zpráva pro příjemce</th>
+		
+			<th>KS</th>
+		
+			<th>VS</th>
+		
+			<th>SS</th>
+		
+			<th>Poznámka</th>
+		
+	</tr>
+		</thead>
+		<tbody>
+			
+				<tr>
+		
+			<td>30.12.2025</td>
+		
+			<td class="negative text-right amount amount_value" data-value="-387.4800">
+		-387,48&nbsp;CZK
+	</td>
+		
+			<td>Platba převodem uvnitř banky</td>
+		
+			<td></td>
+		
+			<td>
+		<div>Převod zůstatku z volebního účtu PSP 2025</div>
+		
+		
+		
+		
+	</td>
+		
+			<td></td>
+		
+			<td></td>
+		
+			<td></td>
+		
+			<td>Převod zůstatku z volebního účtu PSP 2025</td>
+		
+	</tr>
+			
+				<tr>
+		
+			<td>28.09.2025</td>
+		
+			<td class="negative text-right amount amount_value" data-value="-10000.0000">
+		-10 000,00&nbsp;CZK
+	</td>
+		
+			<td>Okamžitá odchozí platba</td>
+		
+			<td></td>
+		
+			<td>
+		
+		
+		
+		
+		
+	</td>
+		
+			<td></td>
+		
+			<td>240925</td>
+		
+			<td></td>
+		
+			<td>Videospot do CT pro volby PSP 25 - FA</td>
+		
+	</tr>
+			
+				<tr>
+		
+			<td>28.09.2025</td>
+		
+			<td class="text-right amount amount_value" data-value="1300.0000">
+		1 300,00&nbsp;CZK
+	</td>
+		
+			<td>Platba převodem uvnitř banky</td>
+		
+			<td>Hnutí Kruh</td>
+		
+			<td>
+		
+		
+		
+		
+		
+	</td>
+		
+			<td></td>
+		
+			<td></td>
+		
+			<td></td>
+		
+			<td>Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010</td>
+		
+	</tr>
+			
+				<tr>
+		
+			<td>27.09.2025</td>
+		
+			<td class="negative text-right amount amount_value" data-value="-1300.0000">
+		-1 300,00&nbsp;CZK
+	</td>
+		
+			<td>Karetní transakce</td>
+		
+			<td></td>
+		
+			<td>
+		<div>Výběr z bankomatu: FIO BANKA, DEJVICKÁ 33, PRAHA 6, 16000, CZ, dne 27.9.2025, částka  1300.00 CZK</div>
+		
+		
+		
+		
+	</td>
+		
+			<td></td>
+		
+			<td>7395</td>
+		
+			<td></td>
+		
+			<td>Výběr z bankomatu: FIO BANKA, DEJVICKÁ 33, PRAHA 6, 16000, CZ, dne 27.9.2025, částka  1300.00 CZK</td>
+		
+	</tr>
+			
+				<tr>
+		
+			<td>24.09.2025</td>
+		
+			<td class="text-right amount amount_value" data-value="767.1400">
+		767,14&nbsp;CZK
+	</td>
+		
+			<td>Bezhotovostní příjem</td>
+		
+			<td>Print Promotion</td>
+		
+			<td>
+		<div>VRATKA_oprava obj.250808</div>
+		
+		
+		
+		
+	</td>
+		
+			<td>0306</td>
+		
+			<td>250400028</td>
+		
+			<td></td>
+		
+			<td>Print Promotion vratka chybně objednaného tisku letáků</td>
+		
+	</tr>
+			
+				<tr>
+		
+			<td>22.09.2025</td>
+		
+			<td class="negative text-right amount amount_value" data-value="-5379.6600">
+		-5 379,66&nbsp;CZK
+	</td>
+		
+			<td>Karetní transakce</td>
+		
+			<td></td>
+		
+			<td>
+		<div>Nákup: GOPAY  *PRINT.CZ, CHRUDIM, CZ, dne 19.9.2025, částka  5379.66 CZK</div>
+		
+		
+		
+		
+	</td>
+		
+			<td></td>
+		
+			<td>7395</td>
+		
+			<td></td>
+		
+			<td>Nákup: GOPAY  *PRINT.CZ, CHRUDIM, CZ, dne 19.9.2025, částka  5379.66 CZK</td>
+		
+	</tr>
+			
+				<tr>
+		
+			<td>19.09.2025</td>
+		
+			<td class="text-right amount amount_value" data-value="15000.0000">
+		15 000,00&nbsp;CZK
+	</td>
+		
+			<td>Platba převodem uvnitř banky</td>
+		
+			<td>Hnutí Kruh</td>
+		
+			<td>
+		<div>Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010</div>
+		
+		
+		
+		
+	</td>
+		
+			<td></td>
+		
+			<td></td>
+		
+			<td></td>
+		
+			<td>Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010</td>
+		
+	</tr>
+			
+		</tbody>
+		
+	</table>
+					
+
+
+				</div>
+				
+			</div>
+		</div>
+		<div class="wrapperFooter" style="height: 69px;">
+			<div class="green_border"
+				style="margin-top: 25px; margin-bottom: 0px;"></div>
+			<div class="grey_footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-6 gfBox"></div>
+						<div class="col-sm-6 text-right gfBox">
+							<span>&copy;</span> <span>2026</span> <span
+								style="margin-right: 10px">Fio banka</span> <span><a target="_blank" href="https://www.fio.cz/spolecnost_dokumenty_ostatni_pravniProhlaseni.php">Právní prohlášení</a></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -3,7 +3,10 @@ import { PrismaClient } from '@prisma/client';
 import { subscribeUser } from './subscribe';
 import { createInvolvement } from './joinus';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+    log: ['query'],
+    datasources: { db: { url: process.env.DATABASE_URL } },
+});
 
 /*
   (Model Donation je nyní definován v prisma/schema.prisma)

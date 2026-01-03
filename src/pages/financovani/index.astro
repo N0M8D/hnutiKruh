@@ -55,71 +55,74 @@ interface RawTx {
   type?: 'IN' | 'OUT';
 }
 
-let electionTransactions: RawTx[] = [];
-let fetchError: string | null = null;
-
-async function tryLoadElection() {
-  const apiToken = import.meta.env.FIO_ELECTION_TOKEN || '';
-  // Dynamicky posledních 45 dní
-  const to = new Date();
-  const from = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000);
-  const fmt = (d: Date) => d.toISOString().slice(0,10);
-  const apiUrl = apiToken ? `https://fioapi.fio.cz/v1/rest/periods/${apiToken}/${fmt(from)}/${fmt(to)}/transactions.xml` : '';
-  try {
-    if (apiToken) {
-      const res = await fetch(apiUrl, { headers: { 'Accept': 'application/xml,text/xml,*/*' } });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const xml = await res.text();
-      // Parsování XML bez externí knihovny – jednoduché, zaměřené na <Transaction> bloky
-      const transactions: RawTx[] = [];
-      const txRegex = /<Transaction>([\s\S]*?)<\/Transaction>/g;
-      let match: RegExpExecArray | null;
-      while ((match = txRegex.exec(xml)) !== null) {
-        const block = match[1];
-        const colRegex = /<column_(\d+)([^>]*)>([\s\S]*?)<\/column_\1>/g;
-        const cols: Record<string,string> = {};
-        let c: RegExpExecArray | null;
-        while ((c = colRegex.exec(block)) !== null) {
-          const id = c[1];
-          let val = c[3].trim();
-            // odstranit HTML entity základně
-          val = val.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
-          cols[id] = val;
-        }
-        // Mapování podle ID z dokumentace
-        const idVal = cols['22'] || cols['25'] || cols['17'] || ''; // fallback
-        let dateRaw = cols['0'] || '';
-        if (dateRaw.includes('+')) dateRaw = dateRaw.split('+')[0];
-        const amountStr = cols['1'] || '0';
-        const amount = parseFloat(amountStr.replace(',', '.')) || 0;
-        const currency = cols['14'] || 'CZK';
-        const counterAcc =  cols['10'] || cols['2'] || '';
-        // Variabilní symbol – ve výpisu bývá někdy column_5 / 10 podle verze; zkusíme více ID
-        const vs = cols['5']  || cols['15'] || '';
-        // Zpráva / komentář
-        const message = cols['25'] || cols['16'] || cols['8'] || '';
-        const type: 'IN' | 'OUT' = amount >= 0 ? 'IN' : 'OUT';
-        transactions.push({
-          id: idVal || String(transactions.length),
-          date: dateRaw || new Date().toISOString().slice(0,10),
-          sender: type === 'IN' ? counterAcc : undefined,
-          recipient: type === 'OUT' ? counterAcc : undefined,
-            amount,
-          currency,
-          message,
-          vs,
-          type
-        });
-      }
-      electionTransactions = transactions;
-      return;
-    }
-    electionTransactions = [];
-  } catch (e: any) {
-    fetchError = e.message;
+// 3) Záložní data (bez dotahování z Fio API)
+// Zdroj: transparentní účet (https://ib.fio.cz/ib/transparent?a=2403303750&f=03.06.2025&t=03.01.2026)
+const electionTransactions: RawTx[] = [
+  {
+    id: '2025-12-30-1',
+    date: '2025-12-30',
+    amount: -387.48,
+    currency: 'CZK',
+    message: 'Převod zůstatku z volebního účtu PSP 2025',
+    type: 'OUT'
+  },
+  {
+    id: '2025-09-28-1',
+    date: '2025-09-28',
+    amount: -10000,
+    currency: 'CZK',
+    message: 'Videospot do CT pro volby PSP 25 - FA',
+    vs: '240925',
+    type: 'OUT'
+  },
+  {
+    id: '2025-09-28-2',
+    date: '2025-09-28',
+    sender: 'Hnutí Kruh',
+    amount: 1300,
+    currency: 'CZK',
+    message: 'Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010',
+    type: 'IN'
+  },
+  {
+    id: '2025-09-27-1',
+    date: '2025-09-27',
+    amount: -1300,
+    currency: 'CZK',
+    message: 'Výběr z bankomatu: FIO BANKA, DEJVICKÁ 33, PRAHA 6, 16000, CZ, dne 27.9.2025, částka 1300.00 CZK',
+    vs: '7395',
+    type: 'OUT'
+  },
+  {
+    id: '2025-09-24-1',
+    date: '2025-09-24',
+    sender: 'Print Promotion',
+    amount: 767.14,
+    currency: 'CZK',
+    message: 'Print Promotion vratka chybně objednaného tisku letáků',
+    vs: '250400028',
+    type: 'IN'
+  },
+  {
+    id: '2025-09-22-1',
+    date: '2025-09-22',
+    amount: -5379.66,
+    currency: 'CZK',
+    message: 'Nákup: GOPAY *PRINT.CZ, CHRUDIM, CZ, dne 19.9.2025, částka 5379.66 CZK',
+    vs: '7395',
+    type: 'OUT'
+  },
+  {
+    id: '2025-09-19-1',
+    date: '2025-09-19',
+    sender: 'Hnutí Kruh',
+    amount: 15000,
+    currency: 'CZK',
+    message: 'Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010',
+    type: 'IN'
   }
-}
-await tryLoadElection();
+];
+electionTransactions.sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
 // Agregace
 const totalIn = electionTransactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
@@ -159,20 +162,32 @@ function formatSize(bytes: number) {
     ) : (
       <div class="accounts">
         {accounts.map(acc => (
-          <div class={`acc acc--${acc.type || 'other'}`}>
+          <div class={`acc acc--${acc.type || 'other'}${acc.closed ? ' acc--closed' : ''}`}>
             <div class="acc-head">
               <h3 class="acc-label">{acc.label}</h3>
               <p class="purpose">{acc.purpose}</p>
             </div>
+
+            {acc.closed && (
+              <>
+                <div class="acc-closedOverlay" aria-hidden="true">
+                  <div class="acc-closedOverlayInner">
+                    <div class="acc-closedOverlayTitle">Účet je uzavřen</div>
+                    <div class="acc-closedOverlayText">Pro případné dary využijte prosím dárcovský účet.</div>
+                  </div>
+                </div>
+                <span class="visually-hidden">Účet je uzavřen, pro případné dary využijte prosím dárcovský účet.</span>
+              </>
+            )}
             <div class="acc-number-row">
               <code class="acc-num" data-copy={acc.number}>{acc.number}</code>
-              <button class="copyBtn" data-copy={acc.number}>Kopírovat</button>
+              <button class="copyBtn" data-copy={acc.number} disabled={acc.closed ? true : undefined}>Kopírovat</button>
             </div>
             {acc.iban && (
               <div class="iban-row">
                 <span class="iban-tag">IBAN</span>
                 <code class="iban-code" data-copy={acc.iban}>{acc.iban}</code>
-                <button class="copyBtn small" data-copy={acc.iban}>📋</button>
+                <button class="copyBtn small" data-copy={acc.iban} disabled={acc.closed ? true : undefined}>📋</button>
               </div>
             )}
             {acc.note && <p class="note">{acc.note}</p>}
@@ -186,8 +201,7 @@ function formatSize(bytes: number) {
       </div>
     )}
 
-    <h2 id="volebni-ucet">Transparentní (volební) účet</h2>
-    {fetchError && <p class="warn">Nepodařilo se načíst živá data: {fetchError}. Zobrazeny fallback/ukázkové položky.</p>}
+    <h2 id="volebni-ucet">Transparentní (volební) účet PS 2025</h2>
     <div class="totals">
       <div><span class="label">Příjmy</span><span class="value in">{formatCurrency(totalIn)}</span></div>
       <div><span class="label">Výdaje</span><span class="value out">{formatCurrency(totalOut)}</span></div>
@@ -285,11 +299,54 @@ function formatSize(bytes: number) {
     position:absolute;
     inset:0;
     pointer-events:none;
+    z-index:0;
     background:
       linear-gradient(140deg,rgba(255,255,255,.35),rgba(255,255,255,0) 35%),
       linear-gradient(to top,rgba(0,0,0,.05),rgba(0,0,0,0));
     mix-blend-mode:overlay;
     opacity:.65;
+  }
+  .acc > * { position:relative; z-index:1; }
+
+  .acc-closedOverlay {
+    position:absolute;
+    inset:0;
+    z-index:4;
+    pointer-events:none;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:1.05rem;
+    /* Fallback (color-mix není všude podporovaný) */
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    backdrop-filter: blur(2px);
+  }
+
+  .acc--closed > :not(.acc-closedOverlay):not(.visually-hidden) {
+    opacity:.55;
+    filter:saturate(.85);
+  }
+
+  .acc-closedOverlayInner {
+    max-width: 28ch;
+  }
+  .acc-closedOverlayTitle {
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:.82rem;
+    color: var(--acc-accent);
+    margin-bottom:.25rem;
+  }
+  .acc-closedOverlayText {
+    font-weight:650;
+    font-size:.78rem;
+    line-height:1.2;
+    color: var(--acc-accent);
+    opacity: .88;
   }
   .acc-head { display:flex; flex-direction:column; gap:.15rem; }
   .acc-label {
@@ -369,6 +426,12 @@ function formatSize(bytes: number) {
     position:relative;
     transition:background .25s,border-color .25s,box-shadow .25s,transform .25s;
   }
+  .copyBtn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .copyBtn:disabled:hover { background: var(--acc-accent); border-color: var(--acc-accent); }
   .copyBtn.small { padding:.38rem .55rem .34rem; font-size:.58rem; }
   .copyBtn:hover { background:var(--theme-primary); border-color:var(--theme-primary); }
   .copyBtn:active { transform:translateY(1px); }
@@ -566,6 +629,7 @@ function formatSize(bytes: number) {
     margin-top:.8rem;
   }
 
+
   /* DARK MODE */
   @media (prefers-color-scheme:dark) {
     .acc {
@@ -582,6 +646,11 @@ function formatSize(bytes: number) {
     .acc .note { color:#e9dbd4; border-top-color:#4a3d36; }
     .copyBtn:hover { background:var(--acc-accent); border-color:var(--acc-accent); }
     .acc--election .copyBtn:hover { background:#ff9090; }
+
+    .acc-closedOverlay {
+      background: rgba(0, 0, 0, 0.28);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
   }
 
   /* RESPONSIVE TWEAK */
@@ -650,6 +719,7 @@ document.addEventListener('click', (e) => {
   if (!(target instanceof Element)) return;
   const btn = target.closest('.copyBtn');
   if (!btn) return;
+  if (btn instanceof HTMLButtonElement && btn.disabled) return;
   const val = btn.getAttribute('data-copy');
   if (!val) return;
   copyPlain(val.replace(/\s+/g,''))

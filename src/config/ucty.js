@@ -10,11 +10,12 @@ export const accounts = [
         note: 'Do poznámky uveď “Příspěvek – jméno a”'
     },
     {
-        label: 'Volební účet',
+        label: 'Volební účet PS 2025',
         purpose: 'Financování volební kampaně',
         number: '2403303750/2010',
         iban: null,
         type: 'election',
+        closed: true,
         transparent: true,
         bankUrl: 'https://ib.fio.cz/ib/transparent?a=2403303750',
         note: 'Financování kampaně hnutí.'

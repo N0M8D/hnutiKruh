@@ -34,7 +34,9 @@ function todayISO() {
             </div>
             <FormInput name="Jmeno" label="Jméno" required />
             <FormInput name="Prijmeni" label="Příjmení" required />
-            <FormInput name="DatumNarozeni" type="date" label="Datum narození (dd.mm.rrrr)" max={todayISO()} required />
+            <div class="dob-field" data-dob-field hidden>
+              <FormInput name="DatumNarozeni" type="date" label="Datum narození (dd.mm.rrrr)" max={todayISO()} required={false} />
+            </div>
             <FormInput name="StatniPrislusnost" value="CZ" label="Státní příslušnost" required />
 
             <!-- Sekce: Trvalý pobyt -->
@@ -162,4 +164,36 @@ function todayISO() {
     ta.addEventListener('input', update);
     update();
   }
+
+  // Datum narození je povinné jen pro dary nad 1 000 Kč
+  const amountInput = document.getElementById('field-Castka');
+  const dobWrapper = document.querySelector('[data-dob-field]');
+  const dobInput = document.getElementById('field-DatumNarozeni');
+
+  const parseCzk = (v) => {
+    if (!v) return NaN;
+    // podporujeme i čárku
+    const normalized = String(v).replace(',', '.');
+    return parseFloat(normalized);
+  };
+
+  const updateDobVisibility = () => {
+    if (!amountInput || !dobWrapper || !dobInput) return;
+    const amount = parseCzk(amountInput.value);
+    const requireDob = Number.isFinite(amount) && amount > 1000;
+
+    dobWrapper.hidden = !requireDob;
+    dobInput.required = requireDob;
+    dobInput.disabled = !requireDob;
+    if (!requireDob) dobInput.value = '';
+
+    const indicator = document.querySelector(`label[for="${dobInput.id}"] [data-required-indicator]`);
+    if (indicator) indicator.hidden = !requireDob;
+  };
+
+  if (amountInput) {
+    amountInput.addEventListener('input', updateDobVisibility);
+    amountInput.addEventListener('change', updateDobVisibility);
+  }
+  updateDobVisibility();
 </script>

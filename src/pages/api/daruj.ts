@@ -52,8 +52,8 @@ export const POST: APIRoute = async ({ request }) => {
 
         if (!data.GDPR) return new Response('Chybí souhlas GDPR', { status: 400 });
 
-        // Basic required check
-        const required = ['Jmeno', 'Prijmeni', 'DatumNarozeni', 'Ulice', 'Obec', 'PSC', 'Email', 'Telefon', 'Castka'];
+        // Basic required check (DatumNarozeni je podmíněné podle částky)
+        const required = ['Jmeno', 'Prijmeni', 'Ulice', 'Obec', 'PSC', 'Email', 'Telefon', 'Castka'];
         for (const f of required) {
             // @ts-ignore
             if (!data[f]) return new Response(`Chybí pole: ${f}`, { status: 400 });
@@ -80,13 +80,24 @@ export const POST: APIRoute = async ({ request }) => {
             return new Response('Částka musí být kladné číslo větší než 0.', { status: 400 });
         }
 
+        // Datum narození je povinné jen pro dary nad 1 000 Kč
+        const requiresDob = castkaNum > 1000;
+        let dob: Date | null = null;
+        if (data.DatumNarozeni) {
+            const parsed = new Date(data.DatumNarozeni);
+            if (!isNaN(parsed.getTime())) dob = parsed;
+        }
+        if (requiresDob && !dob) {
+            return new Response('Chybí nebo je neplatné datum narození (povinné pro dary nad 1 000 Kč).', { status: 400 });
+        }
+
         const VariabilniSymbol = await generateVariableSymbol();
 
         const donation = await prisma.donation.create({
             data: {
                 Jmeno: data.Jmeno,
                 Prijmeni: data.Prijmeni,
-                DatumNarozeni: new Date(data.DatumNarozeni),
+                DatumNarozeni: dob,
                 StatniPrislusnost: data.StatniPrislusnost,
                 Ulice: data.Ulice,
                 Obec: data.Obec,

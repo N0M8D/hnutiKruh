@@ -49,7 +49,12 @@ const {
             <ul class="footer-link__list">
               {list.items.map((item) => (
                 <li>
-                  <a href={item.slug}>{item.title}</a>
+                  <a
+                    href={item.slug}
+                    download={item.download === true ? '' : item.download}
+                  >
+                    {item.title}
+                  </a>
                 </li>
               ))}
             </ul>

@@ -39,6 +39,11 @@ export const footerLists = [
 				title: 'Grafika',
 				slug: '/grafika',
 			},
+			{
+				title: 'Stanovy',
+				slug: '/assets/docs/stanovy_kruh.pdf',
+				download: 'stanovy_kruh.pdf',
+			},
 		],
 	},
 ];

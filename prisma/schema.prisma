@@ -25,7 +25,7 @@ model Donation {
 
     Jmeno             String
     Prijmeni          String
-    DatumNarozeni     DateTime
+    DatumNarozeni     DateTime?
     StatniPrislusnost String
     Ulice             String
     Obec              String

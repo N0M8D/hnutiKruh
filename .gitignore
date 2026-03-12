@@ -44,3 +44,5 @@ pnpm-debug.log*
 
 icon.d.ts
 *.cache
+
+.github

@@ -1,7 +1,7 @@
 export const nav = [
 	{
 		title: 'Volby',
-		slug: '/volby',
+		slug: '/volby/senat-2026',
 	},
 	{
 		title: 'Manifest',

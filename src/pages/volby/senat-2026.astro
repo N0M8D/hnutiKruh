@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Page.astro';
+import SenatHero from '../../components/volby/SenatHero.astro';
+import SenatPriority from '../../components/volby/SenatPriority.astro';
+import SenatKandidatky from '../../components/volby/SenatKandidatky.astro';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
+import { senatKandidatky2026, senatPriority2026 } from '../../data/senatKandidatky2026.js';
+
+const seo = {
+  title: 'Senátní volby 2026 | Hnutí Kruh',
+  description:
+    'Hnutí Kruh v senátních volbách 2026 – poznejte naše kandidátky, priority a vizi pro Senát České republiky.',
+};
+---
+
+<Layout {seo}>
+  <SenatHero kandidatky={senatKandidatky2026} />
+  <SenatPriority priority={senatPriority2026} />
+  <SenatKandidatky kandidatky={senatKandidatky2026} />
+  <ZapojSe />
+</Layout>

@@ -1,620 +1,593 @@
 ---
 import Layout from '../../layouts/Page.astro';
-import { TextSection, Container } from '../../components/odyssey-theme';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
+import { Icon } from 'astro-icon/components';
 
 const seo = {
   title: 'Program - Hnutí Kruh',
   description: 'Program Hnutí Kruh - naše hodnoty a vize pro férovou politiku',
 };
+
+const topics = [
+  {
+    id: 'socialni-politika',
+    icon: 'ic:baseline-volunteer-activism',
+    title: 'Sociální politika',
+    vize: 'Sociální politika má být oporou, ne labyrintem byrokracie. Chceme důstojné mzdy pro pracující v sociálních službách, podporu pečujících a jistotu, že každý člověk bude mít šanci na stabilní a bezpečný život. Stavíme na principu solidarity, spravedlivého ohodnocení práce a respektu ke stáří i rodičovství.',
+    cil: 'Společnost, kde péče a práce jsou náležitě oceněny a kde stát vytváří férové a dostupné podmínky pro všechny.',
+    navrhy: [
+      { title: 'Platy napojené na průměrnou mzdu', desc: 'Navážeme platy v sociálních a zdravotních službách na průměrnou mzdu s automatickou valorizací podle inflace.' },
+      { title: 'Víceleté financování sociálních služeb', desc: 'Financování sociálních služeb plánovat víceleté, aby organizace nemusely přežívat z roku na rok.' },
+      { title: 'Pětistupňový systém příspěvků na péči', desc: 'Zavedeme pětistupňový systém příspěvků na péči pro spravedlivější podporu podle reálných potřeb.' },
+      { title: 'Dostupné odlehčovací služby', desc: 'Rozšíříme odlehčovací služby s jednoduchou online žádostí a garantovanou lhůtou vyřízení.' },
+      { title: 'Důstojné a aktivní stáří', desc: 'Podpoříme aktivní stáří – kluby, mentoring, bezbariérové prostředí, mobilní asistenční týmy.' },
+      { title: 'Férová mateřská a rodičovská', desc: 'Zajistíme důstojnou mateřskou a rodičovskou pro všechny rodiče, včetně OSVČ a možnosti souběžné péče obou pečujících.' },
+      { title: 'Podpora náhradní rodinné péče', desc: 'Posílíme finanční a společenskou prestiž pěstounů a podpoříme náhradní rodinnou péči.' },
+      { title: 'Zálohové výživné pro každé dítě', desc: 'Stát bude automaticky zajišťovat vyplácení, administrativu a vymáhání výživného, aby děti nedoplácely na nesolidní rodiče.' },
+      { title: 'Základní příjem a menstruační volno', desc: 'Pilotujeme nepodmíněný základní příjem a zavedeme menstruační volno jako moderní sociální inovace.' },
+      { title: 'Modernizace úřadů práce', desc: 'Modernizujeme úřady práce: osobní plány, práce na zkoušku, transparentní portál pracovních nabídek.' },
+    ],
+  },
+  {
+    id: 'lidska-prava',
+    icon: 'ic:baseline-balance',
+    title: 'Lidská práva',
+    vize: 'Chceme společnost postavenou na spravedlnosti, spolupráci a respektu. Každý má mít šanci uspět, nikdo nemá trpět kvůli svému původu či postavení. Odmítáme koncentraci moci v rukou vyvolených – rozhodovat musíme společně.',
+    cil: 'Zajistit rovnost a ochranu základních práv, včetně reprodukčních, dětských a občanských, a garantovat důstojnost pro všechny.',
+    navrhy: [
+      { title: 'Férový daňový systém', desc: 'Zavedeme daňový systém, kde se daní astronomické zisky, ne práce běžných lidí.' },
+      { title: 'Participativní demokracie', desc: 'Zapojíme veřejnost do spolurozhodování – hlasovací lístky k referendům přímo do schránek a zákon o občanských shromážděních.' },
+      { title: 'Rovná hlasovací práva', desc: 'Posílíme rovná hlasovací práva, např. doplněním braillova písma na hlasovací lístky.' },
+      { title: 'Ústavní právo na interrupci', desc: 'Zavedeme vyšší právní ochranu interrupcí, zakotvíme je do ústavy a zařadíme mezi základní zdravotní péči.' },
+      { title: 'Dostupné menstruační pomůcky', desc: 'Zajistíme dostupnost menstruačních pomůcek ve veřejných budovách.' },
+      { title: 'Boj proti domácímu násilí', desc: 'Zavedeme povinné vzdělávání soudců v otázkách domácího a sexualizovaného násilí.' },
+      { title: 'Podpora obětí trestných činů', desc: 'Stabilně budeme financovat organizace pomáhající obětem trestných činů.' },
+      { title: 'Posílení dětských práv', desc: 'Zajistíme rovný přístup ke vzdělání, ochranu před násilím a právo dětí na vyjádření názoru.' },
+    ],
+  },
+  {
+    id: 'zdravotnictvi',
+    icon: 'ic:baseline-local-hospital',
+    title: 'Zdravotnictví',
+    vize: 'Zdravotnictví musí být dostupné, moderní a citlivé. Zdůrazňujeme propojení zdravotní a sociální péče, důraz na duševní zdraví, respekt k právu na volbu a důstojný konec života. Stavíme se za právo na interrupci, dostupnou antikoncepci a podporu prevence.',
+    cil: 'Zajistit dostupnou a kvalitní péči pro každého bez ohledu na region, příjem či životní situaci.',
+    navrhy: [
+      { title: 'Integrovaná zdravotní a sociální péče', desc: 'Budujeme integrační centra a digitální portály spojující zdravotní a sociální péči.' },
+      { title: 'Dostupná psychologická pomoc', desc: 'Zajistíme dostupnost psychologů hrazených z pojištění a krizových center 24/7.' },
+      { title: 'Prevence duševního zdraví ve školách', desc: 'Podpoříme školní programy prevence duševního zdraví a destigmatizační kampaně.' },
+      { title: 'Hrazená antikoncepce', desc: 'Zajistíme cílené hrazení antikoncepce a dostupnost menstruačních pomůcek.' },
+      { title: 'Dostupné interrupční služby', desc: 'Udržíme dostupnou síť interrupčních služeb a zakotvíme ústavní právo na interrupci.' },
+      { title: 'Zákon o eutanazii', desc: 'Připravíme zákon o eutanazii s přísnými odbornými podmínkami a podporou rodiny.' },
+      { title: 'Flexibilní pracovní neschopnost', desc: 'Umožníme lékaři rozhodovat o volnějších vycházkách při pracovní neschopnosti.' },
+      { title: 'Práva pacientů', desc: 'Posílíme práva pacientů a roli pacientských organizací při tvorbě zdravotní politiky.' },
+      { title: 'Vzdělávání lékařů', desc: 'Zavedeme povinné vzdělávání lékařů pro lepší práci s chronicky nemocnými.' },
+      { title: 'Komunitní zdravotní iniciativy', desc: 'Podpoříme propojení zdravotní péče s komunitními a neziskovými iniciativami.' },
+    ],
+  },
+  {
+    id: 'skolstvi-veda-sport',
+    icon: 'ic:baseline-school',
+    title: 'Školství, věda a sport',
+    vize: 'Každý člověk má právo na vzdělání, které rozvíjí jeho potenciál a dovednosti pro život ve svobodné, udržitelné společnosti. Škola má být místem rovnosti, péče a inovací, kde se děti učí nejen znalosti, ale i spolupráci a respekt.',
+    cil: 'Zajistit rovný přístup ke vzdělání, podporu učitelů a moderní vzdělávací systém nezávislý na politických náladách.',
+    navrhy: [
+      { title: 'Rovný přístup ke vzdělání', desc: 'Garantujeme rovný přístup ke vzdělání bez ohledu na původ, příjem či zdravotní stav.' },
+      { title: 'Dostupné školky a předškolní péče', desc: 'Zajistíme dostupné školky a předškolní péči, aby všechny děti měly rovný start.' },
+      { title: 'Školy jako centra komunity', desc: 'Podpoříme venkovské a regionální školy jako centra komunitního života.' },
+      { title: 'Důstojné platy učitelů', desc: 'Zajistíme důstojné platy učitelů a jasný kariérní řád.' },
+      { title: 'Profesní rozvoj pedagogů', desc: 'Rozvíjíme profesní komunity učitelů, mentoring a sdílení dobré praxe.' },
+      { title: 'Moderní kurikulum', desc: 'Pravidelně revidujeme kurikulum, doplníme digitální, finanční a vztahovou výchovu.' },
+      { title: 'Školní psychologové', desc: 'Podpoříme školní psychology a krizové interventy, aby školy zvládaly náročné situace.' },
+      { title: 'Propojení škol s komunitou', desc: 'Propojíme školy s komunitou – odpolední využívání prostor pro kulturu a sport.' },
+      { title: 'Bezplatné vysokoškolské vzdělání', desc: 'Zachováme bezplatné vysokoškolské studium a podpoříme vědecký výzkum.' },
+      { title: 'Sport a pohybové aktivity', desc: 'Podpoříme sport a pohybové aktivity dětí i dospělých, včetně rozvoje sportovišť.' },
+    ],
+  },
+  {
+    id: 'bydleni',
+    icon: 'ic:baseline-home',
+    title: 'Bydlení',
+    vize: 'Důstojné bydlení je základní podmínkou pro spokojený život. Chceme ukončit obchod s chudobou a rozvíjet dostupné nájemní i sociální bydlení. Podporujeme koncept Housing First a férovou bytovou politiku, která chrání rodiny před pádem do bezdomovectví.',
+    cil: 'Stabilní a dostupné bydlení pro všechny, zejména zranitelné skupiny.',
+    navrhy: [
+      { title: 'Obecní bytový fond', desc: 'Intenzivně podpoříme růst obecního bytového fondu prostřednictvím státních grantů a bezúročných půjček obcím.' },
+      { title: 'Zdanění prázdných bytů', desc: 'Zvýšíme zdanění dlouhodobě neobsazených bytů a komerčních prostor, aby se motivovalo k jejich využití.' },
+      { title: 'Zákon o družstevním bydlení', desc: 'Zavedeme moderní zákon o družstevním bydlení jako podmínku pro rozvoj obcí a návrat důvěry ve společnost.' },
+      { title: 'Komunitní centra a sousedské iniciativy', desc: 'Podpoříme komunitní centra a sousedské iniciativy pro začleňování ohrožených skupin.' },
+      { title: 'Kapacity azylových domů', desc: 'Rozšíříme kapacity azylových domů a nízkoprahových ubytoven.' },
+      { title: 'Housing First', desc: 'Podpoříme vznik 5 000 nízkoprahových bytů v režimu Housing First.' },
+    ],
+  },
+  {
+    id: 'zivotni-prostredi',
+    icon: 'ic:baseline-eco',
+    title: 'Životní prostředí',
+    vize: 'Prosazujeme spravedlivé a udržitelné hospodaření v krajině. Zemědělství a lesnictví mají sloužit potravinové a surovinové bezpečnosti a vést k udržení kulturní harmonické krajiny, kde budeme dobře žít. Chceme posílit ekologické zemědělství, chránit biodiverzitu a adaptovat se na klimatickou krizi.',
+    cil: 'Odolná krajina, která chrání vodu, půdu i klima a podporuje lokální komunity.',
+    navrhy: [
+      { title: 'Spravedlivá dekarbonizace', desc: 'Zajistíme, že náklady na odklon od fosilních paliv ponesou ti, kdo si to mohou dovolit, ne běžní občané.' },
+      { title: 'Ekologické a regenerativní zemědělství', desc: 'Podpoříme ekologické zemědělství, regenerativní zemědělství a agrolesnictví.' },
+      { title: 'Odbřemenění lokálních producentů', desc: 'Odbřemeníme menší producenty zpracovávající lokální produkty a podpoříme výstavbu městských tržnic.' },
+      { title: 'Dotace na ekosystémové hospodaření', desc: 'U velkých zemědělských podniků nastavíme dotace na více stromů, vodozádržných opatření a lepší stav půdy.' },
+      { title: 'Poradenství pro zemědělce', desc: 'Zajistíme bezplatné, státem garantované poradenství pro zemědělce vedoucí ke zlepšení stavu půdy a úsporám.' },
+      { title: 'Ochrana vody', desc: 'Podpoříme ochranu vody – revitalizací toků a rušením meliorací.' },
+      { title: 'Reforma hospodaření v lesích', desc: 'Podpoříme hospodaření bez holosečí vedoucí k druhově pestrému lesu a vyšší biodiverzitě.' },
+      { title: 'Reforma myslivosti', desc: 'Reformujeme myslivost tak, aby kontrolu a výkon v případě nutnosti zajišťovali profesionálové.' },
+      { title: 'Prostupnost krajiny', desc: 'Zvýšíme prostupnost krajiny pro divoká zvířata a zavedeme dotace na ekosystémové služby.' },
+      { title: 'Cirkulární odpadové hospodářství', desc: 'Investice v odpadovém hospodářství povedeme do recyklačních linek a zařízení na zpracování bioodpadu, ne do spaloven.' },
+    ],
+  },
+  {
+    id: 'mistni-rozvoj',
+    icon: 'ic:baseline-location-city',
+    title: 'Místní rozvoj a regiony',
+    vize: 'Rozvoj regionů je cestou k rovným šancím a důstojnému životu kdekoliv v Česku. Podporujeme lokální ekonomiku, férové dotace a spolupráci obcí. Chceme, aby veřejné služby byly dostupné i mimo velká města.',
+    cil: 'Spravedlivý a udržitelný rozvoj regionů s důrazem na spolupráci a solidaritu.',
+    navrhy: [
+      { title: 'Přerozdělení daní pro regiony', desc: 'Změníme rozpočtové určení daní ve prospěch chudších regionů a rodin s dětmi.' },
+      { title: 'Spolupráce obcí', desc: 'Podpoříme společenství obcí a sdílení služeb, aby se snížily náklady a zvýšila kvalita.' },
+      { title: 'Dopravní dostupnost regionů', desc: 'Motivujeme k soukromým investicím a zlepšíme dopravní dostupnost regionů.' },
+      { title: 'Nižší daně v chudších regionech', desc: 'Snížíme daně pro nízkopříjmové pracovníky a malé podnikatele v chudších regionech.' },
+      { title: 'Vzdělávání v každém okrese', desc: 'Podpoříme kvalitní vzdělávání v každém okrese, včetně školních psychologů.' },
+      { title: 'Oddlužení a šedá ekonomika', desc: 'Zlepšíme podmínky oddlužení a omezíme šedou ekonomiku.' },
+      { title: 'Dostupné nájemní bydlení', desc: 'Rozvíjíme dostupné nájemní bydlení, aby skončil obchod s chudobou.' },
+      { title: 'Strategický regionální rozvoj', desc: 'Posílíme plánování a strategii regionálního rozvoje na úrovni státu i obcí.' },
+    ],
+  },
+  {
+    id: 'bezpecnost',
+    icon: 'ic:baseline-shield',
+    title: 'Bezpečnost',
+    vize: 'Bezpečnost chápeme jako komplexní službu, která dává lidem klid, ochranu a důvěru v budoucnost. Stavíme na prevenci kriminality, evropské spolupráci, moderní armádě i kybernetické bezpečnosti.',
+    cil: 'Bezpečná společnost s profesionální armádou, důvěryhodnou policií a ochranou dat.',
+    navrhy: [
+      { title: 'Prevence kriminality', desc: 'Podpoříme prevenci kriminality – rekvalifikace, mentoring, mikropůjčky.' },
+      { title: 'Evropská bezpečnostní spolupráce', desc: 'Rozvíjíme evropskou a sousedskou spolupráci při krizových situacích.' },
+      { title: 'Profesionální armáda a zálohy', desc: 'Udržíme profesionální armádu a posílíme dobrovolné zálohy.' },
+      { title: 'Moderní výstroj pro vojáky a veterány', desc: 'Investujeme do moderní výstroje a péče pro vojáky i veterány.' },
+      { title: 'Kybernetická obrana', desc: 'Rozšíříme kapacity kybernetické obrany a podpoříme open-source řešení.' },
+      { title: 'Digitalizace státní správy', desc: 'Modernizujeme spisovou službu a veřejné registry.' },
+      { title: 'Výcvik policistů a hasičů', desc: 'Zajistíme moderní výcvik a supervizi pro policisty a hasiče.' },
+      { title: 'Dobrovolničtí respondeři', desc: 'Podpoříme kurzy IZS pro veřejnost a systém dobrovolníků–responderů.' },
+      { title: 'Státní datová suverenita', desc: 'Vybudujeme státní datová centra a ochráníme suverenitu dat.' },
+      { title: 'Mezinárodní závazky', desc: 'Potvrdíme aktivní členství v EU, NATO a OSN a posílíme mezinárodní závazky.' },
+    ],
+  },
+  {
+    id: 'doprava',
+    icon: 'ic:baseline-train',
+    title: 'Doprava',
+    vize: 'Mobilita je základní veřejná služba, která má být bezpečná, dostupná a férová. Naše cesty mají spojovat lidi, ne je rozdělovat. Chceme moderní, udržitelnou a chytrou dopravní politiku.',
+    cil: 'Dostupná, bezpečná a moderní doprava pro občany i podnikatele.',
+    navrhy: [
+      { title: 'Dokončení pražského okruhu', desc: 'Dokončíme pražský okruh a vystavíme 100 obchvatů obcí s nejvyšší tranzitní zátěží.' },
+      { title: 'Férová dálniční známka', desc: 'Zavedeme férovou dálniční známku – sleva pro řidiče bez přestupků.' },
+      { title: 'PPP projekty pro infrastrukturu', desc: 'Rozšíříme PPP projekty na výstavbu dálnic a dopravní infrastruktury.' },
+      { title: 'Chytrá údržba silnic', desc: 'Využijeme drony a digitální systémy pro chytrou údržbu silnic.' },
+      { title: 'Jednotná jízdenka CZ-Ticket', desc: 'Zavedeme jednotnou jízdenku CZ-Ticket pro vlaky, autobusy a MHD.' },
+      { title: 'Garantované přestupní uzly', desc: 'Vyhlásíme strategické přestupní uzly s garantovaným taktem spojů.' },
+      { title: 'Elektro a vodíková MHD', desc: 'Rozvíjíme elektro a vodíkovou MHD ve městech nad 50 tisíc obyvatel.' },
+      { title: 'Pěší a cyklistická doprava', desc: 'Podpoříme pěší a cyklodopravu – chodník není parkoviště.' },
+      { title: 'Mikroregionální dopravní plány', desc: 'Tvoříme mikroregionální dopravní plány, včetně sdílených aut a seniortaxi.' },
+    ],
+  },
+  {
+    id: 'navykove-chovani',
+    icon: 'ic:baseline-psychology',
+    title: 'Návykové chování',
+    vize: 'Užívání psychoaktivních látek je právo dospělého člověka. Represe selhává, proto chceme regulaci postavenou na prevenci, léčbě a minimalizaci rizik. Prosazujeme racionální přístup založený na vědeckých důkazech.',
+    cil: 'Snížit škody způsobené návykovým chováním prostřednictvím prevence, podpory služeb a regulace.',
+    navrhy: [
+      { title: 'Prevence rizikového chování', desc: 'Podpoříme prevenci rizikového chování se zaměřením na duševní zdraví.' },
+      { title: 'Omezení reklamy na alkohol', desc: 'Omezíme reklamu na alkohol podobně jako u tabáku.' },
+      { title: 'Regulace psychoaktivních látek', desc: 'Postupně legalizujeme a regulujeme psychoaktivní látky podle jejich rizikovosti.' },
+      { title: 'Adiktologické služby', desc: 'Ukotvíme adiktologické služby na pomezí zdravotnictví a sociální péče.' },
+      { title: 'Nízkoprahová zařízení', desc: 'Podpoříme vznik nízkoprahových zařízení i pro uživatele alkoholu.' },
+      { title: 'Stabilní financování adiktologie', desc: 'Zajistíme stabilní víceleté financování adiktologických služeb.' },
+      { title: 'Zrušení daňové výjimky pro tiché víno', desc: 'Zrušíme daňovou výjimku pro tiché víno a použijeme peníze na prevenci a léčbu.' },
+      { title: 'Léčebné využití psychedelik', desc: 'Podpoříme léčebné využití psychedelik a dalších látek ve výzkumu.' },
+      { title: 'Harm reduction přístup', desc: 'Prosazujeme harm reduction přístup – minimalizace škod namísto represe.' },
+      { title: 'Substituční programy', desc: 'Rozšíříme substituční programy a aplikační místnosti pro uživatele.' },
+    ],
+  },
+];
 ---
 
 <Layout {seo}>
-  <Container>
-    <TextSection>
-      <h1>Program Hnutí Kruh</h1>
-      
-      <h2>Naše hodnoty a vize</h2>
-      <p>
-        Stojíme na <strong>otevřenosti</strong>, <strong>soudržnosti</strong> a <strong>spolupráci</strong>. Usilujeme o férovou politiku pro všechny, 
-        ne pro vyvolené. Chceme společnost, kde se hraje na rovinu a poctivě. Každý má mít šanci uspět a nikdo nemá trpět kvůli 
-        původu nebo postavení. 
-      </p>
-      <ul>
-        <li>Transparentní a otevřené rozhodování, zapojení veřejnosti do spolurozhodování.</li>
-        <li>Solidarita, sounáležitost a empatie – stát na straně těch, kdo se nemohou bránit sami.</li>
-        <li>Férový daňový systém: danit astronomické zisky, ne práci běžných lidí.</li>
-        <li>Rovné příležitosti a důstojné ohodnocení práce i péče.</li>
-        <li>Respekt, spolupráce a odvaha vést věcný dialog.</li>
-      </ul>
+  <section class="program-page">
+    <div class="program-page__inner">
 
-      <h2>Klíčové oblasti našeho programu</h2>
-      
-      <!--
-        Každý kruh níže představuje hlavní programovou oblast. Po kliknutí
-        na kruh se zobrazí podrobnější přehled priorit. Obsah je sestaven
-        podle interních pracovních podkladů hnutí. Stručné seznamy lze
-        kdykoliv rozšířit stažením kompletního programu ve formátu PDF.
-      -->
-      <div class="program-circles">
-        <div class="circles-row">
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🤝</div>
-              <h3>Sociální politika</h3>
-            </summary>
-          </details>
+      <!-- Page header -->
+      <header class="program-header">
+        <div class="program-header__left">
+          <p class="program-header__label">Vize pro Česko</p>
+          <h1>Naše priority.</h1>
+        </div>
+        <div class="program-header__right">
+          <p>Deset pilířů, které tvoří pevný kruh naší budoucnosti. Program postavený na lidskosti, odbornosti a odvaze měnit věci k lepšímu.</p>
+        </div>
+      </header>
 
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">⚖️</div>
-              <h3>Lidská práva</h3>
-            </summary>
-          </details>
+      <!-- Sidebar + content -->
+      <div class="program-layout">
 
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🏥</div>
-              <h3>Zdravotnictví</h3>
-            </summary>
-          </details>
+        <!-- Left nav -->
+        <nav class="program-nav" aria-label="Oblasti programu">
+          {topics.map((t, i) => (
+            <button
+              class={`program-nav__item${i === 0 ? ' is-active' : ''}`}
+              data-topic={t.id}
+              type="button"
+            >
+              <span class="program-nav__icon">
+                <Icon name={t.icon} width={18} height={18} />
+              </span>
+              <span class="program-nav__label">{t.title}</span>
+              <span class="program-nav__arrow">
+                <Icon name="ic:baseline-chevron-right" width={18} height={18} />
+              </span>
+            </button>
+          ))}
+        </nav>
 
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🏫</div>
-              <h3>Školství, věda a sport</h3>
-            </summary>
-          </details>
-          
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🏠</div>
-              <h3>Bydlení</h3>
-            </summary>
-          </details>
+        <!-- Right content panels -->
+        <div class="program-content">
+          {topics.map((t, i) => (
+            <div class={`program-panel${i === 0 ? ' is-active' : ''}`} data-panel={t.id}>
 
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🌱</div>
-              <h3>Životní prostředí a zemědělství</h3>
-            </summary>
-          </details>
-          
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🏙️</div>
-              <h3>Místní rozvoj a regiony</h3>
-            </summary>
-          </details>
-          
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🛡️</div>
-              <h3>Bezpečnost</h3>
-            </summary>
-          </details>
-          
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-              <div class="circle-icon">🚆</div>
-              <h3>Doprava</h3>
-            </summary>
-          </details>
-          
-          <details class="program-circle" name="program-topics">
-            <summary class="circle-summary">
-              <span class="circle-border noShadow"></span>
-                <div class="circle-icon">🍷</div>
-              <h3>Návykové chování</h3>
-            </summary>
-          </details>
+              <div class="program-panel__header">
+                <span class="program-panel__icon">
+                  <Icon name={t.icon} width={28} height={28} />
+                </span>
+                <h2>{t.title}</h2>
+              </div>
+
+              <div class="program-panel__meta">
+                <div class="program-panel__vize">
+                  <p class="meta-label">— Naše vize</p>
+                  "{t.vize}"
+                </div>
+                <div class="program-panel__cil">
+                  <p class="meta-label">Cíl</p>
+                  <p>{t.cil}</p>
+                </div>
+              </div>
+
+              <h3 class="program-panel__proposals-title">Co navrhujeme</h3>
+              <ol class="program-panel__list">
+                {t.navrhy.map((n, idx) => (
+                  <li>
+                    <span class="item-num">{String(idx + 1).padStart(2, '0')}</span>
+                    <div class="item-body">
+                      <strong class="item-title">{n.title}</strong>
+                      <span class="item-desc">{n.desc}</span>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+            </div>
+          ))}
         </div>
 
-        <div class="content-area">
-          <!-- Sociální politika -->
-          <div class="circle-content" data-topic="socialni-politika">
-            <h4>Sociální politika</h4>
-            <h5>Naše vize</h5>
-            <p>Sociální politika má být oporou, ne labyrintem byrokracie. Chceme důstojné mzdy pro pracující v sociálních službách, podporu pečujících a jistotu, že každý člověk bude mít šanci na stabilní a bezpečný život. Stavíme na principu solidarity, spravedlivého ohodnocení práce a respektu ke stáří i rodičovství.</p>
-            <h5>Cíl</h5>
-            <p>Společnost, kde péče a práce jsou náležitě oceněny a kde stát vytváří férové a dostupné podmínky pro všechny.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Navázat platy v sociálních a zdravotních službách na průměrnou mzdu, s automatickou valorizací podle inflace.</li>
-              <li>Financování sociálních služeb plánovat víceleté, aby organizace nemusely přežívat z roku na rok.</li>
-              <li>Zavést pětistupňový systém příspěvků na péči pro spravedlivější podporu podle reálných potřeb.</li>
-              <li>Rozšířit odlehčovací služby s jednoduchou online žádostí a garantovanou lhůtou vyřízení.</li>
-              <li>Podporovat aktivní a důstojné stáří – kluby, mentoring, bezbariérové prostředí, mobilní asistenční týmy.</li>
-              <li>Zajistit důstojnou mateřskou a rodičovskou pro všechny rodiče, včetně OSVČ a samoživitelů včetně individuálního nastavení délky a možnosti souběžné péče obou rodičů/pečujících.</li>
-              <li>Posílit finanční a společenskou prestiž pěstounů a podpořit náhradní rodinnou péči.</li>
-              <li>Zálohové výživné pro každé dítě. Vyplácení, administrativu a vymáhání výživného bude automaticky zajišťovat stát, aby děti nikdy nedoplácely na nesolidní rodiče.</li>
-              <li>Pilotovat nepodmíněný základní příjem a zavést menstruační volno jako moderní sociální inovace.</li>
-              <li>Modernizovat úřady práce: osobní plány, práce na zkoušku, transparentní portál pracovních nabídek.</li>
-            </ul>
-          </div>
-
-          <!-- Lidská práva -->
-          <div class="circle-content" data-topic="lidska-prava">
-            <h4>Lidská práva</h4>
-            <h5>Naše vize</h5>
-            <p>Chceme společnost postavenou na spravedlnosti, spolupráci a respektu. Každý má mít šanci uspět, nikdo nemá trpět kvůli svému původu či postavení. Odmítáme koncentraci moci v rukou vyvolených – rozhodovat musíme společně.</p>
-            <h5>Cíl</h5>
-            <p>Zajistit rovnost a ochranu základních práv, včetně reprodukčních, dětských a občanských, a garantovat důstojnost pro všechny.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Zavést férový daňový systém: danit astronomické zisky, ne práci běžných lidí.</li>
-              <li>Zapojit veřejnost do spolurozhodování - navázat kvórum účasti u místních referend na účast v předchozích komunálních volbách, doručovat do schránek hlasovací lístky k referendům a zavést zákon o občanských shromážděních.</li>
-              <li>Posílit rovná hlasovací práva (např. doplnění braillova písma na hlasovací lístky).</li>
-              <li>Zavést vyšší právní ochranu interrupcí, právo na interrupci do ústavy a zařadit je mezi základní zdravotní péči.</li>
-              <li>Zajistit dostupnost menstruačních pomůcek ve veřejných budovách.</li>
-              <li>Bojovat proti násilí – povinné vzdělávání soudců v otázkách domácího a sexualizovaného násilí.</li>
-              <li>Stabilně financovat organizace pomáhající obětem trestných činů.</li>
-              <li>Posílit dětská práva – rovný přístup ke vzdělání, ochrana před násilím, právo na vyjádření názoru.</li>
-            </ul>
-          </div>
-
-          <!-- Zdravotnictví -->
-          <div class="circle-content" data-topic="zdravotnictvi">
-            <h4>Zdravotnictví</h4>
-            <h5>Naše vize</h5>
-            <p>Zdravotnictví musí být dostupné, moderní a citlivé. Zdůrazňujeme propojení zdravotní a sociální péče, důraz na duševní zdraví, respekt k právu na volbu a důstojný konec života. Stavíme se za právo na interrupci, dostupnou antikoncepci a podporu prevence.</p>
-            <h5>Cíl</h5>
-            <p>Zajistit dostupnou a kvalitní péči pro každého bez ohledu na region, příjem či životní situaci.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Budovat integrační centra a digitální portály spojující zdravotní a sociální péči.</li>
-              <li>Zajistit dostupnost psychologů hrazených z pojištění a krizových center 24/7.</li>
-              <li>Podpořit školní programy prevence duševního zdraví a destigmatizační kampaně.</li>
-              <li>Zajistit cílené hrazení antikoncepce a dostupnost menstruačních pomůcek.</li>
-              <li>Udržet dostupnou síť interrupčních služeb a garantovat ústavní právo na interrupci.</li>
-              <li>Připravit zákon o eutanazii s přísnými odbornými podmínkami a podporou rodiny.</li>
-              <li>Umožnit lékaři rozhodovat o volnějších vycházkách při pracovní neschopnosti.</li>
-              <li>Posílit práva pacientů a roli pacientských organizací při tvorbě zdravotní politiky.</li>
-              <li>Zavést povinné vzdělávání lékařů pro lepší práci s chronicky nemocnými.</li>
-              <li>Podporovat propojení zdravotní péče s komunitními a neziskovými iniciativami.</li>
-            </ul>
-          </div>
-
-          <!-- Školství, věda a sport -->
-          <div class="circle-content" data-topic="skolstvi-veda-sport">
-            <h4>Školství, věda a sport</h4>
-            <h5>Naše vize</h5>
-            <p>Každý člověk má právo na vzdělání, které rozvíjí jeho potenciál a dovednosti pro život ve svobodné, udržitelné společnosti. Škola má být místem rovnosti, péče a inovací, kde se děti učí nejen znalosti, ale i spolupráci a respekt.</p>
-            <h5>Cíl</h5>
-            <p>Zajistit rovný přístup ke vzdělání, podporu učitelů a moderní vzdělávací systém nezávislý na politických náladách.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Garantovat rovný přístup ke vzdělání bez ohledu na původ, příjem či zdravotní stav.</li>
-              <li>Zajistit dostupné školky a předškolní péči, aby všechny děti měly rovný start.</li>
-              <li>Podpořit venkovské a regionální školy jako centra komunitního života.</li>
-              <li>Zajistit důstojné platy učitelů a jasný kariérní řád.</li>
-              <li>Rozvíjet profesní komunity učitelů, mentoring a sdílení dobré praxe.</li>
-              <li>Pravidelně revidovat kurikulum, doplnit digitální, finanční a vztahovou výchovu.</li>
-              <li>Podporovat školní psychology a krizové interventy, aby školy zvládaly náročné situace.</li>
-              <li>Propojit školy s komunitou – odpolední využívání prostor pro kulturu a sport.</li>
-              <li>Zachovat bezplatné vysokoškolské studium a podpořit vědecký výzkum.</li>
-              <li>Podporovat sport a pohybové aktivity dětí i dospělých, včetně rozvoje sportovišť.</li>
-            </ul>
-          </div>
-
-          <!-- Bydlení -->
-          <div class="circle-content" data-topic="bydleni">
-            <h4>Bydlení</h4>
-            <h5>Naše vize</h5>
-            <p>Důstojné bydlení je základní podmínkou pro spokojený život. Chceme ukončit obchod s chudobou a rozvíjet dostupné nájemní i sociální bydlení. Podporujeme koncept Housing First a férovou bytovou politiku, která chrání rodiny před pádem do bezdomovectví.</p>
-            <h5>Cíl</h5>
-            <p>Stabilní a dostupné bydlení pro všechny, zejména zranitelné skupiny.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Intenzivní podporu růstu obecního bytového fondu. Podporovat komunitně prospěšné developerské projekty. Poskytovat státní granty a bezúročné půjčky obcím na výstavbu obecních bytů.</li>
-              <li>Zvýšit zdanění dlouhodobě neobsazených bytů a komerčních prostor, aby se motivovalo k jejich využití.</li>
-              <li>Moderní zákon o družstevním bydlení. Nezbytná podmínka pro rozvoj obcí, a zejména pro návrat důvěry ve společnost.</li>
-              <li>Podporovat komunitní centra a sousedské iniciativy pro začleňování ohrožených skupin.</li>
-              <li>Rozšířit kapacity azylových domů a nízkoprahových ubytoven.</li>
-              <li>Podpořit vznik 5 000 nízkoprahových bytů v režimu Housing First.</li>
-            </ul>
-          </div>
-
-          <!-- Životní prostředí a zemědělství -->
-          <div class="circle-content" data-topic="zivotni-prostredi-zemedelstvi">
-            <h4>Životní prostředí a zemědělství</h4>
-            <h5>Naše vize</h5>
-            <p>Prosazujeme spravedlivé a udržitelné hospodaření v krajině. Zemědělství a lesnictví mají sloužit potravinové a surovinové bezpečnosti a vést k udržení kulturní harmonické krajiny, kde budeme dobře žít. Chceme posílit ekologické zemědělství, chránit biodiverzitu a adaptovat se na klimatickou krizi.</p>
-            <h5>Cíl</h5>
-            <p>Odolná krajina, která chrání vodu, půdu i klima a podporuje lokální komunity.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Zajistit spravedlivou dekarbonizaci – náklady na odklon od fosilních paliv nesmí nést běžní občané.</li>
-              <li>Podporovat ekologické zemědělství, regenerativní zemědělství a agrolesnictví.</li>
-              <li>Odbřemenit menší producenty zpracovávající lokální produkty, co se týče nároků na vybavení provozoven, podpořit výstavbu městských a obecních tržnic.</li>
-              <li>U velkých zemědělských podniků nastavit dotace tak, aby se do zemědělské krajiny dostalo více stromů, vodozádržných opatření a zlepšil se stav půdy.</li>
-              <li>Zajistit bezplatné, státem garantované poradenství pro zemědělce, vedoucí ke zlepšení stavu půdy a úsporám.</li>
-              <li>Podpořit ochranu vody – revitalizací toků a rušením meliorací.</li>
-              <li>Konec dotování státního rozpočtu z těžby státních lesů  – zisk LČR musí být použit na udržení kvalifikované pracovní síly a adaptaci porostů na klimatickou změnu.</li>
-              <li>V lesích podpořit a umožnit hospodaření bez holosečí, které vede k druhově a strukturně pestrému lesu a zvýšení biodiverzity  – za tímto účelem zavedeme dotace na ekosystémové služby.</li>
-              <li>Reformovat myslivost, tak, aby byl zachován její spolkový rozměr, ale kontrolu a v případě nutnosti i výkon zajišťovali profesionálové – tím dojde k obnovení rovnováhy mezi zvěří a lesem.</li>
-              <li>Intenzivnější péči v některých chráněných územích, v jiných naopak více nerušené “divočiny”, mj. za využití velkých kopytníků, jako jsou zubři nebo divocí koně.</li>
-              <li>Zvýšit prostupnost krajiny pro divoká zvířata.</li>
-              <li>Zajistit transparentnost a vyloučení střetu zájmů při posuzování vlivů na životní prostředí.</li>
-              <li>Investice v odpadovém hospodářství musí směřovat do dotřiďovacích a recyklačních linek a zařízení na zpracování bioodpadu a ne do předimenzovaných spaloven.</li>
-              <li>Zavedeme chytrá řešení pro design výrobků, která výrobce příliš nezatíží, ale výrazně pomohou v recyklaci materiálů a obalů.</li>
-              <li>Podpoříme daňovými úlevami firmy, které zavedou bezodpadové hospodářství. Kde to půjde, zavedeme motivační systém i pro domácnosti.</li>
-              <li>Prosadit  systémovou regulaci koček, povinné čipování a centrální registr psů a koček, spolu se zpřísněním trestů za týrání zvířat.</li>
-            </ul>
-          </div>
-
-          <!-- Místní rozvoj a regiony -->
-          <div class="circle-content" data-topic="mistni-rozvoj-regiony">
-            <h4>Místní rozvoj a regiony</h4>
-            <h5>Naše vize</h5>
-            <p>Rozvoj regionů je cestou k rovným šancím a důstojnému životu kdekoliv v Česku. Podporujeme lokální ekonomiku, férové dotace a spolupráci obcí. Chceme, aby veřejné služby byly dostupné i mimo velká města.</p>
-            <h5>Cíl</h5>
-            <p>Spravedlivý a udržitelný rozvoj regionů s důrazem na spolupráci a solidaritu.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Změnit rozpočtové určení daní ve prospěch chudších regionů a rodin s dětmi.</li>
-              <li>Podpořit společenství obcí a sdílení služeb, aby se snížily náklady a zvýšila kvalita.</li>
-              <li>Motivovat k soukromým investicím a zlepšit dopravní dostupnost regionů.</li>
-              <li>Snížit daně pro nízkopříjmové pracovníky a malé podnikatele v chudších regionech.</li>
-              <li>Podpořit kvalitní vzdělávání v každém okrese, včetně školních psychologů.</li>
-              <li>Zlepšit podmínky oddlužení a omezit šedou ekonomiku.</li>
-              <li>Rozvíjet dostupné nájemní bydlení, aby skončil obchod s chudobou.</li>
-              <li>Posílit plánování a strategii regionálního rozvoje na úrovni státu i obcí.</li>
-            </ul>
-          </div>
-
-          <!-- Bezpečnost -->
-          <div class="circle-content" data-topic="bezpecnost">
-            <h4>Bezpečnost</h4>
-            <h5>Naše vize</h5>
-            <p>Bezpečnost chápeme jako komplexní službu, která dává lidem klid, ochranu a důvěru v budoucnost. Stavíme na prevenci kriminality, evropské spolupráci, moderní armádě i kybernetické bezpečnosti.</p>
-            <h5>Cíl</h5>
-            <p>Bezpečná společnost s profesionální armádou, důvěryhodnou policií a ochranou dat.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Podporovat prevenci kriminality – rekvalifikace, mentoring, mikropůjčky.</li>
-              <li>Rozvíjet evropskou a sousedskou spolupráci při krizových situacích.</li>
-              <li>Udržet profesionální armádu a posílit dobrovolné zálohy.</li>
-              <li>Investovat do moderní výstroje a péče pro vojáky i veterány.</li>
-              <li>Rozšířit kapacity kybernetické obrany a podporovat open-source řešení</li>
-              <li>Modernizovat spisovou službu</li>
-              <li>Zajistit moderní výcvik a supervizi pro policisty a hasiče.</li>
-              <li>Podporovat kurzy IZS pro veřejnost a systém dobrovolníků–responderů.</li>
-              <li>Vybudovat státní datová centra a chránit suverenitu dat.</li>
-              <li>Potvrdit aktivní členství v EU, NATO a OSN a posilovat mezinárodní závazky.</li>
-            </ul>
-          </div>
-
-          <!-- Doprava -->
-          <div class="circle-content" data-topic="doprava">
-            <h4>Doprava</h4>
-            <h5>Naše vize</h5>
-            <p>Mobilita je základní veřejná služba, která má být bezpečná, dostupná a férová. Naše cesty mají spojovat lidi, ne je rozdělovat. Chceme moderní, udržitelnou a chytrou dopravní politiku.</p>
-            <h5>Cíl</h5>
-            <p>Dostupná, bezpečná a moderní doprava pro občany i podnikatele.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Dokončit pražský okruh a postavit 100 obchvatů obcí s nejvyšší tranzitní zátěží.</li>
-              <li>Zavést férovou dálniční známku – sleva pro řidiče bez přestupků.</li>
-              <li>Rozšířit PPP projekty na výstavbu dálnic a dopravní infrastruktury.</li>
-              <li>Využívat drony a digitální systémy pro chytrou údržbu silnic.</li>
-              <li>Zavést jednotnou jízdenku CZ-Ticket pro vlaky, autobusy a MHD.</li>
-              <li>Vyhlásit strategické přestupní uzly s garantovaným taktem spojů.</li>
-              <li>Rozvíjet elektro a vodíkovou MHD ve městech nad 50 tisíc obyvatel.</li>
-              <li>Podporovat pěší a cyklodopravu – chodník není parkoviště.</li>
-              <li>Tvořit mikroregionální dopravní plány, včetně sdílených aut a seniortaxi.</li>
-            </ul>
-          </div>
-
-          <!-- Návykové chování -->
-          <div class="circle-content" data-topic="navykove-chovani">
-            <h4>Návykové chování</h4>
-            <h5>Naše vize</h5>
-            <p>Užívání psychoaktivních látek je právo dospělého člověka. Represe selhává, proto chceme regulaci postavenou na prevenci, léčbě a minimalizaci rizik. Prosazujeme racionální přístup založený na vědeckých důkazech.</p>
-            <h5>Cíl</h5>
-            <p>Snížit škody způsobené návykovým chováním prostřednictvím prevence, podpory služeb a regulace.</p>
-            <h5>Co navrhujeme:</h5>
-            <ul>
-              <li>Podporovat prevenci rizikového chování se zaměřením na duševní zdraví.</li>
-              <li>Omezit reklamu na alkohol podobně jako u tabáku.</li>
-              <li>Postupně legalizovat a regulovat psychoaktivní látky podle jejich rizikovosti.</li>
-              <li>Ukotvit adiktologické služby na pomezí zdravotnictví a sociální péče.</li>
-              <li>Podpořit vznik nízkoprahových zařízení i pro uživatele alkoholu.</li>
-              <li>Zajistit stabilní víceleté financování adiktologických služeb.</li>
-              <li>Zrušit daňovou výjimku pro tiché víno a použít peníze na prevenci a léčbu.</li>
-              <li>Podporovat léčebné využití psychedelik a dalších látek ve výzkumu.</li>
-              <li>Prosazovat harm reduction přístup – minimalizace škod namísto represe.</li>
-              <li>Rozšířit substituční programy a aplikační místnosti pro uživatele.</li>
-            </ul>
-          </div>
-        </div>
       </div>
-    </TextSection>
-  </Container>
+    </div>
+  </section>
+  <ZapojSe />
 </Layout>
 
 <style>
-  h1 {
-    margin-bottom: 2rem;
-    text-align: center;
+  /* ─── Page wrapper ─────────────────────────────── */
+  .program-page {
+    padding: 4rem 1.5rem 5rem;
   }
 
-  h2 {
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--theme-primary);
-    padding-bottom: 0.5rem;
+  .program-page__inner {
+    max-width: var(--container-max-width, 1100px);
+    margin: 0 auto;
   }
 
-  h3 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .program-circles {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin: 3rem 0;
-  }
-
-  .circles-row {
+  /* ─── Header ───────────────────────────────────── */
+  .program-header {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    justify-items: center;
+    align-items: end;
+    margin-bottom: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-surface-variant, #e9e0e0);
   }
 
-  .program-circle {
-    position: relative;
-    width: 200px;
+  .program-header__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
   }
 
-  .program-circle:not([open]) .circle-content {
-    display: none;
+  .program-header__left h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1.05;
+    margin: 0;
   }
 
-  .content-area {
-    width: 100%;
-    margin-top: 2rem;
+  .program-header__right p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text-muted, #555);
+    margin: 0;
   }
 
-  .content-area .circle-content {
-    display: none;
+  /* ─── Two-column layout ────────────────────────── */
+  .program-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 1.5rem;
+    align-items: start;
   }
 
-  .content-area .circle-content.active {
-    display: block;
-  }
-
-  .circle-summary {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
+  /* ─── Left nav ─────────────────────────────────── */
+  .program-nav {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    list-style: none;
-    position: relative;
-    transition: box-shadow 0.4s, border 0.4s, background 0.4s;
-    border: 3px solid rgba(255,255,255,0.3);
-    background: none;
-    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
-    text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow: hidden;
+    gap: 0.2rem;
+    position: sticky;
+    top: 5rem;
+    background: var(--color-surface-lowest, #fff);
+    border-radius: var(--theme-card-radius, 2rem);
+    padding: 0.5rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
   }
 
-  .circle-summary:hover,
-  .program-circle[open] .circle-summary {
-    border: 3px solid var(--theme-primary);
-    box-shadow: 0 8px 32px 0 rgba(160,90,44,0.18), 0 0 0 8px rgba(255,128,128,0.10);
-    background: none;
-    animation: highlight 0.7s cubic-bezier(.4,0,.2,1);
-  }
-
-  @keyframes highlight {
-    0% {
-      box-shadow: 0 0 0 0 rgba(255,128,128,0.18);
-    }
-    60% {
-      box-shadow: 0 0 0 16px rgba(255,128,128,0.10);
-    }
-    100% {
-      box-shadow: 0 8px 32px 0 rgba(160,90,44,0.18), 0 0 0 8px rgba(255,128,128,0.10);
-    }
-  }
-
-  .program-circle[open] .circle-summary h3 {
-    color: var(--theme-primary-hover);
-  }
-
-  .circle-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+  .program-nav__item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 54px;
-    height: 54px;
-  }
-
-  .circle-summary h3 {
-    margin: 0.5rem 0;
-    color: var(--theme-on-bg);
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.2;
-    transition: color 0.3s ease;
-    font-family: var(--theme-font-family-serif);
-  }
-
-  .circle-content {
-    background: rgba(255,255,255,0.25);
-    border-radius: var(--theme-shape-radius, 1.5rem);
-    border: 1px solid rgba(255,255,255,0.3);
-    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    padding: 1.5rem;
-    animation: slideDown 0.4s ease-out;
+    gap: 0.6rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 1.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.88rem;
+    font-family: inherit;
+    color: var(--color-text, #222);
+    transition: background 0.15s, color 0.15s;
     width: 100%;
-    box-sizing: border-box;
+    line-height: 1.3;
   }
 
-  .circle-content h4 {
-    color: #a05a2c;
-    margin: 0 0 1rem 0;
-    font-size: 1.4rem;
+  .program-nav__item:hover:not(.is-active) {
+    background: var(--color-surface-low, #ffe6d5);
+  }
+
+  .program-nav__item.is-active {
+    background: var(--color-primary);
+    color: #fff;
     font-weight: 600;
   }
 
-  .circle-content h5 {
-    color: #a05a2c;
-    margin: 1.5rem 0 0.5rem 0;
-    font-size: 1.1rem;
-    font-weight: 600;
+  .program-nav__icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    opacity: 0.85;
   }
 
-  .circle-content ul {
-    margin: 0.5rem 0 0 1rem;
-    padding: 0;
+  .program-nav__label {
+    flex: 1;
   }
 
-  .circle-content li {
-    margin-bottom: 0.5rem;
-    color: #444;
-    line-height: 1.5;
-    position: relative;
+  .program-nav__arrow {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
   }
 
-  .circle-content li::marker {
-    color: #a05a2c;
+  .program-nav__item.is-active .program-nav__arrow,
+  .program-nav__item:hover .program-nav__arrow {
+    opacity: 1;
   }
 
-  p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
+  /* ─── Content panels ───────────────────────────── */
+  .program-content {
+    background: var(--color-surface-lowest, #fff);
+    border-radius: var(--theme-card-radius, 2rem);
+    padding: 2rem 2.5rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
   }
 
-  em {
-    color: #666;
-    font-style: italic;
-    margin-top: 2rem;
+  .program-panel {
+    display: none;
+  }
+
+  .program-panel.is-active {
     display: block;
-    text-align: center;
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 8px;
   }
 
-  /* Responsive design pro menší obrazovky */
-  @media (max-width: 768px) {
-    .circles-row {
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.5rem;
+  /* Panel header */
+  .program-panel__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-left: 0.75rem;
+    border-left: 4px solid var(--color-primary);
+  }
+
+  .program-panel__icon {
+    display: flex;
+    align-items: center;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .program-panel__header h2 {
+    font-size: 1.6rem;
+    margin: 0;
+    color: var(--color-primary);
+  }
+
+  /* Meta: vize + cíl two-column */
+  .program-panel__meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .meta-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .program-panel__vize {
+    background: var(--color-surface, #fff8f5);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .program-panel__cil {
+    background: var(--color-surface-lowest, #fff);
+    border: 1px solid var(--color-surface-variant, #e9e0e0);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .program-panel__cil p {
+    margin: 0;
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  /* Proposals */
+  .program-panel__proposals-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: var(--color-text, #222);
+  }
+
+  .program-panel__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .program-panel__list li {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-surface-variant, #e9e0e0);
+    align-items: baseline;
+  }
+
+  .program-panel__list li:last-child {
+    border-bottom: none;
+  }
+
+  .item-num {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    opacity: 0.6;
+    min-width: 2.25rem;
+    flex-shrink: 0;
+    padding-top: 0.05rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .item-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text, #222);
+    line-height: 1.4;
+  }
+
+  .item-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-muted, #666);
+    line-height: 1.55;
+  }
+
+  /* ─── Responsive ───────────────────────────────── */
+  @media (max-width: 860px) {
+    .program-layout {
+      grid-template-columns: 1fr;
     }
 
-    .program-circle {
-      width: 160px;
+    .program-nav {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding: 0.5rem;
+      border-radius: 1.5rem;
     }
 
-    .circle-summary {
-      width: 160px;
-      height: 160px;
-      padding: 15px;
+    .program-nav__item {
+      width: auto;
+      flex: 0 1 auto;
+      padding: 0.45rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.82rem;
     }
 
-    .circle-icon {
-      width: 40px;
-      height: 40px;
-      font-size: 2rem;
+    .program-nav__arrow {
+      display: none;
     }
 
-    .circle-summary h3 {
-      font-size: 0.9rem;
+    .program-content {
+      padding: 1.5rem;
     }
   }
 
-  @media (max-width: 480px) {
-    .circles-row {
-      grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 640px) {
+    .program-header {
+      grid-template-columns: 1fr;
       gap: 1rem;
     }
 
-    .program-circle {
-      width: 140px;
-      justify-self: center;
-    }
-
-    .circle-summary {
-      width: 140px;
-      height: 140px;
-    }
-
-    .circle-content {
-      padding: 1rem;
-    }
-
-    .circle-summary h3 {
-      font-size: 0.8rem;
-      line-height: 1.1;
+    .program-panel__meta {
+      grid-template-columns: 1fr;
     }
   }
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Náhodná rotace pro každé kolo
-    document.querySelectorAll('.circle-border').forEach(el => {
-      const deg = Math.floor(Math.random() * 360);
-      (el as HTMLElement).style.transform = `rotate(${deg}deg)`;
-    });
+  document.addEventListener('DOMContentLoaded', () => {
+    const navItems = document.querySelectorAll<HTMLButtonElement>('.program-nav__item');
+    const panels = document.querySelectorAll<HTMLElement>('.program-panel');
 
-    const circles = document.querySelectorAll('.program-circle');
-    const contents = document.querySelectorAll('.content-area .circle-content');
-    const topics = [
-      'socialni-politika',
-      'lidska-prava',
-      'zdravotnictvi',
-      'skolstvi-veda-sport',
-      'bydleni',
-      'zivotni-prostredi-zemedelstvi',
-      'mistni-rozvoj-regiony',
-      'bezpecnost',
-      'doprava',
-      'navykove-chovani'
-    ];
-    
-    circles.forEach((circle, index) => {
-      const summary = circle.querySelector('.circle-summary');
-      summary.addEventListener('click', function(e) {
-        e.preventDefault();
-        // Zavřít všechny ostatní kruhy
-        circles.forEach(c => c.removeAttribute('open'));
-        contents.forEach(c => c.classList.remove('active'));
-        // Otevřít kliknutý kruh
-        circle.setAttribute('open', '');
-        // Zobrazit odpovídající obsah
-        if (topics[index]) {
-          const targetContent = document.querySelector(`[data-topic="${topics[index]}"]`);
-          if (targetContent) {
-            targetContent.classList.add('active');
-          }
-        }
+    navItems.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.topic;
+
+        navItems.forEach(b => b.classList.remove('is-active'));
+        panels.forEach(p => p.classList.remove('is-active'));
+
+        btn.classList.add('is-active');
+        const panel = document.querySelector<HTMLElement>(`.program-panel[data-panel="${target}"]`);
+        if (panel) panel.classList.add('is-active');
       });
     });
   });
 </script>
-

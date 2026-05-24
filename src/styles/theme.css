@@ -1,76 +1,113 @@
 :root {
-	/* Theme Colors */
-	--theme-primary: #ff8080;
-	--theme-primary-hover: #d35f5f;
-	--theme-on-primary: hsl(0, 0%, 100%);
+	/* ───── Design System Colors ───── */
+	--color-primary: #ff8080;
+	--color-primary-dark: #a33b3e;
+	--color-on-primary: #ffffff;
+	--color-primary-container: #ff8080;
+	--color-primary-fixed: #ffdad8;
+	--color-primary-fixed-dim: #ffb3b1;
 
-	--theme-bg: #fffffe;
-	--theme-on-bg: #5e4536;
+	--color-secondary: #22686c;
+	--color-on-secondary: #ffffff;
+	--color-secondary-container: #aceef3;
+	--color-on-secondary-container: #2a6e73;
 
-	--theme-surface-1: #ffe6d5;
-	--theme-on-surface-1: #5e4536;
+	--color-tertiary: #795900;
+	--color-on-tertiary: #ffffff;
+	--color-tertiary-container: #caa03f;
 
-	--theme-surface-2: #6a4d34;
-	--theme-on-surface-2: #ffffff;
+	--color-background: #fff8f5;
+	--color-on-background: #1f1b1b;
+	--color-surface: #fff8f5;
+	--color-on-surface: #1f1b1b;
+	--color-surface-variant: #e9e0e0;
+	--color-on-surface-variant: #564241;
 
-	--theme-button-border-radius: 0.5rem;
+	--color-surface-lowest: #ffffff;
+	--color-surface-low: #ffe6d5;
+	--color-surface-container: #ffe6d5;
+	--color-surface-high: #ffe6d5;
+	--color-surface-highest: #e9e0e0;
+	--color-surface-dim: #e1d8d7;
+	--color-surface-bright: #fff8f7;
 
-	/* Theme Shapes */
-	/* Set this to 0 if you want all of the rounded cards, images, etc to be straight edges */
-	--theme-shape-radius: clamp(1rem, 2rem, 3rem);
-	--theme-button-border-radius: 3rem;
+	--color-outline: #8a7170;
+	--color-outline-variant: #ddc0be;
 
-	/* Theme Transition */
+	--color-error: #ba1a1a;
+	--color-on-error: #ffffff;
+
+	/* ───── Legacy Aliases (backward compat) ───── */
+	--theme-primary: var(--color-primary);
+	--theme-primary-hover: var(--color-primary-dark);
+	--theme-on-primary: var(--color-on-primary);
+	--theme-bg: var(--color-background);
+	--theme-on-bg: var(--color-on-surface);
+	--theme-surface-1: var(--color-surface-low);
+	--theme-on-surface-1: var(--color-on-surface);
+	--theme-surface-2: var(--color-secondary);
+	--theme-on-surface-2: var(--color-on-secondary);
+
+	/* ───── Fonts ───── */
+	--theme-font-family-headline: 'Manrope', -apple-system, sans-serif;
+	--theme-font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+	--theme-font-family-label: 'Work Sans', -apple-system, sans-serif;
+	--theme-font-family-serif: var(--theme-font-family-headline);
+	/* legacy alias */
+
+	/* ───── Shape ───── */
+	--theme-shape-radius: 1rem;
+	--theme-button-border-radius: 9999px;
+	--theme-card-radius: 2rem;
+
+	/* ───── Transitions ───── */
 	--theme-transition: 0.2s ease-in-out;
 
-	/* Theme Layout */
+	/* ───── Layout ───── */
 	--section-margin: 3rem;
-	--theme-grid-gap: 1rem;
-	--container-max-width: 1440px;
-	--container-max-width-narrow: 960px;
-	--container-padding: 0 1rem;
-
+	--theme-grid-gap: 1.5rem;
+	--container-max-width: 1100px;
+	--container-max-width-narrow: 720px;
+	--container-padding: 0 2rem;
 	--theme-blog-post-header-width: 1200px;
 
-	/* Theme Fonts */
-	--theme-font-family-serif: 'Roboto Serif', Georgia, Cambria, 'Times New Roman',
-		Times, serif;
-	--theme-font-family-sans: 'Lato', -apple-system, BlinkMacSystemFont,
-		sans-serif;
+	/* ───── Signature Gradient ───── */
+	--theme-gradient-primary: linear-gradient(135deg, #ff8080 0%, #ffb3b1 100%);
 
-	--theme-bg-gradient: linear-gradient(90deg,
-			rgba(255, 230, 213, 0.95) 0%,
-			/* světlejší lososová, vyšší opacity */
-			rgba(255, 128, 128, 0.32) 100%
-			/* hlavní růžová, více sytá */
-		);
+	/* ───── Glassmorphism (nav / overlays only) ───── */
+	--g-glass-bg: rgba(255, 248, 245, 0.85);
+	--g-glass-blur: blur(20px);
 
-	--g-box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-	--g-glass-bg: rgba(255, 255, 255, 0.25);
+	/* ───── Shadows (warm-tinted, never grey) ───── */
+	--g-box-shadow: 0 8px 40px 0 rgba(37, 25, 15, 0.07);
+	--g-shadow-float: 0 4px 24px 0 rgba(37, 25, 15, 0.08);
+	--g-shadow-raised: 0 20px 60px 0 rgba(37, 25, 15, 0.06);
+
+	/* ───── Background Gradient ───── */
+	--theme-bg-gradient: linear-gradient(160deg, #fff8f5 0%, #ffe6d5 55%, #fff8f5 100%);
 }
 
 body {
-	background: var(--theme-bg-gradient);
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-size: cover;
-	color: var(--theme-on-bg);
+	background-color: var(--color-background);
+	color: var(--color-on-surface);
 	font-family: var(--theme-font-family-sans);
 }
 
-.glass,
-.card,
-section,
-header,
-article {
-	/* footer zde nesmí být */
-	padding: 1rem;
-	background: rgba(255, 255, 255, 0.25);
-	backdrop-filter: blur(12px) saturate(180%);
-	-webkit-backdrop-filter: blur(12px) saturate(180%);
+/* Glassmorphism — pouze explicitní třída (nav, overlay) */
+.glass {
+	background: var(--g-glass-bg);
+	backdrop-filter: var(--g-glass-blur) saturate(160%);
+	-webkit-backdrop-filter: var(--g-glass-blur) saturate(160%);
 	border-radius: var(--theme-shape-radius);
-	border: 1px solid rgba(255, 255, 255, 0.3);
 	box-shadow: var(--g-box-shadow);
+}
+
+/* Karta — tónové vrstvení, žádný border */
+.card {
+	background: var(--color-surface-lowest);
+	border-radius: 2rem;
+	box-shadow: var(--g-shadow-float);
+	overflow: hidden;
 }
 
 h1,

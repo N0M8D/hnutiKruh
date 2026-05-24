@@ -12,6 +12,10 @@ interface PublicEvent {
     date: string;         // "21. 08." nebo "21. 08. - 24. 08."
     description: string;  // summary
     googleMaps?: string;  // odkaz pokud location
+    day: string;          // "22"
+    month: string;        // "říj"
+    time?: string;        // "18:00" (není pro celodenní akce)
+    locationLabel?: string; // text lokace (pokud není URL)
 }
 
 declare global {
@@ -72,6 +76,17 @@ function dmLocal(d: Date): string {
     const month = monthRaw.replace(/\D/g, '').padStart(2, '0');
     return `${day}.${month}.`; // přidána tečka za měsícem
 }
+const CZ_MONTHS_SHORT = ['led', 'úno', 'bře', 'dub', 'kvě', 'čvn', 'čvc', 'srp', 'zář', 'říj', 'lis', 'pro'];
+
+function dayNum(d: Date): string {
+    return new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', timeZone: TZ }).format(d).replace(/\D/g, '');
+}
+function monthAbbr(d: Date): string {
+    const mStr = new Intl.DateTimeFormat('cs-CZ', { month: '2-digit', timeZone: TZ }).format(d);
+    const idx = parseInt(mStr.replace(/\D/g, ''), 10) - 1;
+    return CZ_MONTHS_SHORT[idx] ?? '';
+}
+
 function hhmmLocal(d: Date): string {
     return new Intl.DateTimeFormat('cs-CZ', {
         hour: '2-digit',
@@ -187,7 +202,11 @@ export async function fetchCalendarEvents(limit = 10): Promise<PublicEvent[]> {
                 : ev.location
                     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ev.location)}`
                     : undefined;
-            return { date, description, googleMaps };
+            const day = dayNum(ev.start);
+            const month = monthAbbr(ev.start);
+            const time = ev.allDay ? undefined : hhmmLocal(ev.start);
+            const locationLabel = ev.location && !direct ? ev.location : undefined;
+            return { date, description, googleMaps, day, month, time, locationLabel };
         });
 
     globalThis.__calendarCache = {
@@ -234,7 +253,11 @@ export async function fetchCalendarEventsNextDays(days = 30): Promise<PublicEven
                 : ev.location
                     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ev.location)}`
                     : undefined;
-            return { date, description, googleMaps };
+            const day = dayNum(ev.start);
+            const month = monthAbbr(ev.start);
+            const time = ev.allDay ? undefined : hhmmLocal(ev.start);
+            const locationLabel = ev.location && !direct ? ev.location : undefined;
+            return { date, description, googleMaps, day, month, time, locationLabel };
         });
     return windowEvents;
 }

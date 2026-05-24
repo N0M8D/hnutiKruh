@@ -51,11 +51,17 @@ a {
 /* Make images easier to work with */
 img,
 picture {
-	max-width: 70%;
+	max-width: 100%;
 	margin: 0 auto 1rem auto;
-	border-radius: var(--theme-shape-radius);
 	display: block;
-	box-shadow: 5px 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+/* Article/blog content images get shape + soft shadow */
+article img,
+article picture {
+	border-radius: var(--theme-shape-radius);
+	box-shadow: 0 8px 32px rgba(37, 25, 15, 0.10);
+	max-width: 80%;
 }
 
 img.noShadow,

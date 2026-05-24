@@ -4,6 +4,7 @@ import { TextSection } from '@components/odyssey-theme';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { accounts } from '../../config/ucty.js';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // SEO
 const seo = {
@@ -258,6 +259,7 @@ function formatSize(bytes: number) {
       </ul>
     )}
   </TextSection>
+  <ZapojSe />
 </Layout>
 
 <style>

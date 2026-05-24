@@ -1,6 +1,6 @@
 ---
-import { Container } from '@components/odyssey-theme';
 import Layout from '../../layouts/Page.astro';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // Import all person profiles
 const peopleModules = import.meta.glob('../../pages/people/people-list/*.mdx', { eager: true });
@@ -46,10 +46,14 @@ const seo = {
 ---
 
 <Layout {seo}>
-  <Container>
+  <section class="people-page">
+    <div class="people-page__inner">
 
-    <br/><br/>
-          <h1>Naše tváře</h1>
+      <header class="people-header">
+        <h1>Naše tváře</h1>
+        <div class="people-header__accent"></div>
+        <p class="people-header__lead">Seznamte se s lidmi, kteří stojí za Hnutím Kruh.</p>
+      </header>
 
     <section class="people-section">
 
@@ -99,12 +103,48 @@ const seo = {
       </div>
       
     </section>
-  </Container>
+    </div>
+  </section>
+  <ZapojSe />
 </Layout>
   
 <style>
+/* Page wrapper */
+.people-page {
+  padding: 4rem 1.5rem;
+}
+
+.people-page__inner {
+  max-width: var(--container-max-width, 1100px);
+  margin: 0 auto;
+}
+
+/* Header */
+.people-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.people-header h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  margin-bottom: 0.5rem;
+}
+
+.people-header__accent {
+  width: 3rem;
+  height: 4px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  margin: 0.75rem auto 1.25rem;
+}
+
+.people-header__lead {
+  color: var(--color-text-muted, #555);
+  font-size: 1.05rem;
+}
+
+/* Sections */
 .people-section {
-  margin: var(--section-margin) auto;
   text-align: center;
 }
 
@@ -113,35 +153,42 @@ const seo = {
 }
 
 .people-category h2 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
 }
 
+/* Grid */
 .people-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: 1.25rem;
+  margin-top: 1rem;
 }
+
+/* Cards — sjednoceno s manifest boxy */
 .person-card {
-  background: var(--theme-surface-1);
-  padding: 1rem; /* zmenšeno z 1.5rem */
-  border-radius: 12px;
+  background: var(--color-surface-lowest, #ffffff);
+  padding: 1.5rem 1rem;
+  border-radius: var(--theme-card-radius, 2rem);
   text-decoration: none;
   color: inherit;
-  box-shadow: var(--g-box-shadow);
-  transition: transform 0.2s ease;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .person-card:hover {
   transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.11);
 }
 
+/* Photo */
 .photo-wrapper {
   position: relative;
   width: 120px;
   height: 120px;
-  margin: 0 auto 0.75rem; /* menší mezera dolů */
+  margin: 0 auto 1rem;
 }
+
 .photo-frame {
   position: absolute;
   top: 0;
@@ -151,6 +198,7 @@ const seo = {
   z-index: 1;
   max-width: 100%;
 }
+
 .person-photo {
   position: absolute;
   top: 14%;
@@ -162,18 +210,29 @@ const seo = {
   z-index: 2;
   max-width: 100%;
 }
+
 .role {
   font-weight: bold;
   margin: 0.25rem 0;
   font-size: 0.9rem;
+  color: var(--color-primary);
 }
 
 .description {
-  font-size: 0.8rem; /* menší text */
-  line-height: 1.3;
-  color: var(--theme-text-2);
-  margin: 0.25rem 0 0 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--color-text-muted, #666);
+  margin: 0.25rem 0 0;
 }
 
+/* Responsive */
+@media (max-width: 560px) {
+  .people-page {
+    padding: 2.5rem 1rem;
+  }
 
+  .people-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 </style>

@@ -1,0 +1,414 @@
+---
+/**
+ * SenatHero.astro
+ * HERO sekce pro stránku senátních voleb 2026.
+ * Kandidátky se automaticky přepínají v cyklu – fotografie + citace.
+ */
+
+interface Kandidatka {
+  slug: string;
+  jmeno: string;
+  obvod: string;
+  oblastExpertizy: string;
+  foto: string;
+  href: string;
+  citace: string;
+}
+
+interface Props {
+  kandidatky: Kandidatka[];
+}
+
+const { kandidatky } = Astro.props;
+const jsonData = JSON.stringify(kandidatky);
+---
+
+<section class="senat-hero">
+  <!-- Kampaňový claim přes celou šířku -->
+  <div class="senat-hero__claim">
+    <span class="senat-hero__claim-text">Tady jsme.</span>
+    <span class="senat-hero__claim-accent">Senátorky 2026</span>
+  </div>
+
+  <div class="senat-hero__inner">
+
+    <!-- Levá část: text + tlačítka -->
+    <div class="senat-hero__text">
+      <p class="senat-hero__badge">Senátní volby 2026</p>
+      <h1 class="senat-hero__title">Ženský hlas<br />mění pravidla<br />v Senátu</h1>
+      <p class="senat-hero__desc">
+        Všechno do politiky smyslu, odbornosti a osobní zodpovědnosti. Naše
+        kandidátky vstupují do nejvyšší zákonodárné komory a přinášejí
+        perspektivu, která tam dosud chyběla. Společně tvoří větší rovnováhu
+        a stabilitu.
+      </p>
+      <div class="senat-hero__btns">
+        <a href="#kandidatky" class="btn-primary">Poznej naše kandidátky</a>
+        <a href="/program" class="btn-outline">Náš program</a>
+      </div>
+    </div>
+
+    <!-- Pravá část: rotující foto + citace -->
+    <div class="senat-hero__visual">
+      <div class="hero-carousel" id="heroCarousel">
+        {kandidatky.map((k, i) => (
+          <div
+            class={`hero-slide ${i === 0 ? 'hero-slide--active' : ''}`}
+            data-index={i}
+            aria-hidden={i !== 0}
+          >
+            <div class="hero-slide__photo-wrap">
+              <img
+                src={k.foto}
+                alt={`Foto ${k.jmeno}`}
+                class="hero-slide__photo"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
+            <div class="hero-slide__quote-bubble">
+              <p class="hero-slide__quote-text">„{k.citace}"</p>
+              <span class="hero-slide__quote-name">{k.jmeno}</span>
+              <span class="hero-slide__quote-obvod">{k.obvod}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Tečkový navigátor -->
+      <div class="hero-dots" role="tablist" aria-label="Výběr kandidátky">
+        {kandidatky.map((k, i) => (
+          <button
+            class={`hero-dot ${i === 0 ? 'hero-dot--active' : ''}`}
+            data-target={i}
+            role="tab"
+            aria-selected={i === 0}
+            aria-label={k.jmeno}
+          />
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script define:vars={{ jsonData }}>
+  const kandidatky = JSON.parse(jsonData);
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  let current = 0;
+  let timer;
+
+  function goTo(index) {
+    slides[current].classList.remove('hero-slide--active');
+    slides[current].setAttribute('aria-hidden', 'true');
+    dots[current].classList.remove('hero-dot--active');
+    dots[current].setAttribute('aria-selected', 'false');
+
+    current = (index + slides.length) % slides.length;
+
+    slides[current].classList.add('hero-slide--active');
+    slides[current].setAttribute('aria-hidden', 'false');
+    dots[current].classList.add('hero-dot--active');
+    dots[current].setAttribute('aria-selected', 'true');
+  }
+
+  function startAuto() {
+    timer = setInterval(() => goTo(current + 1), 5000);
+  }
+
+  function resetAuto() {
+    clearInterval(timer);
+    startAuto();
+  }
+
+  dots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      goTo(parseInt(dot.dataset.target, 10));
+      resetAuto();
+    });
+  });
+
+  startAuto();
+</script>
+
+<style>
+  /* ── Kampanová paleta (scoped) ─────────────── */
+  .senat-hero {
+    --camp-dark:    #110c0a;
+    --camp-gold:    #E3B754;
+    --camp-akcent:  #C0392B;
+    --camp-broskev: #FFE6D5;
+    --camp-cream:   #FFF8F5;
+  }
+
+  /* ── Kampaňový claim ─────────────────────── */
+  .senat-hero__claim {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em;
+  }
+
+  .senat-hero__claim-text,
+  .senat-hero__claim-accent {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(2.25rem, 5.5vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .senat-hero__claim-text {
+    color: var(--camp-cream);
+  }
+
+  .senat-hero__claim-accent {
+    color: var(--camp-gold);
+  }
+
+  /* ── Hero wrapper ─────────────────────────── */
+  .senat-hero {
+    background: var(--camp-dark);
+    padding: 3rem clamp(1.5rem, 4vw, 3rem) 4rem;
+    min-height: min(50rem, calc(100svh - 4.5rem));
+    display: flex;
+    flex-direction: column;
+  }
+
+  .senat-hero__inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    min-height: clamp(34rem, 66vh, 48rem);
+    flex: 1;
+  }
+
+  /* ── Text sloupec ─────────────────────────── */
+  .senat-hero__badge {
+    display: inline-block;
+    background: var(--camp-gold);
+    color: var(--camp-dark);
+    font-family: var(--theme-font-family-label);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 9999px;
+    margin-bottom: 1.25rem;
+  }
+
+  .senat-hero__title {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 800;
+    color: var(--camp-cream);
+    line-height: 1.15;
+    margin: 0 0 1.25rem;
+  }
+
+  .senat-hero__desc {
+    font-family: var(--theme-font-family-sans);
+    font-size: 1.0625rem;
+    color: var(--camp-broskev);
+    line-height: 1.7;
+    max-width: 28rem;
+    margin: 0 0 2rem;
+    opacity: 0.9;
+  }
+
+  .senat-hero__btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* Primární tlačítko: zlaté na tmavém = silný CTA */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    background: var(--camp-gold);
+    color: var(--camp-dark);
+    font-family: var(--theme-font-family-label);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--theme-button-border-radius);
+    text-decoration: none;
+    transition: background var(--theme-transition), transform var(--theme-transition);
+  }
+  .btn-primary:hover {
+    background: #f0ca6b;
+    transform: translateY(-1px);
+  }
+
+  /* Sekundární tlačítko: světlý obrys na tmavém */
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    color: var(--camp-cream);
+    font-family: var(--theme-font-family-label);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--theme-button-border-radius);
+    border: 2px solid rgba(255, 248, 245, 0.35);
+    text-decoration: none;
+    transition: border-color var(--theme-transition), background var(--theme-transition), transform var(--theme-transition);
+  }
+  .btn-outline:hover {
+    border-color: var(--camp-gold);
+    color: var(--camp-gold);
+    background: rgba(227, 183, 84, 0.08);
+    transform: translateY(-1px);
+  }
+
+  /* ── Carousel ─────────────────────────────── */
+  .senat-hero__visual {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    min-height: clamp(34rem, 46vw, 40rem);
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero-slide--active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
+
+  .hero-slide__photo-wrap {
+    border-radius: var(--theme-card-radius);
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    flex: 1;
+  }
+
+  .hero-slide__photo {
+    width: 100%;
+    height: clamp(25rem, 35vw, 32rem);
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .hero-slide--active .hero-slide__photo {
+    transform: scale(1.02);
+  }
+
+  /* Citace: poloprůhledný tmavý panel se zlatým akcentem */
+  .hero-slide__quote-bubble {
+    background: rgba(255, 248, 245, 0.06);
+    border: 1px solid rgba(227, 183, 84, 0.35);
+    border-radius: var(--theme-shape-radius);
+    padding: 1rem 1.25rem;
+    backdrop-filter: blur(4px);
+  }
+
+  .hero-slide__quote-text {
+    font-family: var(--theme-font-family-serif);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--camp-broskev);
+    margin: 0 0 0.5rem;
+    font-style: italic;
+  }
+
+  .hero-slide__quote-name {
+    display: block;
+    font-family: var(--theme-font-family-label);
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--camp-gold);
+  }
+
+  .hero-slide__quote-obvod {
+    display: block;
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.75rem;
+    color: rgba(255, 230, 213, 0.55);
+    margin-top: 0.2rem;
+  }
+
+  /* ── Dots ──────────────────────────────────── */
+  .hero-dots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .hero-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 248, 245, 0.2);
+    cursor: pointer;
+    padding: 0;
+    transition: background var(--theme-transition), transform var(--theme-transition);
+  }
+
+  .hero-dot--active {
+    background: var(--camp-gold);
+    transform: scale(1.3);
+  }
+
+  /* ── Responsive ────────────────────────────── */
+  @media (max-width: 768px) {
+    .senat-hero__claim {
+      padding: 2rem 0 1.5rem;
+    }
+
+    .senat-hero {
+      padding-inline: 1.5rem;
+      min-height: unset;
+    }
+
+    .senat-hero__inner {
+      grid-template-columns: 1fr;
+      min-height: unset;
+      gap: 2rem;
+    }
+
+    .senat-hero__visual {
+      order: -1;
+    }
+
+    .hero-carousel {
+      min-height: 480px;
+    }
+
+    .hero-slide__photo {
+      height: 380px;
+    }
+  }
+</style>

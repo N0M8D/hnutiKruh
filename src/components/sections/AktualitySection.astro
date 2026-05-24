@@ -1,0 +1,285 @@
+---
+/**
+ * AktualitySection – editorial blok s aktualitami
+ *
+ * Props:
+ *   posts   – pole článků ({ title, excerpt, featuredImage, href, publishDate: Date, tags? })
+ *   allHref – odkaz na všechny články (default: /blog)
+ */
+
+const { posts = [], allHref = '/blog' } = Astro.props;
+
+const featured = posts[0];
+const rest = posts.slice(1, 5);
+
+function formatDate(d: Date) {
+  if (!d || isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+{featured && (
+  <section class="aktuality">
+    <div class="aktuality__inner">
+      <div class="aktuality__header">
+      <h2 class="aktuality__heading">Aktuality</h2>
+      <a class="aktuality__all-link" href={allHref}>
+        Všechny aktuality &rarr;
+      </a>
+    </div>
+
+    <div class="aktuality__grid">
+
+      <!-- Velký featured článek -->
+      <a class="featured" href={featured.href}>
+        <div class="featured__img-wrap">
+          {featured.tags?.[0] && (
+            <span class="featured__tag">{featured.tags[0]}</span>
+          )}
+          <img
+            src={featured.featuredImage}
+            alt={featured.title}
+            class="featured__img"
+          />
+        </div>
+        <div class="featured__body">
+          <p class="featured__date">{formatDate(featured.publishDate)}</p>
+          <h3 class="featured__title">{featured.title}</h3>
+          {featured.excerpt && (
+            <p class="featured__excerpt">{featured.excerpt}</p>
+          )}
+          <span class="featured__read-more">Číst více &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Seznam dalších článků -->
+      <ul class="article-list">
+        {rest.map((post) => (
+          <li class="article-item">
+            <a class="article-item__link" href={post.href}>
+              <p class="article-item__date">{formatDate(post.publishDate)}</p>
+              <h4 class="article-item__title">{post.title}</h4>
+              {post.excerpt && (
+                <p class="article-item__excerpt">{post.excerpt}</p>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+    </div>
+    </div>
+  </section>
+)}
+
+<style>
+/* ── Sekce ── */
+.aktuality {
+  padding: 3rem 1.5rem;
+}
+
+.aktuality__inner {
+  max-width: var(--container-max-width, 1100px);
+  margin: 0 auto;
+}
+
+.aktuality__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.aktuality__heading {
+  font-family: var(--theme-font-family-headline, 'Manrope', sans-serif);
+  font-size: var(--font-size-xl, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-align: left;
+}
+
+.aktuality__all-link {
+  font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--color-primary, #ff8080);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity var(--theme-transition);
+}
+
+.aktuality__all-link:hover {
+  opacity: 0.75;
+}
+
+.aktuality__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ── Featured ── */
+.featured {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-surface-lowest, #ffffff);
+  border-radius: var(--theme-card-radius, 2rem);
+  overflow: hidden;
+  box-shadow: var(--g-shadow-float, 0 4px 24px 0 rgba(37, 25, 15, 0.08));
+  transition: box-shadow var(--theme-transition), transform var(--theme-transition);
+}
+
+.featured:hover {
+  box-shadow: 0 8px 40px 0 rgba(37, 25, 15, 0.12);
+  transform: translateY(-2px);
+}
+
+.featured__img-wrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-surface-low, #ffe6d5);
+}
+
+.featured__img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition: transform 0.4s ease;
+}
+
+.featured:hover .featured__img {
+  transform: scale(1.03);
+}
+
+.featured__tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+  font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--color-primary, #ff8080);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.featured__body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.featured__date {
+  font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-on-surface-variant, #564241);
+  margin: 0;
+}
+
+.featured__title {
+  font-size: var(--font-size-lg, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.featured__excerpt {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--color-on-surface-variant, #564241);
+  line-height: 1.55;
+  margin: 0.25rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.featured__read-more {
+  font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--color-primary, #ff8080);
+  margin-top: 0.5rem;
+}
+
+/* ── Seznam dalších článků ── */
+.article-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.article-item {
+  background: var(--color-surface-lowest, #ffffff);
+  border-radius: var(--theme-card-radius, 2rem);
+  overflow: hidden;
+  box-shadow: var(--g-shadow-float, 0 4px 24px 0 rgba(37, 25, 15, 0.08));
+  transition: box-shadow var(--theme-transition), transform var(--theme-transition);
+}
+
+.article-item:hover {
+  box-shadow: 0 8px 40px 0 rgba(37, 25, 15, 0.12);
+  transform: translateY(-2px);
+}
+
+.article-item__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.article-item__date {
+  font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+  font-size: 0.78rem;
+  color: var(--color-on-surface-variant, #564241);
+  margin: 0;
+}
+
+.article-item__title {
+  font-size: var(--font-size-base, 1rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.article-item__excerpt {
+  font-size: 0.82rem;
+  color: var(--color-on-surface-variant, #564241);
+  line-height: 1.5;
+  margin: 0.15rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Responzivní ── */
+@media (max-width: 768px) {
+  .aktuality__grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

@@ -1,21 +1,51 @@
 ---
 import Icon from '../Icons/Icon.astro';
-import Container from '../core/Container.astro';
 import Plug from './Plug.astro';
 
+interface FooterSocial {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface FooterListItem {
+  title: string;
+  slug: string;
+  download?: boolean | string;
+}
+
+interface FooterList {
+  title: string;
+  items: FooterListItem[];
+}
+
+interface ContactPerson {
+  name: string;
+  email?: string;
+  phone?: string;
+}
+
 const {
-  footerSocials,
+  footerSocials = [],
   contactList = [],
   footerLists = [],
   copyrightName,
   background,
   color,
   showPlug: showPlug = true,
-} = Astro.props;
+} = Astro.props as {
+  footerSocials?: FooterSocial[];
+  contactList?: ContactPerson[];
+  footerLists?: FooterList[];
+  copyrightName?: string;
+  background?: string;
+  color?: string;
+  showPlug?: boolean;
+};
 ---
 
 <footer>
-  <Container>
+  <div class="footer-shell">
     <div class="footer-grid__container">
       <!-- Col 1: Logo + socials -->
       <div class="footer-col footer-col--brand">
@@ -95,7 +125,7 @@ const {
         Zadavatel & Zpracovatel: Hnutí Kruh
       </p>
     </div>
-  </Container>
+  </div>
 </footer>
 
 <style>
@@ -110,6 +140,11 @@ const {
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-top: 1.5px solid rgba(255,255,255,0.35);
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
+  }
+  .footer-shell {
+    width: min(1600px, calc(100vw - 3rem));
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 4vw, 3rem);
   }
   .footer-grid__container {
     /* původně: repeat(3,minmax(0,1fr)) */
@@ -135,6 +170,7 @@ const {
     .footer-col--contact { order:3; grid-column:1 / -1; }
   }
   @media (max-width: 640px) {
+    .footer-shell { width: 100%; padding: 0 1.5rem; }
     .footer-grid__container { grid-template-columns:1fr; }
     .footer-col--brand, .footer-col--lists, .footer-col--contact { order:initial; }
   }

@@ -57,53 +57,53 @@ const { priority } = Astro.props;
       <button class="priority-arrow priority-arrow--next" aria-label="Další" id="nextBtn">&#8594;</button>
     </div>
 
-    <!-- Tečky -->
-    <div class="priority-dots" id="priorityDots" role="tablist" aria-label="Navigace prioritami">
-      {priority.map((p, i) => (
-        <button
-          class={`priority-dot ${i === 0 ? 'priority-dot--active' : ''}`}
-          data-index={i}
-          role="tab"
-          aria-label={p.nazev}
-          aria-selected={i === 0}
-        />
-      ))}
-    </div>
-
   </div>
 </section>
 
 <script>
   const track = document.getElementById('priorityTrack') as HTMLElement;
   const viewport = document.getElementById('priorityViewport') as HTMLElement;
-  const dots = document.querySelectorAll<HTMLButtonElement>('.priority-dot');
   const prevBtn = document.getElementById('prevBtn') as HTMLButtonElement;
   const nextBtn = document.getElementById('nextBtn') as HTMLButtonElement;
 
   let current = 0;
   let autoTimer: ReturnType<typeof setInterval>;
-  const total = dots.length;
+  const total = track.querySelectorAll('.priority-card').length;
+
+  function getGap(): number {
+    return parseInt(getComputedStyle(track).gap || '0', 10);
+  }
 
   function getCardWidth(): number {
     const card = track.querySelector<HTMLElement>('.priority-card');
     if (!card) return 0;
-    const gap = parseInt(getComputedStyle(track).gap || '0', 10);
-    return card.offsetWidth + gap;
+    return card.offsetWidth + getGap();
+  }
+
+  function getVisibleCardCount(): number {
+    const card = track.querySelector<HTMLElement>('.priority-card');
+    if (!card) return 1;
+
+    const step = getCardWidth();
+    if (!step) return 1;
+
+    return Math.max(1, Math.round((viewport.clientWidth + getGap()) / step));
+  }
+
+  function getSlideCount(): number {
+    return Math.max(1, total - getVisibleCardCount() + 1);
   }
 
   function slideTo(index: number) {
-    const idx = (index + total) % total;
-
-    dots[current].classList.remove('priority-dot--active');
-    dots[current].setAttribute('aria-selected', 'false');
+    const slideCount = getSlideCount();
+    const idx = (index + slideCount) % slideCount;
 
     current = idx;
 
-    dots[current].classList.add('priority-dot--active');
-    dots[current].setAttribute('aria-selected', 'true');
-
     const offset = current * getCardWidth();
-    track.style.transform = `translateX(-${offset}px)`;
+    const maxOffset = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    const appliedOffset = Math.min(offset, maxOffset);
+    track.style.transform = `translateX(-${appliedOffset}px)`;
   }
 
   function startAuto() {
@@ -118,13 +118,6 @@ const { priority } = Astro.props;
   prevBtn.addEventListener('click', () => { slideTo(current - 1); resetAuto(); });
   nextBtn.addEventListener('click', () => { slideTo(current + 1); resetAuto(); });
 
-  dots.forEach((dot) => {
-    dot.addEventListener('click', () => {
-      slideTo(parseInt(dot.dataset.index!, 10));
-      resetAuto();
-    });
-  });
-
   // Swipe support
   let touchStartX = 0;
   viewport.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
@@ -136,6 +129,9 @@ const { priority } = Astro.props;
     }
   }, { passive: true });
 
+  window.addEventListener('resize', () => slideTo(current));
+
+  slideTo(0);
   startAuto();
 </script>
 
@@ -149,7 +145,7 @@ const { priority } = Astro.props;
 
   .priority-sec {
     padding: 4rem 1.5rem;
-    background: var(--color-surface-lowest);
+    background: var(--color-surface-low);
   }
 
   .priority-inner {
@@ -305,29 +301,6 @@ const { priority } = Astro.props;
     background: var(--camp-gold);
     border-color: var(--camp-gold);
     color: var(--camp-dark);
-  }
-
-  /* ── Dots ───────────────────────────────────── */
-  .priority-dots {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-  }
-
-  .priority-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    border: none;
-    background: var(--color-outline-variant);
-    cursor: pointer;
-    padding: 0;
-    transition: background var(--theme-transition), transform var(--theme-transition);
-  }
-
-  .priority-dot--active {
-    background: var(--camp-gold);
-    transform: scale(1.35);
   }
 
   /* ── Responsive ─────────────────────────────── */

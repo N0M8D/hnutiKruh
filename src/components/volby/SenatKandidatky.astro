@@ -19,6 +19,7 @@ interface Props {
 }
 
 const { kandidatky } = Astro.props;
+const subtitle = 'Poznejte kandidátky Hnutí Kruh a jejich vizi pro lepší Česko.';
 ---
 
 <section class="senatky-sec" id="kandidatky">
@@ -30,7 +31,7 @@ const { kandidatky } = Astro.props;
         <h2 class="senatky-title">Senátorky <em>2026</em></h2>
       </div>
       <p class="senatky-subtitle">
-        Tři ženy, tři senátní obvody, tři silné příběhy a jedna společná vize pro lepší Česko.
+        {subtitle}
       </p>
     </header>
 
@@ -137,19 +138,20 @@ const { kandidatky } = Astro.props;
   /* ── Grid ────────────────────────────────────── */
   .senatky-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 22rem));
     gap: 1.5rem;
+    justify-content: center;
   }
 
   @media (max-width: 960px) {
     .senatky-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 22rem));
     }
   }
 
   @media (max-width: 560px) {
     .senatky-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 

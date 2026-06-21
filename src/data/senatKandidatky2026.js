@@ -1,43 +1,44 @@
 /**
- * Lokální data kandidátek Hnutí Kruh do senátu 2026.
- * Zdroj pravdy pro stránku /volby/senat-2026 a navázané komponenty.
+ * Sdílený zdroj dat kandidátek Hnutí Kruh do senátu 2026.
+ * Kandidátky se načítají z MDX detailů v src/pages/volby/kandidatky.
  */
 
-export const senatKandidatky2026 = [
-    {
-        slug: 'iva-baslarova',
-        jmeno: 'Iva Baslarová',
-        titul: 'Mgr., Ph.D.',
-        obvod: 'Volební obvod č. 36 – Česká Lípa',
-        oblastExpertizy: 'Filmová publicistka & genderová vědkyně',
-        foto: '/assets/candidates/iva_baslarova.jpg',
-        href: '/volby/kandidatky/iva-baslarova',
-        citace: '???? – doplnit skutečnou citaci.',
-        perex: 'Socioložka, filmová publicistka a genderová vědkyně. Přes dvacet let se věnuje mediálním studiím, výzkumu rovných příležitostí a akademické výuce.',
-    },
-    {
-        slug: 'darina-batyiova',
-        jmeno: 'Darina Batyiová',
-        titul: 'Bc., MSc.',
-        obvod: 'Volební obvod č. 24 - Praha 9',
-        oblastExpertizy: 'Programová ředitelka ve vzdělávání & mentorka',
-        foto: '/assets/candidates/darina_batyiova.jpg',
-        href: '/volby/kandidatky/darina-batyiova',
-        citace: '???? – doplnit skutečnou citaci.',
-        perex: 'Freelancerka a mentorka se zkušenostmi v programovém řízení vzdělávání. Členka Hnutí Kruh, kandiduje za obvod Strakonice.',
-    },
-    {
-        slug: 'veronika-holcnerova',
-        jmeno: 'Veronika Holcnerová',
-        titul: 'Bc.',
-        obvod: 'Volební obvod č. 60 – Brno-město',
-        oblastExpertizy: 'Data engineer & expertka na datovou analytiku',
-        foto: '/assets/candidates/veronika_holcnerova.jpg',
-        href: '/volby/kandidatky/veronika-holcnerova',
-        citace: '???? – doplnit skutečnou citaci.',
-        perex: 'Freelancerka a mentorka se zkušenostmi v programovém řízení vzdělávání. Členka Hnutí Kruh, kandiduje za obvod Strakonice.',
-    },
-];
+const candidateModules = import.meta.glob('../pages/volby/kandidatky/*.mdx', { eager: true });
+
+function getLeadParagraph(text = '') {
+    return text
+        .split(/\n\s*\n/)
+        .map((paragraph) => paragraph.replace(/\s+/g, ' ').trim())
+        .find(Boolean) ?? '';
+}
+
+function formatObvod(obvod = '') {
+    return obvod ? `Volební obvod č. ${obvod}` : '';
+}
+
+function getSlugFromUrl(url = '') {
+    const segments = url.split('/').filter(Boolean);
+    return segments[segments.length - 1] ?? '';
+}
+
+export const senatKandidatky2026 = Object.values(candidateModules)
+    .map((mod) => {
+        const frontmatter = mod.frontmatter ?? {};
+
+        return {
+            slug: getSlugFromUrl(mod.url),
+            jmeno: frontmatter.name ?? '',
+            titul: frontmatter.titul ?? '',
+            obvod: formatObvod(frontmatter.obvod),
+            oblastExpertizy: frontmatter.oblastExpertizy ?? '',
+            foto: frontmatter.featuredImage ?? '',
+            href: mod.url ?? '/volby/senat-2026#kandidatky',
+            citace: frontmatter.citace ?? '',
+            perex: getLeadParagraph(frontmatter.omne ?? ''),
+        };
+    })
+    .filter((candidate) => candidate.jmeno && candidate.href)
+    .sort((left, right) => left.jmeno.localeCompare(right.jmeno, 'cs'));
 
 export const senatPriority2026 = [
     {

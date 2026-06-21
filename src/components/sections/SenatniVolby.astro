@@ -2,40 +2,10 @@
 /**
  * SenatniVolby.astro
  * Promo blok senátních voleb 2026 na úvodní stránce.
- * Data jsou zatím statická – kandidáti se napojí na CMS/MDX v dalším kroku.
+ * Kandidátky sdílí stejný zdroj dat jako stránka /volby/senat-2026.
  */
 
-interface Candidate {
-  name: string;
-  region: string;
-  bio: string;
-  photo: string;
-  href?: string;
-}
-
-const candidates: Candidate[] = [
-  {
-    name: 'Alice Hamalová',
-    region: 'Praha 8',
-    bio: 'Laboratorní technoložka a terapeutka, která propojuje vědu s péčí o lidi. Zastupitelská zkušenost z MČ Praha 8.',
-    photo: '/assets/people/alice-hamalova/profile-pic.jpg',
-    href: '/people/alice-hamalova',
-  },
-  {
-    name: 'Klára Kadár',
-    region: 'Zbiroh / Praha',
-    bio: 'Advokační manažerka specializující se na prevenci domácího a sexualizovaného násilí. Členka předsednictva hnutí.',
-    photo: '/assets/people/klara-kadar/profile-pic.jpg',
-    href: '/people/klara-kadar',
-  },
-  {
-    name: 'Eva Nováková',
-    region: 'Olomouc',
-    bio: 'Metodička rovných příležitostí ve vzdělávání. Zkušenosti z komunální politiky i sociální práce v terénu.',
-    photo: '/assets/people/eva-novakova/profile-pic.jpg',
-    href: '/people/eva-novakova',
-  },
-];
+import { senatKandidatky2026 } from '../../data/senatKandidatky2026.js';
 ---
 
 <section class="senat-sec">
@@ -67,15 +37,15 @@ const candidates: Candidate[] = [
 
     <!-- ── Candidates grid ────────────────────────── -->
     <div class="candidates-grid">
-      {candidates.map((c) => (
-        <a class="cand-card" href={c.href ?? '/volby'}>
+      {senatKandidatky2026.map((k) => (
+        <a class="cand-card" href={k.href}>
           <div class="cand-photo-wrap">
-            <img src={c.photo} alt={`Foto ${c.name}`} class="cand-photo" />
+            <img src={k.foto} alt={`Foto ${k.jmeno}`} class="cand-photo" />
           </div>
           <div class="cand-info">
-            <span class="cand-region">Region: {c.region}</span>
-            <strong class="cand-name">{c.name}</strong>
-            <p class="cand-bio">{c.bio}</p>
+            <span class="cand-region">Region: {k.obvod}</span>
+            <strong class="cand-name">{k.jmeno}</strong>
+            <p class="cand-bio">{k.perex}</p>
           </div>
         </a>
       ))}
@@ -170,8 +140,9 @@ const candidates: Candidate[] = [
   /* ── Candidate cards ─────────────────────────────── */
   .candidates-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 20rem));
     gap: 2rem;
+    justify-content: center;
   }
 
   .cand-card {

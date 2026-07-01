@@ -1,6 +1,18 @@
 ---
 import { Icon } from 'astro-icon/components'
-const { navData, rightMenu } = Astro.props;
+
+interface NavItem {
+  title: string;
+  slug: string;
+  highlight?: boolean;
+}
+
+interface Props {
+  navData?: NavItem[];
+  rightMenu?: boolean;
+}
+
+const { navData, rightMenu } = Astro.props as Props;
 ---
 
 <script type="module">
@@ -56,7 +68,7 @@ const { navData, rightMenu } = Astro.props;
     <slot name="nav">
       {navData && <nav>
         <ul>
-          {navData.map(navItem => (
+          {navData.map((navItem: NavItem) => (
             (<li>
               <a href={navItem.slug} class={navItem.highlight ? 'highlight-button' : ''}>
                 {navItem.title}
@@ -76,15 +88,16 @@ const { navData, rightMenu } = Astro.props;
 <style>
   header {
     width: 100%;
-    padding: 1rem 0.5rem;
+    padding: 0.45rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.7); /* méně průhledné */
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border-radius: 0; /* žádné kulaté rohy */
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
+    /* Glassmorphism s teplou surface barvou */
+    background: rgba(255, 248, 245, 0.85);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-radius: 0;
+    box-shadow: 0 2px 20px 0 rgba(37, 25, 15, 0.06);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -97,6 +110,13 @@ const { navData, rightMenu } = Astro.props;
     width: fit-content;
     color: inherit;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    line-height: 0;
+  }
+  .header-logo__link :global(.logo-img) {
+    max-width: 170px;
+    margin: 0;
   }
   .header-logo-menu__container {
     display: flex;
@@ -116,59 +136,68 @@ const { navData, rightMenu } = Astro.props;
     display: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    color: var(--color-on-surface);
   }
   #menuButton > span {
-    color: var(--theme-on-bg);
+    color: var(--color-on-surface);
     vertical-align: middle;
   }
   nav {
-  display: flex;
+    display: flex;
   }
   nav ul {
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
   }
   nav ul li a {
+    font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+    font-weight: 500;
+    font-size: 0.95rem;
     text-decoration: none;
-    margin-right: 1rem;
-    color: inherit;
-    opacity: 0.72;
-    transition: opacity linear 150ms;
+    padding: 0.4rem 0.75rem;
+    color: var(--color-on-surface);
+    opacity: 0.75;
+    border-radius: 9999px;
+    transition: opacity var(--theme-transition), background var(--theme-transition);
+    white-space: nowrap;
   }
   nav ul li a:hover {
     opacity: 1;
+    background: rgba(163, 59, 62, 0.07);
   }
   nav ul li a.highlight-button {
-    background-color: var(--theme-primary, #fe7d88);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    background: var(--theme-gradient-primary, linear-gradient(135deg, #a33b3e 0%, #ff8080 100%));
+    color: #ffffff;
     opacity: 1;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    padding: 0.5rem 1.25rem;
+    box-shadow: 0 2px 12px 0 rgba(163, 59, 62, 0.20);
+    transition: box-shadow var(--theme-transition), transform var(--theme-transition);
   }
-  
   nav ul li a.highlight-button:hover {
-    background-color: var(--theme-primary-hover, #ff8a96);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px 0 rgba(163, 59, 62, 0.30);
+    transform: translateY(-1px);
+    background: var(--theme-gradient-primary);
   }
-  
-  @media(max-width: 768px) {
+
+  @media(max-width: 1120px) {
     nav {
       display: none;
     }
     #menuButton {
-      display: block;  
+      display: block;
       z-index: 1000;
       position: relative;
     }
     .header-nav__container {
       width: 100%;
-      background-color: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(255, 248, 245, 0.97);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(37, 25, 15, 0.10);
       display: none;
       flex-direction: column;
       position: absolute;
@@ -189,35 +218,34 @@ const { navData, rightMenu } = Astro.props;
       flex-direction: column;
       width: 100%;
       padding: 0 1rem;
+      gap: 0.25rem;
     }
-     header[mobile-menu-open] nav ul li {
-       margin-bottom: 0.5rem;
-       width: 100%;
-     }
-     header[mobile-menu-open] nav ul li a {
-       pointer-events: auto;
-       cursor: pointer;
-       color: var(--theme-on-bg);
-       opacity: 1;
-       font-size: 1.1rem;
-       padding: 1rem;
-       border-radius: 0.5rem;
-       transition: background-color 0.2s ease;
-       display: block;
-       width: 100%;
-       text-align: center;
-     }
-     header[mobile-menu-open] nav ul li a:hover {
-       background-color: rgba(255, 128, 128, 0.1);
-     }
-     header[mobile-menu-open] nav ul li a.highlight-button {
-      background-color: var(--theme-primary, #fe7d88);
+    header[mobile-menu-open] nav ul li {
+      width: 100%;
+    }
+    header[mobile-menu-open] nav ul li a {
+      pointer-events: auto;
+      cursor: pointer;
+      color: var(--color-on-surface);
+      opacity: 1;
+      font-size: 1.05rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--theme-shape-radius);
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    header[mobile-menu-open] nav ul li a:hover {
+      background: rgba(163, 59, 62, 0.07);
+    }
+    header[mobile-menu-open] nav ul li a.highlight-button {
+      background: var(--theme-gradient-primary);
       color: white;
       margin-top: 0.5rem;
+      box-shadow: 0 2px 12px 0 rgba(163, 59, 62, 0.20);
     }
-    
     header[mobile-menu-open] nav ul li a.highlight-button:hover {
-      background-color: var(--theme-primary-hover, #ff8a96);
+      box-shadow: 0 4px 20px 0 rgba(163, 59, 62, 0.30);
     }
   }
 </style>

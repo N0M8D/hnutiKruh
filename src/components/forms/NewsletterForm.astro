@@ -13,13 +13,15 @@ import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
         <div class="newsletter-form__container">
           <FormInput name="Jmeno" label="Jméno" />
           <FormInput name="Prijmeni" label="Příjmení" />
-          <FormInput name="Email" label="Email" placeholder="hello@example.com" required />
-                    <Button customIcon fullWidth>
-            Přihlásit se k odběru
-            <Fragment slot="icon">
-              <Icon name="ic:baseline-chevron-right" />
-            </Fragment>
-          </Button>
+          <FormInput name="Email" label="Email" required />
+                    <div class="newsletter-btn-wrap">
+            <Button customIcon fullWidth>
+              Přihlásit se k odběru
+              <Fragment slot="icon">
+                <Icon name="ic:baseline-chevron-right" />
+              </Fragment>
+            </Button>
+          </div>
           <!-- Nový checkbox pro souhlas se zpracováním -->
           <div class="consent-checkbox">
             <FormCheckbox 
@@ -58,6 +60,11 @@ import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+/* Tlačítko se zarovná na spodek buňky (výška inputu, bez labelu) */
+.newsletter-btn-wrap {
+  align-self: center;
 }
 
 /* Checkbox pro souhlas */

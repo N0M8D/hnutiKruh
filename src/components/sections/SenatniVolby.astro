@@ -1,0 +1,227 @@
+---
+/**
+ * SenatniVolby.astro
+ * Promo blok senátních voleb 2026 na úvodní stránce.
+ * Kandidátky sdílí stejný zdroj dat jako stránka /volby/senat-2026.
+ */
+
+import { senatKandidatky2026 } from '../../data/senatKandidatky2026.js';
+---
+
+<section class="senat-sec">
+  <div class="senat-inner">
+
+    <!-- ── Top row ─────────────────────────────────── -->
+    <div class="senat-top">
+      <div class="senat-intro">
+        <h2 class="senat-title">Volby 2026 –<br />Ženy do senátu!</h2>
+        <p class="senat-desc">
+          Náš manifest je jasný: Rovnováha, odbornost a lidskost. Věříme, že
+          Senát potřebuje více ženských hlasů, které přinášejí perspektivu
+          empatie a dlouhodobé udržitelnosti. Naše kandidátky jsou expertky ve
+          svých oborech s jasnou vizí pro své regiony.
+        </p>
+        <a href="/volby/senat-2026#kandidatky" class="senat-cta">
+          Poznejte naše kandidátky →
+        </a>
+      </div>
+
+      <blockquote class="senat-quote">
+        <p>
+          "Politika není boj o moc, ale služba společenství. Chceme vrátit
+          důvěru v instituce skrze transparentnost a odvahu dělat správné věci."
+        </p>
+        <footer>— Manifest Hnutí Kruh</footer>
+      </blockquote>
+    </div>
+
+    <!-- ── Candidates grid ────────────────────────── -->
+    <div class="candidates-grid">
+      {senatKandidatky2026.map((k) => (
+        <a class="cand-card" href={k.href}>
+          <div class="cand-photo-wrap">
+            <img src={k.foto} alt={`Foto ${k.jmeno}`} class="cand-photo" />
+          </div>
+          <div class="cand-info">
+            <span class="cand-region">Region: {k.obvod}</span>
+            <strong class="cand-name">{k.jmeno}</strong>
+            <p class="cand-bio">{k.perex}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .senat-sec {
+    padding: 4rem 1.5rem;
+  }
+
+  .senat-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  /* ── Top row ────────────────────────────────────── */
+  .senat-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .senat-title {
+    font-family: var(--theme-font-family-headline, 'Manrope', sans-serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--color-primary, #ff8080);
+    margin: 0 0 1.1rem;
+  }
+
+  .senat-desc {
+    color: var(--color-on-surface, #1f1b1b);
+    line-height: 1.7;
+    margin: 0 0 1.75rem;
+    max-width: 52ch;
+    font-size: 0.9375rem;
+  }
+
+  .senat-cta {
+    display: inline-block;
+    padding: 0.65rem 1.6rem;
+    border-radius: 999px;
+    background: var(--theme-gradient-primary, linear-gradient(135deg, #ff8080 0%, #ffb3b1 100%));
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: opacity 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 12px rgba(255, 128, 128, 0.35);
+  }
+
+  .senat-cta:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 20px rgba(255, 128, 128, 0.45);
+  }
+
+  /* ── Quote ───────────────────────────────────────── */
+  .senat-quote {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem 2.25rem;
+    margin: 0;
+    border-left: none;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .senat-quote p {
+    font-size: 1.0625rem;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--color-on-surface, #1f1b1b);
+    margin: 0 0 1rem;
+  }
+
+  .senat-quote footer {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary, #ff8080);
+  }
+
+  /* ── Candidate cards ─────────────────────────────── */
+  .candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 20rem));
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  .cand-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s;
+  }
+
+  .cand-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .cand-photo-wrap {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: #f0ddd4;
+    margin-bottom: 1rem;
+  }
+
+  .cand-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transition: transform 0.3s;
+  }
+
+  .cand-card:hover .cand-photo {
+    transform: scale(1.03);
+  }
+
+  .cand-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .cand-region {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary, #ff8080);
+  }
+
+  .cand-name {
+    font-family: var(--theme-font-family-headline, 'Manrope', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--color-on-surface, #1f1b1b);
+    line-height: 1.2;
+  }
+
+  .cand-bio {
+    font-size: 0.875rem;
+    color: var(--color-on-surface-variant, #7a6360);
+    line-height: 1.55;
+    margin: 0.15rem 0 0;
+  }
+
+  /* ── Responsive ───────────────────────────────────── */
+  @media (max-width: 900px) {
+    .senat-top {
+      grid-template-columns: 1fr;
+    }
+    .candidates-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .candidates-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

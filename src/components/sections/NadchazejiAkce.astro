@@ -1,0 +1,262 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Event {
+  day: string;
+  month: string;
+  description: string;
+  time?: string;
+  locationLabel?: string;
+  googleMaps?: string;
+}
+
+export interface Props { events?: Event[]; }
+const { events = [] } = Astro.props;
+
+const CALENDAR_URL =
+  'https://calendar.google.com/calendar/embed?src=e3b2ccf24db663a33c6a14b19f6b3691354919608f197b799747719d14f943b9%40group.calendar.google.com&ctz=Europe%2FPrague';
+---
+
+<section class="akce-sec" id="akce">
+  <div class="akce-inner">
+    <div class="akce-heading">
+      <h2>Nadcházející<br />akce</h2>
+      <p>
+        Přijďte se s námi potkat osobně. Diskutujeme o tématech, která hýbou
+        vaší obcí i celou zemí.
+      </p>
+      <div class="accent-line"></div>
+    </div>
+
+    <div class="akce-events">
+      {
+        events.length === 0 ? (
+          <p class="no-events">
+            Momentálně nejsou plánované žádné akce.{' '}
+            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer">
+              Otevřít kalendář
+            </a>
+          </p>
+        ) : (
+          <>
+            {events.map((event) => (
+              <div class="event-card">
+                <div class="event-date">
+                  <span class="d">{event.day}</span>
+                  <span class="m">{event.month}</span>
+                </div>
+
+                <div class="event-body">
+                  <strong class="event-title">{event.description}</strong>
+                  {(event.locationLabel || event.time) && (
+                    <span class="event-meta">
+                      <Icon name="mdi:map-marker" width={14} height={14} />
+                      <span>
+                        {[event.locationLabel, event.time]
+                          .filter(Boolean)
+                          .join(', ')}
+                      </span>
+                    </span>
+                  )}
+                </div>
+
+                {event.googleMaps && (
+                  <a
+                    href={event.googleMaps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="reg-btn"
+                  >
+                    Google Mapy
+                  </a>
+                )}
+              </div>
+            ))}
+
+            <div class="calendar-link">
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer">
+                <Icon name="mdi:open-in-new" width={14} height={14} />
+                <span>Otevřít kalendář</span>
+              </a>
+            </div>
+          </>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .akce-sec {
+    padding: 4rem 1.5rem;
+  }
+
+  .akce-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* ── Left column ─────────────────────────────── */
+  .akce-heading h2 {
+    font-family: var(--theme-font-family-headline, 'Manrope', sans-serif);
+    font-size: var(--font-size-xxl, 2.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-on-surface, #1f1b1b);
+    margin: 0 0 1rem;
+  }
+
+  .akce-heading p {
+    color: var(--color-on-surface-variant, #5f4c46);
+    line-height: 1.6;
+    max-width: 28ch;
+    margin: 0 0 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .accent-line {
+    width: 3rem;
+    height: 3px;
+    background: var(--color-primary, #ff8080);
+    border-radius: 999px;
+  }
+
+  /* ── Events column ───────────────────────────── */
+  .akce-events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .event-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 1rem 1.25rem;
+    gap: 1.25rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+    transition: box-shadow 0.2s;
+  }
+
+  .event-card:hover {
+    box-shadow: 0 4px 18px rgba(255, 128, 128, 0.14);
+  }
+
+  /* Date box */
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 3rem;
+    text-align: center;
+  }
+
+  .event-date .d {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #e96c54;
+  }
+
+  .event-date .m {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #e96c54;
+    margin-top: 0.1rem;
+  }
+
+  /* Event content */
+  .event-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .event-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-on-surface, #1f1b1b);
+  }
+
+  .event-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8125rem;
+    color: var(--color-on-surface-variant, #7a6360);
+  }
+
+  /* Registration button */
+  .reg-btn {
+    flex-shrink: 0;
+    padding: 0.4rem 1.1rem;
+    border: 1.5px solid #e5d5d0;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-on-surface, #1f1b1b);
+    text-decoration: none;
+    white-space: nowrap;
+    background: transparent;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+
+  .reg-btn:hover {
+    background: var(--color-surface-highest, #ffe6d5);
+    border-color: var(--color-primary, #ff8080);
+    color: #c0503a;
+  }
+
+  /* Calendar link */
+  .calendar-link {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.25rem;
+  }
+
+  .calendar-link a {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.875rem;
+    color: var(--color-on-surface-variant, #7a6360);
+    text-decoration: none;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+  }
+
+  .calendar-link a:hover {
+    opacity: 1;
+  }
+
+  .no-events {
+    color: var(--color-on-surface-variant, #7a6360);
+  }
+
+  .no-events a {
+    color: var(--color-primary, #ff8080);
+  }
+
+  /* ── Responsive ──────────────────────────────── */
+  @media (max-width: 768px) {
+    .akce-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .akce-heading p {
+      max-width: unset;
+    }
+  }
+</style>

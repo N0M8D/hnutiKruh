@@ -1,16 +1,16 @@
 export const nav = [
 	{
 		title: 'Volby',
-		slug: '/volby',
+		slug: '/volby/senat-2026',
 	},
 	{
 		title: 'Manifest',
 		slug: '/manifest',
 	},
-	/*{
+	{
 		title: 'Program',
 		slug: '/program',
-	},*/
+	},
 	{
 		title: 'Tváře Kruhu',
 		slug: '/people',
@@ -28,10 +28,10 @@ export const nav = [
 		slug: '/forms/zapoj-se',
 		highlight: true,
 	},
-	{
+	/*{
 		title: 'Daruj',
 		slug: '/forms/daruj',
 		highlight: true,
-	},
+	},*/
 
 ];

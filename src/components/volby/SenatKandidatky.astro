@@ -1,0 +1,289 @@
+---
+/**
+ * SenatKandidatky.astro
+ * Mřížka karet kandidátek do senátu 2026.
+ */
+
+interface Kandidatka {
+  slug: string;
+  jmeno: string;
+  obvod: string;
+  oblastExpertizy: string;
+  foto: string;
+  href: string;
+  perex: string;
+}
+
+interface Props {
+  kandidatky: Kandidatka[];
+}
+
+const { kandidatky } = Astro.props;
+const subtitle = 'Poznejte kandidátky Hnutí Kruh a jejich vizi pro lepší Česko.';
+---
+
+<section class="senatky-sec" id="kandidatky">
+  <div class="senatky-inner">
+
+    <header class="senatky-header">
+      <div class="senatky-header__top">
+        <span class="senatky-badge">Tady jsme</span>
+        <h2 class="senatky-title">Senátorky <em>2026</em></h2>
+      </div>
+      <p class="senatky-subtitle">
+        {subtitle}
+      </p>
+    </header>
+
+    <div class="senatky-grid">
+      {kandidatky.map((k) => (
+        <a class="senatky-card" href={k.href}>
+          <div class="senatky-card__photo-wrap">
+            <img
+              src={k.foto}
+              alt={`Foto ${k.jmeno}`}
+              class="senatky-card__photo"
+              loading="lazy"
+            />
+            <div class="senatky-card__photo-gradient" />
+            <div class="senatky-card__obvod-badge">{k.obvod}</div>
+          </div>
+          <div class="senatky-card__body">
+            <strong class="senatky-card__name">{k.jmeno}</strong>
+            <span class="senatky-card__expertiza">{k.oblastExpertizy}</span>
+            <p class="senatky-card__perex">{k.perex}</p>
+            <span class="senatky-card__link" aria-hidden="true">
+              Více o kandidátce <span class="senatky-card__arrow">→</span>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Kampanová paleta (scoped) ─────────────── */
+  .senatky-sec {
+    --camp-dark:    #110c0a;
+    --camp-dark-2:  #211812;
+    --camp-gold:    #E3B754;
+    --camp-akcent:  #C0392B;
+    --camp-cream:   #FFF8F5;
+    --camp-muted:   rgba(255,248,245,0.65);
+  }
+
+  /* ── Section ─────────────────────────────────── */
+  .senatky-sec {
+    background: var(--camp-dark);
+    padding: 5rem 1.5rem 6rem;
+  }
+
+  .senatky-inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  /* ── Header ─────────────────────────────────── */
+  .senatky-header {
+    text-align: center;
+  }
+
+  .senatky-header__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .senatky-badge {
+    display: inline-block;
+    background: var(--camp-gold);
+    color: var(--camp-dark);
+    font-family: var(--theme-font-family-label);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+  }
+
+  .senatky-title {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--camp-cream);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .senatky-title em {
+    font-style: normal;
+    color: var(--camp-gold);
+  }
+
+  .senatky-subtitle {
+    font-family: var(--theme-font-family-sans);
+    font-size: 1rem;
+    color: var(--camp-muted);
+    margin: 0;
+  }
+
+  /* ── Grid ────────────────────────────────────── */
+  .senatky-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 22rem));
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 960px) {
+    .senatky-grid {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 22rem));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .senatky-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ── Card ────────────────────────────────────── */
+  .senatky-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--camp-dark-2);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .senatky-card:hover {
+    border-color: var(--camp-gold);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  /* ── Photo ───────────────────────────────────── */
+  .senatky-card__photo-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .senatky-card__photo {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.4s ease;
+    filter: brightness(0.92) saturate(0.95);
+  }
+
+  .senatky-card:hover .senatky-card__photo {
+    transform: scale(1.04);
+    filter: brightness(1) saturate(1);
+  }
+
+  /* Jemný gradient do body */
+  .senatky-card__photo-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--camp-dark-2));
+    pointer-events: none;
+  }
+
+  /* Obvod badge */
+  .senatky-card__obvod-badge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    background: var(--camp-akcent);
+    color: #fff;
+    font-family: var(--theme-font-family-label);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 9999px;
+  }
+
+  /* ── Body ────────────────────────────────────── */
+  .senatky-card__body {
+    padding: 1.5rem 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+    border-top: 2px solid var(--camp-gold);
+  }
+
+  .senatky-card__name {
+    font-family: var(--theme-font-family-headline);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--camp-cream);
+    display: block;
+    line-height: 1.2;
+  }
+
+  .senatky-card__expertiza {
+    font-family: var(--theme-font-family-label);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--camp-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    display: block;
+    margin-top: 0.15rem;
+  }
+
+  .senatky-card__perex {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.9rem;
+    color: var(--camp-muted);
+    line-height: 1.6;
+    margin: 0.5rem 0 0;
+    flex: 1;
+  }
+
+  .senatky-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 1.25rem;
+    font-family: var(--theme-font-family-label);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--camp-gold);
+    letter-spacing: 0.02em;
+    transition: gap 0.2s ease;
+  }
+
+  .senatky-card:hover .senatky-card__link {
+    gap: 0.55rem;
+  }
+
+  .senatky-card__arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .senatky-card:hover .senatky-card__arrow {
+    transform: translateX(3px);
+  }
+</style>

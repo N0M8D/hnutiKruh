@@ -1,0 +1,322 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/**
+ * SenatPriority.astro
+ * Posuvník priorit Hnutí Kruh pro senátní volby 2026.
+ * Automaticky se posouvá, lze ovládat tlačítky i swipem.
+ */
+
+interface Priorita {
+  ikona: string;
+  nazev: string;
+  popis: string;
+  body: string[];
+}
+
+interface Props {
+  priority: Priorita[];
+}
+
+const { priority } = Astro.props;
+---
+
+<section class="priority-sec">
+  <div class="priority-inner">
+
+    <header class="priority-header">
+      <h2 class="priority-title">Naše priority pro Senát</h2>
+      <p class="priority-subtitle">Přinášíme do Senátu péči o lidi, zdravý stát a politiku, která je udržitelná i pro další generace.</p>
+    </header>
+
+    <div class="priority-track-wrap">
+      <button class="priority-arrow priority-arrow--prev" aria-label="Předchozí" id="prevBtn">&#8592;</button>
+
+      <div class="priority-viewport" id="priorityViewport">
+        <div class="priority-track" id="priorityTrack">
+          {priority.map((p) => (
+            <div class="priority-card">
+              <div class="priority-card__icon" aria-hidden="true">
+                <Icon name={p.ikona} />
+              </div>
+              <h3 class="priority-card__title">{p.nazev}</h3>
+              <p class="priority-card__desc">{p.popis}</p>
+              <ul class="priority-card__list">
+                {p.body.map((b) => (
+                  <li class="priority-card__item">
+                    <span class="priority-card__bullet" aria-hidden="true">○</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button class="priority-arrow priority-arrow--next" aria-label="Další" id="nextBtn">&#8594;</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('priorityTrack') as HTMLElement;
+  const viewport = document.getElementById('priorityViewport') as HTMLElement;
+  const prevBtn = document.getElementById('prevBtn') as HTMLButtonElement;
+  const nextBtn = document.getElementById('nextBtn') as HTMLButtonElement;
+
+  let current = 0;
+  let autoTimer: ReturnType<typeof setInterval>;
+  const total = track.querySelectorAll('.priority-card').length;
+
+  function getGap(): number {
+    return parseInt(getComputedStyle(track).gap || '0', 10);
+  }
+
+  function getCardWidth(): number {
+    const card = track.querySelector<HTMLElement>('.priority-card');
+    if (!card) return 0;
+    return card.offsetWidth + getGap();
+  }
+
+  function getVisibleCardCount(): number {
+    const card = track.querySelector<HTMLElement>('.priority-card');
+    if (!card) return 1;
+
+    const step = getCardWidth();
+    if (!step) return 1;
+
+    return Math.max(1, Math.round((viewport.clientWidth + getGap()) / step));
+  }
+
+  function getSlideCount(): number {
+    return Math.max(1, total - getVisibleCardCount() + 1);
+  }
+
+  function slideTo(index: number) {
+    const slideCount = getSlideCount();
+    const idx = (index + slideCount) % slideCount;
+
+    current = idx;
+
+    const offset = current * getCardWidth();
+    const maxOffset = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    const appliedOffset = Math.min(offset, maxOffset);
+    track.style.transform = `translateX(-${appliedOffset}px)`;
+  }
+
+  function startAuto() {
+    autoTimer = setInterval(() => slideTo(current + 1), 4000);
+  }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    startAuto();
+  }
+
+  prevBtn.addEventListener('click', () => { slideTo(current - 1); resetAuto(); });
+  nextBtn.addEventListener('click', () => { slideTo(current + 1); resetAuto(); });
+
+  // Swipe support
+  let touchStartX = 0;
+  viewport.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  viewport.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      slideTo(diff > 0 ? current + 1 : current - 1);
+      resetAuto();
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', () => slideTo(current));
+
+  slideTo(0);
+  startAuto();
+</script>
+
+<style>
+  /* ── Kampanová paleta (scoped) ─────────────── */
+  .priority-sec {
+    --camp-dark:   #110c0a;
+    --camp-gold:   #E3B754;
+    --camp-akcent: #C0392B;
+  }
+
+  .priority-sec {
+    padding: 4rem 1.5rem;
+    background: var(--color-surface-low);
+  }
+
+  .priority-inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* ── Header ─────────────────────────────────── */
+  .priority-header {
+    text-align: left;
+  }
+
+  .priority-title {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 800;
+    color: var(--color-on-background);
+    margin: 0 0 0.5rem;
+  }
+
+  .priority-title::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 2.25em;
+    background: var(--camp-gold);
+    border-radius: 2px;
+    float: left;
+    margin-right: 0.75rem;
+    margin-top: 0.1em;
+  }
+
+  .priority-subtitle {
+    font-family: var(--theme-font-family-sans);
+    font-size: 1rem;
+    color: var(--color-on-surface-variant);
+    margin: 0;
+    padding-left: calc(4px + 0.75rem);
+  }
+
+  /* ── Track wrap ──────────────────────────────── */
+  .priority-track-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .priority-viewport {
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .priority-track {
+    display: flex;
+    gap: 1.5rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  /* ── Cards ───────────────────────────────────── */
+  .priority-card {
+    flex: 0 0 calc((100% - 3rem) / 3);
+    background: var(--camp-dark);
+    border-radius: var(--theme-card-radius);
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 280px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .priority-card__icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(227, 183, 84, 0.12);
+    border: 1px solid rgba(227, 183, 84, 0.3);
+    color: var(--camp-gold);
+    flex-shrink: 0;
+  }
+
+  .priority-card__icon :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .priority-card__title {
+    font-family: var(--theme-font-family-headline);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #FFF8F5;
+    margin: 0;
+  }
+
+  .priority-card__desc {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.9375rem;
+    color: rgba(255,248,245,0.7);
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+  }
+
+  .priority-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .priority-card__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.875rem;
+    color: rgba(255,248,245,0.85);
+  }
+
+  .priority-card__bullet {
+    color: var(--camp-akcent);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Arrows ─────────────────────────────────── */
+  .priority-arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 2px solid var(--color-outline-variant);
+    background: var(--color-surface-lowest);
+    color: var(--color-on-surface);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background var(--theme-transition), border-color var(--theme-transition);
+  }
+
+  .priority-arrow:hover {
+    background: var(--camp-gold);
+    border-color: var(--camp-gold);
+    color: var(--camp-dark);
+  }
+
+  /* ── Responsive ─────────────────────────────── */
+  @media (max-width: 900px) {
+    .priority-card {
+      flex: 0 0 calc((100% - 1.5rem) / 2);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .priority-card {
+      flex: 0 0 100%;
+    }
+
+    .priority-arrow {
+      display: none;
+    }
+  }
+</style>

@@ -4,30 +4,76 @@ const {post} = Astro.props;
 
 <li class="blog-post__preview">
   <a href={post.href}>
-    <img src={post.featuredImage} />
-    <h3>{post.title}</h3>
-    {post.excerpt && <p>{post.excerpt}</p>}
+    <div class="blog-post__img-wrap">
+      <img src={post.featuredImage} alt={post.title} />
+    </div>
+    <div class="blog-post__body">
+      <h3>{post.title}</h3>
+      {post.excerpt && <p class="blog-post__excerpt">{post.excerpt}</p>}
+    </div>
   </a>
 </li>
 
-
 <style>
-.blog-post__preview img {
-  margin-bottom: 1rem;
-  border-radius: calc(var(--theme-shape-radius) /2);
-  transition: border-radius var(--theme-transition);
-  max-width: 90%;
+.blog-post__preview {
+  background: var(--color-surface-lowest, #ffffff);
+  border-radius: var(--theme-card-radius, 2rem);
+  overflow: hidden;
+  box-shadow: var(--g-shadow-float, 0 4px 24px 0 rgba(37, 25, 15, 0.08));
+  transition: box-shadow var(--theme-transition), transform var(--theme-transition);
 }
-.blog-post__preview:hover img {
-  border-radius: var(--theme-shape-radius);
+.blog-post__preview:hover {
+  box-shadow: 0 8px 40px 0 rgba(37, 25, 15, 0.12);
+  transform: translateY(-3px);
 }
 .blog-post__preview a {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   text-decoration: none;
   color: inherit;
-  
 }
-.blog-post__preview h3 {
+.blog-post__img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-surface-low, #ffe6d5);
+}
+.blog-post__img-wrap img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
   margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+  transition: transform 0.4s ease;
 }
-</style> 
+.blog-post__preview:hover .blog-post__img-wrap img {
+  transform: scale(1.04);
+}
+.blog-post__body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.blog-post__body h3 {
+  margin: 0;
+  font-size: var(--font-size-md, 1.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.blog-post__excerpt {
+  margin: 0;
+  font-size: var(--font-size-sm, 0.9rem);
+  color: var(--color-on-surface-variant, #564241);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

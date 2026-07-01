@@ -6,7 +6,7 @@ import {
 	BlogPostsList,
 } from '@components/odyssey-theme';
 import Layout from '../../layouts/Page.astro';
-import NewsletterForm from '../../components/forms/NewsletterForm.astro';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // Opraveno na import.meta.glob
 const postFiles = import.meta.glob('./posts/*.mdx', { eager: true });
@@ -55,14 +55,12 @@ const seo = {
 			</br>
 			<BlogPostsList posts={posts} />
 		</section>
-
-		<NewsletterForm />
 	</Container>
+	<ZapojSe />
 </Layout>
 
 <style>
 	.blog-posts-list__section {
 		margin: var(--section-margin) auto;
-		max-width: var(--container-max-width-narrow);
 	}
 </style>

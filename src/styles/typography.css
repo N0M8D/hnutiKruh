@@ -1,101 +1,42 @@
-/* Roboto - 300 (Light) - základní latinka (pokud nemáte ext) */
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: local('Roboto Light'),
-    url('/assets/fonts/roboto-v20-latin-300.woff2') format('woff2'),
-    url('/assets/fonts/roboto-v20-latin-300.woff') format('woff');
-}
+/* Fonty jsou načítány z Google Fonts v BaseHead.astro:
+   Manrope (headlines), Inter (body), Work Sans (labels) */
 
-/* Roboto - 400 (Regular) - s podporou latin-ext */
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Roboto'),
-    /* název souborů odpovídá vašim reálným: 
-          "roboto-v20-latin-ext_latin-regular.woff2" atd. */
-    url('/assets/fonts/roboto-v20-latin-ext_latin-regular.woff2') format('woff2'),
-    url('/assets/fonts/roboto-v20-latin-ext_latin-regular.woff') format('woff');
-}
-
-/* Roboto - 700 (Bold) - s podporou latin-ext */
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: local('Roboto Bold'),
-    url('/assets/fonts/roboto-v20-latin-ext_latin-700.woff2') format('woff2'),
-    url('/assets/fonts/roboto-v20-latin-ext_latin-700.woff') format('woff');
-}
-
-/* Roboto - 700italic (Bold Italic) - základní latinka (pokud nemáte ext) */
-@font-face {
-  font-family: 'Roboto';
-  font-style: italic;
-  font-weight: 700;
-  font-display: swap;
-  src: local('Roboto Bold Italic'),
-    url('/assets/fonts/roboto-v20-latin-700italic.woff2') format('woff2'),
-    url('/assets/fonts/roboto-v20-latin-700italic.woff') format('woff');
-}
-
-/* Roboto Serif (pokud chcete zachovat jako serif) */
-@font-face {
-  font-family: 'Roboto Serif';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: local(''),
-    url('/assets/fonts/roboto-v47-latin-ext-600.woff2') format('woff2'),
-    url('/assets/fonts/roboto-v47-latin-ext-600.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Roboto Serif';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: local(''),
-    url('/assets/fonts/roboto-v47-latin-ext-700.woff2') format('woff2'),
-    url('/assets/fonts/roboto-v47-latin-ext-700.woff') format('woff');
-}
-
-/* ------------------ Zbytek stylů ------------------ */
+/* ------------------ Typografická škála ------------------ */
 
 :root {
-  --font-size-sm: clamp(14.4px, 0.07vw + 14.13px, 15px);
-  --font-size-base: clamp(18px, 0.23vw + 17.09px, 20px);
-  --font-size-md: clamp(22.5px, 0.47vw + 20.61px, 26.66px);
-  --font-size-lg: clamp(28.13px, 0.84vw + 24.76px, 35.54px);
-  --font-size-xl: clamp(35.16px, 1.39vw + 29.6px, 47.37px);
-  --font-size-xxl: clamp(43.95px, 2.18vw + 35.22px, 63.15px);
-  --font-size-xxxl: clamp(54.93px, 3.32vw + 41.64px, 84.17px);
+  --font-size-sm: clamp(13.5px, 0.07vw + 13.13px, 14.5px);
+  --font-size-base: clamp(16px, 0.2vw + 15.2px, 18px);
+  --font-size-md: clamp(20px, 0.4vw + 18.4px, 23px);
+  --font-size-lg: clamp(25px, 0.8vw + 22px, 31px);
+  --font-size-xl: clamp(31px, 1.3vw + 26px, 42px);
+  --font-size-xxl: clamp(39px, 2vw + 31px, 56px);
+  --font-size-xxxl: clamp(49px, 3.2vw + 36px, 76px);
 }
 
 html,
 body {
-  line-height: 1.5;
-  /* Zkontrolujte, že opravdu máte nastavené
-     --theme-font-family-sans: 'Roboto' někde v globálních proměnných. */
+  line-height: 1.6;
   font-family: var(--theme-font-family-sans);
   font-size: var(--font-size-base);
-  color: var(--theme-on-bg);
+  color: var(--color-on-surface);
 }
 
+/* Nadpisy – Manrope, těsný letter-spacing pro editorial dojem */
 h1,
 h2,
-h3 {
-  font-family: var(--theme-font-family-serif);
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--theme-font-family-headline);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 h1 {
   font-size: var(--font-size-xxl);
+  font-weight: 800;
 }
 
 h2 {
@@ -104,20 +45,18 @@ h2 {
 
 h3 {
   font-size: var(--font-size-lg);
+  font-weight: 600;
 }
 
-h1,
-h2 {
-  line-height: 1.1;
-  font-weight: 700;
+h4 {
+  font-size: var(--font-size-md);
+  font-weight: 600;
 }
 
-h3 {
-  font-weight: 500;
-}
-
+h5,
 h6 {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+  font-weight: 600;
 }
 
 h1,
@@ -130,11 +69,23 @@ p {
   margin: 0 0 1rem 0;
 }
 
+/* Funkční prvky (tagy, časové razítko apod.) – Work Sans */
+.label,
+time,
+.tag,
+.post-tags__tag {
+  font-family: var(--theme-font-family-label);
+}
+
 blockquote {
   font-style: italic;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: 500;
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
-  border-left: 0.25rem solid var(--theme-on-bg);
+  line-height: 1.5;
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  border-left: 0.3rem solid var(--color-primary);
+  background: var(--color-surface-low);
+  border-radius: 0 var(--theme-shape-radius) var(--theme-shape-radius) 0;
+  color: var(--color-on-surface-variant);
 }

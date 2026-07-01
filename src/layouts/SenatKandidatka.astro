@@ -1,0 +1,784 @@
+---
+/**
+ * SenatKandidatka.astro
+ * Layout pro detail kandidátky do senátu 2026.
+ *
+ * Frontmatter (přes Astro.props.content):
+ *   name            – celé jméno
+ *   titul?          – akademický titul před jménem
+ *   obvod           – "24 – Praha 8"
+ *   oblastExpertizy – "Právnička & ústavní expertka"
+ *   citace          – pull-quote
+ *   featuredImage   – URL fotografie
+ *   podporHref?     – URL pro dar / podporu
+ *   kontaktEmail?   – e-mail nebo URL pro kontakt
+ *   kalendarHref?   – URL pro rezervaci schůzky / kalendář
+ *   omne            – bio text (multi-line YAML string)
+ *   procKandiduje   – motivační text (multi-line YAML string)
+ *   profesniCesta   – Array<{rok, nazev, popis}>
+ *   kompetence      – Array<{ikona, nazev, popis}>
+ *   priority        – Array<{ikona, nazev, popis, body?}>
+ */
+import Layout from './Page.astro';
+import { Icon } from 'astro-icon/components';
+
+const {
+  content: {
+    name,
+    titul,
+    obvod,
+    oblastExpertizy,
+    citace,
+    featuredImage,
+    podporHref,
+    kontaktEmail,
+    kalendarHref,
+    omne,
+    procKandiduje,
+    profesniCesta = [],
+    kompetence = [],
+    priority = [],
+  },
+} = Astro.props;
+
+const seo = {
+  title: `${titul ? titul + ' ' : ''}${name} | Hnutí Kruh – Senát 2026`,
+  description: `Kandidátka Hnutí Kruh do Senátu – ${obvod}. ${citace?.slice(0, 120)}`,
+  image: featuredImage,
+};
+
+// Jméno rozdělíme na titul + vlastní jméno pro zvýrazněné zobrazení
+const displayName = titul ? `${titul} ${name}` : name;
+const firstName = name.split(' ')[0];
+---
+
+<Layout {seo}>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="sk-hero">
+    <div class="sk-hero__inner">
+
+      <div class="sk-hero__text">
+        <p class="sk-badge">Kandidátka do senátu&thinsp;|&thinsp;Obvod č. {obvod.split('–')[0].trim()}</p>
+
+        <h1 class="sk-hero__name">
+          {titul && <span class="sk-hero__titul">{titul}</span>}
+          <span class="sk-hero__firstname">{name.split(' ').slice(0, -1).join(' ')}</span>
+          <span class="sk-hero__lastname">{name.split(' ').slice(-1)[0]}</span>
+        </h1>
+
+        {citace && (
+          <blockquote class="sk-hero__quote">
+            <p>„{citace}"</p>
+          </blockquote>
+        )}
+
+        <div class="sk-hero__btns">
+          {podporHref && (
+            <a href={podporHref} class="sk-btn sk-btn--primary">
+              <span>❤</span> Podpořte {firstName}
+            </a>
+          )}
+          {kontaktEmail && (
+            <a
+              href={kontaktEmail.startsWith('http') ? kontaktEmail : `mailto:${kontaktEmail}`}
+              class="sk-btn sk-btn--outline"
+            >
+              Napište mi
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div class="sk-hero__photo-wrap">
+        <img
+          src={featuredImage}
+          alt={`Fotografie ${displayName}`}
+          class="sk-hero__photo"
+          loading="eager"
+        />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       O MNĚ + PROČ KANDIDUJI
+  ══════════════════════════════════════════ -->
+  <section class="sk-about">
+    <div class="sk-about__inner">
+
+      {omne && (
+        <div class="sk-about__col">
+          <h2 class="sk-section-title">O mně</h2>
+          <div class="sk-prose">
+            {omne.split('\n\n').map((para: string) => (
+              para.trim() && <p>{para.trim()}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {procKandiduje && (
+        <div class="sk-about__col">
+          <h2 class="sk-section-title">Proč kandiduji</h2>
+          <div class="sk-prose">
+            {procKandiduje.split('\n\n').map((para: string) => (
+              para.trim() && <p>{para.trim()}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PROFESNÍ CESTA + KOMPETENCE
+  ══════════════════════════════════════════ -->
+  {(profesniCesta.length > 0 || kompetence.length > 0) && (
+    <section class="sk-career">
+      <div class="sk-career__inner">
+
+        {profesniCesta.length > 0 && (
+          <div class="sk-career__col">
+            <h2 class="sk-section-title">Profesní cesta</h2>
+            <ol class="sk-timeline">
+              {profesniCesta.map((item: {rok: string; nazev: string; popis: string}) => (
+                <li class="sk-timeline__item">
+                  <span class="sk-timeline__rok">{item.rok}</span>
+                  <div class="sk-timeline__body">
+                    <strong class="sk-timeline__nazev">{item.nazev}</strong>
+                    {item.popis && <p class="sk-timeline__popis">{item.popis}</p>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {kompetence.length > 0 && (
+          <div class="sk-career__col">
+            <h2 class="sk-section-title">Kompetence</h2>
+            <div class="sk-kompetence">
+              {kompetence.map((k: {ikona: string; nazev: string; popis: string}) => (
+                <div class="sk-komp-card">
+                  <span class="sk-komp-card__icon" aria-hidden="true">
+                    <Icon name={k.ikona} />
+                  </span>
+                  <div>
+                    <strong class="sk-komp-card__nazev">{k.nazev}</strong>
+                    {k.popis && <p class="sk-komp-card__popis">{k.popis}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </div>
+    </section>
+  )}
+
+  <!-- ══════════════════════════════════════════
+       SLOT – volitelný MDX obsah
+  ══════════════════════════════════════════ -->
+  <slot />
+
+  <!-- ══════════════════════════════════════════
+       KALENDÁŘ – "Tady jsem. Potkejme se."
+  ══════════════════════════════════════════ -->
+  {kalendarHref && (
+    <section class="sk-calendar">
+      <div class="sk-calendar__inner">
+        <div class="sk-calendar__text">
+          <p class="sk-calendar__eyebrow">Přijďte osobně</p>
+          <h2 class="sk-calendar__title">Tady jsem.<br />Potkejme se.</h2>
+          <p class="sk-calendar__desc">
+            Chci se bavit s lidmi v mém regionu – ne jen o nich. Podívejte se,
+            kde mě najdete, nebo si rezervujte schůzku.
+          </p>
+          <a href={kalendarHref} class="sk-btn sk-btn--primary" target="_blank" rel="noopener noreferrer">
+            Zobrazit kalendář akcí
+          </a>
+        </div>
+        <div class="sk-calendar__visual" aria-hidden="true">
+          <div class="sk-calendar__icon-wrap">
+            <span class="sk-calendar__icon">📅</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ══════════════════════════════════════════
+       PRIORITY
+  ══════════════════════════════════════════ -->
+  {priority.length > 0 && (
+    <section class="sk-priority">
+      <div class="sk-priority__inner">
+
+        <header class="sk-priority__header">
+          <p class="sk-badge">Vize pro Senát</p>
+          <h2 class="sk-priority__title">Moje priority</h2>
+          <p class="sk-priority__subtitle">
+            Tři pilíře, na kterých chci v horní komoře stavět silnou a spravedlivou společnost.
+          </p>
+        </header>
+
+        <div class="sk-priority__grid">
+          {priority.map((p: {ikona: string; nazev: string; popis: string; body?: string[]}) => (
+            <div class="sk-prior-card">
+              <div class="sk-prior-card__icon" aria-hidden="true">
+                <Icon name={p.ikona} />
+              </div>
+              <h3 class="sk-prior-card__nazev">{p.nazev}</h3>
+              <p class="sk-prior-card__popis">{p.popis}</p>
+              {p.body && p.body.length > 0 && (
+                <ul class="sk-prior-card__list">
+                  {p.body.map((b: string) => (
+                    <li>
+                      <span class="sk-prior-card__bullet" aria-hidden="true">○</span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )}
+
+</Layout>
+
+<style>
+  /* ═══════════════ SDÍLENÉ PRVKY ═══════════════ */
+  .sk-badge {
+    display: inline-block;
+    background: var(--color-primary-fixed);
+    color: var(--color-primary-dark);
+    font-family: var(--theme-font-family-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+  }
+
+  .sk-section-title {
+    font-family: var(--theme-font-family-headline);
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: var(--color-primary-dark);
+    margin: 0 0 1.5rem;
+  }
+
+  .sk-prose p {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--color-on-surface-variant);
+    margin: 0 0 1em;
+  }
+
+  .sk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--theme-font-family-label);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--theme-button-border-radius);
+    text-decoration: none;
+    transition: background var(--theme-transition), color var(--theme-transition), transform var(--theme-transition);
+    cursor: pointer;
+  }
+
+  .sk-btn--primary {
+    background: var(--color-primary-dark);
+    color: var(--color-on-primary);
+  }
+  .sk-btn--primary:hover {
+    background: var(--color-primary);
+    transform: translateY(-1px);
+  }
+
+  .sk-btn--outline {
+    background: transparent;
+    color: var(--color-primary-dark);
+    border: 2px solid var(--color-primary-dark);
+  }
+  .sk-btn--outline:hover {
+    background: var(--color-primary-fixed);
+    transform: translateY(-1px);
+  }
+
+  /* ═══════════════ HERO ═══════════════ */
+  .sk-hero {
+    background: var(--color-background);
+    padding: 2rem 1.5rem 3.5rem;
+  }
+
+  .sk-hero__inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+    align-items: center;
+    min-height: clamp(26rem, 48vh, 36rem);
+  }
+
+  .sk-hero__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sk-hero__name {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 1.5rem;
+    color: var(--color-on-background);
+  }
+
+  .sk-hero__titul {
+    display: block;
+    font-size: 0.55em;
+    font-weight: 600;
+    color: var(--color-on-surface-variant);
+    margin-bottom: 0.1em;
+  }
+
+  .sk-hero__firstname {
+    display: block;
+  }
+
+  .sk-hero__lastname {
+    display: block;
+    color: var(--color-primary-dark);
+  }
+
+  .sk-hero__quote {
+    border-left: 4px solid var(--color-primary-dark);
+    margin: 0 0 2rem;
+    padding: 0.5rem 0 0.5rem 1.25rem;
+  }
+
+  .sk-hero__quote p {
+    font-family: var(--theme-font-family-serif);
+    font-size: clamp(1rem, 1.5vw, 1.1875rem);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--color-on-surface-variant);
+    margin: 0;
+  }
+
+  .sk-hero__btns {
+    display: flex;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+  }
+
+  .sk-hero__photo-wrap {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sk-hero__photo {
+    width: 100%;
+    max-width: 460px;
+    height: clamp(22rem, 30vw, 30rem);
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--theme-card-radius);
+    box-shadow: 0 16px 48px rgba(163, 59, 62, 0.15);
+    display: block;
+  }
+
+  /* ═══════════════ ABOUT ═══════════════ */
+  .sk-about {
+    background: var(--color-surface-lowest);
+    padding: 4rem 1.5rem;
+  }
+
+  .sk-about__inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  /* ═══════════════ CAREER ═══════════════ */
+  .sk-career {
+    background: var(--color-background);
+    padding: 4rem 1.5rem;
+  }
+
+  .sk-career__inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  /* Timeline */
+  .sk-timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sk-timeline__item {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1rem;
+    padding-bottom: 1.75rem;
+    position: relative;
+  }
+
+  .sk-timeline__item::before {
+    content: '';
+    position: absolute;
+    left: calc(6rem - 1px + 0.5rem);
+    top: 0.35rem;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-outline-variant);
+    z-index: 0;
+  }
+
+  .sk-timeline__item:last-child::before {
+    display: none;
+  }
+
+  .sk-timeline__rok {
+    font-family: var(--theme-font-family-label);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    text-align: right;
+    padding-top: 0.1rem;
+    line-height: 1.4;
+  }
+
+  .sk-timeline__body {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .sk-timeline__body::before {
+    content: '';
+    position: absolute;
+    left: -0.45rem;
+    top: 0.4rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+    border: 2px solid var(--color-background);
+    z-index: 1;
+  }
+
+  .sk-timeline__nazev {
+    display: block;
+    font-family: var(--theme-font-family-headline);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-on-background);
+    margin-bottom: 0.25rem;
+  }
+
+  .sk-timeline__popis {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.875rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Kompetence */
+  .sk-kompetence {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .sk-komp-card {
+    background: var(--color-surface-container);
+    border-radius: var(--theme-shape-radius);
+    padding: 1.1rem 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .sk-komp-card__icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-fixed);
+    border-radius: 0.6rem;
+    color: var(--color-primary-dark);
+  }
+
+  .sk-komp-card__icon :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .sk-komp-card__nazev {
+    display: block;
+    font-family: var(--theme-font-family-headline);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-on-background);
+    margin-bottom: 0.25rem;
+  }
+
+  .sk-komp-card__popis {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.8125rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ═══════════════ KALENDÁŘ ═══════════════ */
+  .sk-calendar {
+    background: var(--color-primary-dark);
+    padding: 4rem 1.5rem;
+  }
+
+  .sk-calendar__inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .sk-calendar__eyebrow {
+    font-family: var(--theme-font-family-label);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary-fixed-dim);
+    margin: 0 0 0.5rem;
+  }
+
+  .sk-calendar__title {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    color: var(--color-on-primary);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+  }
+
+  .sk-calendar__desc {
+    font-family: var(--theme-font-family-sans);
+    font-size: 1rem;
+    color: var(--color-primary-fixed-dim);
+    line-height: 1.7;
+    max-width: 36rem;
+    margin: 0 0 2rem;
+  }
+
+  .sk-calendar .sk-btn--primary {
+    background: var(--color-on-primary);
+    color: var(--color-primary-dark);
+  }
+  .sk-calendar .sk-btn--primary:hover {
+    background: var(--color-primary-fixed);
+  }
+
+  .sk-calendar__icon-wrap {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sk-calendar__icon {
+    font-size: 3.5rem;
+  }
+
+  /* ═══════════════ PRIORITY ═══════════════ */
+  .sk-priority {
+    background: var(--color-surface-lowest);
+    padding: 4rem 1.5rem;
+  }
+
+  .sk-priority__inner {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .sk-priority__header {
+    text-align: center;
+  }
+
+  .sk-priority__title {
+    font-family: var(--theme-font-family-headline);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: var(--color-on-background);
+    margin: 0 0 0.5rem;
+  }
+
+  .sk-priority__subtitle {
+    font-family: var(--theme-font-family-sans);
+    font-size: 1rem;
+    color: var(--color-on-surface-variant);
+    margin: 0;
+  }
+
+  .sk-priority__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--theme-grid-gap);
+  }
+
+  .sk-prior-card {
+    background: var(--color-surface-container);
+    border-radius: var(--theme-card-radius);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .sk-prior-card__icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-fixed);
+    border-radius: 0.875rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .sk-prior-card__icon :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .sk-prior-card__nazev {
+    font-family: var(--theme-font-family-headline);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-on-background);
+    margin: 0;
+  }
+
+  .sk-prior-card__popis {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.9rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+  }
+
+  .sk-prior-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .sk-prior-card__list li {
+    display: flex;
+    gap: 0.5rem;
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.85rem;
+    color: var(--color-on-surface);
+    align-items: center;
+  }
+
+  .sk-prior-card__bullet {
+    color: var(--color-primary-dark);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  /* ═══════════════ RESPONSIVE ═══════════════ */
+  @media (max-width: 900px) {
+    .sk-kompetence {
+      grid-template-columns: 1fr;
+    }
+
+    .sk-priority__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sk-hero__inner,
+    .sk-about__inner,
+    .sk-career__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .sk-hero__photo-wrap {
+      order: -1;
+      justify-content: center;
+    }
+
+    .sk-hero__photo {
+      max-width: 100%;
+      height: clamp(280px, 55vw, 420px);
+    }
+
+    .sk-hero__inner {
+      min-height: unset;
+      gap: 2rem;
+    }
+
+    .sk-calendar__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .sk-calendar__visual {
+      display: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .sk-priority__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

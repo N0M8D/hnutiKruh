@@ -3,6 +3,7 @@ import Layout from '../../layouts/Page.astro';
 import { TextSection, Container, Button } from '../../components/odyssey-theme';
 import { Icon } from 'astro-icon/components';
 import type { Candidate } from '../api/nocoDb';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // SEO metadata
 const seo = {
@@ -225,6 +226,7 @@ for (const key of Object.keys(regionMapping)) {
       </div>
     </TextSection>
   </Container>
+  <ZapojSe />
 </Layout>
 
 <style>
@@ -235,7 +237,7 @@ for (const key of Object.keys(regionMapping)) {
   
   .intro-text {
     text-align: center;
-    max-width: 800px;
+    max-width: var(--container-max-width-narrow, 720px);
     margin: 0 auto 2rem auto;
     line-height: 1.6;
     font-size: 1.1rem;

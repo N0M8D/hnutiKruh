@@ -6,7 +6,7 @@ const {href, imgSrc, title} = Astro.props;
   .feature-card__card {
     background-color: var(--theme-surface-1);
     color: var(--theme-on-surface-1);
-    border-radius: var(--theme-shape-radius);
+    border-radius: var(--theme-card-radius, 2rem);
   }
   .feature-card__link {
     display: block;

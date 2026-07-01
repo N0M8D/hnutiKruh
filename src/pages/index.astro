@@ -3,11 +3,14 @@ export const prerender = false; // dynamické načtení kalendáře
 import { parse, isBefore } from 'date-fns';
 import Layout from '../layouts/Page.astro';
 import { TextSection, Button, Container, AnnouncementBar, BlogPostsList } from '@components/odyssey-theme';
-import EventsList from '../components/sections/EventList.astro';
+import NadchazejiAkce from '../components/sections/NadchazejiAkce.astro';
 import Lide from '../components/sections/Lide.astro';
 import { Icon } from 'astro-icon/components';
 import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
-import NewsletterForm from '@components/forms/NewsletterForm.astro';
+import ZapojSe from '../components/sections/ZapojSe.astro';
+import Hero from '../components/sections/Hero.astro';
+import AktualitySection from '../components/sections/AktualitySection.astro';
+import SenatniVolby from '../components/sections/SenatniVolby.astro';
 import ComingSoon from '../components/animated/ComingSoon.astro';
 import { fetchCalendarEventsNextDays } from '../lib/calendar';
 
@@ -40,6 +43,7 @@ const posts = Object.values(postModules)
     publishDate: parse(mod.frontmatter.publishDate, 'dd.MM.yyyy', new Date()),
     featuredImage: mod.frontmatter.featuredImage,
     excerpt: mod.frontmatter.excerpt,
+    tags: mod.frontmatter.tags,
     href: mod.url
   }))
   .sort((a, b) => {
@@ -47,63 +51,37 @@ const posts = Object.values(postModules)
     if (isBefore(b.publishDate, a.publishDate)) return -1;
     return 0;
   })
-  .slice(0, 3);
+  .slice(0, 5);
 
 ---
 
 <Layout {seo}>
 
-  <!-- Banner -->
+  <!-- Hero -->
+  <Hero />
+
+  {/* Banner (zakomentován)
   <div class="banner">
     <img src="/assets/brand/sukynky_short_transparent.png" alt="banner" class="noShadow" />
-  </div> 
-
-  <!-- Poslední články -->
-  <div class="clanky">
-    <TextSection narrow>
-      <h2 id="clanky">Aktuality</h2>
-      <BlogPostsList posts={posts} />
-      <Button href="./blog" newTab fullWidth>
-        Více článků
-      </Button>
-    </TextSection>
   </div>
+  */}
+
+  <!-- Senátní volby 2026 -->
+  <SenatniVolby />
+
+  <!-- Aktuality -->
+  <AktualitySection posts={posts} allHref="/blog" />
 
   <!-- Akce -->
-  <div class="akce">
-    <TextSection narrow>
-      <h2 id="akce">Kde nás můžete potkat</h2>
-      <EventsList events={events} />
-      <div class="calendar-link">
-        <a
-          href="https://calendar.google.com/calendar/embed?src=e3b2ccf24db663a33c6a14b19f6b3691354919608f197b799747719d14f943b9%40group.calendar.google.com&ctz=Europe%2FPrague"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Otevřít celý kalendář v novém okně"
-          title="Otevřít celý kalendář"
-        >
-          <Icon name="mdi:open-in-new" width={18} height={18} />
-          <span>Otevřít kalendář</span>
-        </a>
-      </div>
-    </TextSection>
-  </div>
+  <NadchazejiAkce events={events} />
 
 
   <!-- Lidé -->
-  <div class="lide-div">
-    <TextSection narrow>
-      <h2 id="lide">Naše tváře</h2>
-      <Lide people={people.slice(0, 6)} /> <!-- Zobrazí pouze prvních 6 osob -->
-      <Button href="/people" fullWidth>
-        Další tváře
-      </Button>
-    </TextSection>
-  </div>
+  <Lide people={people} joinHref="/forms/zapoj-se" />
 
-   <!-- Rychlé odkazy: Volby + Program -->
-  <div class="quick-links">
-    <TextSection narrow>
+  <!-- Rychlé odkazy: Volby + Program -->
+{/*  <div class="quick-links">
+    <div class="quick-links__inner">
       <div class="panel">
         <h2>Volby 2025</h2>
         <p>
@@ -115,10 +93,10 @@ const posts = Object.values(postModules)
           <Button campaign href="https://neprehlednito.cz/">Kampaň NEPŘEHLÉDNI TO 2025</Button>
         </div>
       </div>
-    </TextSection>
-  </div>
+    </div>
+  </div>*/}
 
-  <NewsletterForm/>
+  <ZapojSe />
 </Layout>
 
 <style>
@@ -130,7 +108,13 @@ const posts = Object.values(postModules)
     height: auto;
   }
 
-  .quick-links { margin: 1rem 0 0; }
+  .quick-links { padding: 3rem 1.5rem; }
+
+  .quick-links__inner {
+    max-width: var(--container-max-width, 1100px);
+    margin: 0 auto;
+    text-align: center;
+  }
 
   .quick-links .panel h3 {
     margin: 0 0 .35rem;

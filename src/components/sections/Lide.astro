@@ -1,108 +1,200 @@
 ---
 // File: src/components/sections/Lide.astro
-import Container from '../core/Container.astro';
-import Icon from '../Icons/Icon.astro';
 
-const { people = [] } = Astro.props;
+export interface Props {
+  people?: {
+    name: string;
+    role?: string;
+    description?: string;
+    photo?: string;
+    href?: string;
+  }[];
+  joinHref?: string;
+  count?: number;
+}
+
+const { people = [], joinHref = '/people', count = 5 } = Astro.props;
+
+// Fisher-Yates shuffle (server-side → náhodné pořadí při každém renderu)
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const displayed = shuffle(people).slice(0, count);
 ---
 
-<Container>
-  <div class="lide">
-    {people.map((person) => (
-      <div class="card">
-        {person.href ? (
-          <a href={person.href} class="card-link">
-            <img src={person.photo} alt={`Fotka ${person.name}`} class="card-photo" />
-            <h3 class="card-name hover:underline">{person.name}</h3>
-          </a>
-        ) : (
-          <>
-            <img src={person.photo} alt={`Fotka ${person.name}`} class="card-photo" />
-            <h3 class="card-name">{person.name}</h3>
-          </>
-        )}
-
-        <p class="card-description">{person.description}</p>
-
-        {person.socials && person.socials.length > 0 && (
-          <div class="card-socials">
-            {person.socials.map((social) => (
-              <a
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="card-socials__link"
-              >
-                <Icon name={social.icon} viewBox="0 0 402 402" width={32} height={32} />
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-    ))}
+<section class="lide-sec" id="lide">
+  <div class="lide-header">
+    <h2 class="lide-heading">Naše Tváře</h2>
+    <a class="lide-all-link" href={joinHref}>Všechny tváře &rarr;</a>
   </div>
-</Container>
+
+  <div class="lide-row">
+    {displayed.map((person) => (
+      <a class="avatar-card" href={person.href ?? joinHref}>
+        <div class="avatar-wrap">
+          {person.photo
+            ? <img src={person.photo} alt={`Fotka ${person.name}`} class="avatar-img" />
+            : <span class="avatar-placeholder">{person.name.charAt(0)}</span>
+          }
+        </div>
+        <span class="avatar-name">{person.name}</span>
+        {(person.role ?? person.description) && (
+          <span class="avatar-role">{person.role ?? person.description}</span>
+        )}
+      </a>
+    ))}
+
+    <!-- CTA card -->
+    <a class="avatar-card cta-card" href={joinHref}>
+      <div class="avatar-wrap cta-wrap">
+        <span class="cta-plus">+</span>
+      </div>
+      <span class="avatar-name">Vy?</span>
+      <span class="avatar-role">Přidejte se</span>
+    </a>
+  </div>
+</section>
 
 <style>
-  .lide {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin: 2rem 0;
-  }
-
-  .card {
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  .lide-sec {
+    padding: 3.5rem 1.5rem;
     text-align: center;
+    max-width: var(--container-max-width, 1100px);
+    margin: 0 auto;
   }
 
-  .card-link {
-    text-decoration: none;
-    color: inherit;
-    display: inline-block;
-    transition: opacity 0.15s ease;
-  }
-
-  .card-link:hover {
-    opacity: 0.5;
-  }
-
-  .card-photo {
-    width: 100%;
-    max-width: 150px;
-    height: auto;
-    border-radius: 50%;
-    margin: 0 auto 0.5rem;
-    display: block;
-  }
-
-  .card-name {
-    font-size: 1.2rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .card-description {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 1rem;
-  }
-
-  .card-socials {
+  .lide-header {
     display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
   }
 
-  .card-socials__link {
-    display: inline-flex;
-    color: inherit;
+  .lide-heading {
+    font-family: var(--theme-font-family-headline, 'Manrope', sans-serif);
+    font-size: var(--font-size-xl, 2rem);
+    font-weight: 800;
+    color: var(--color-on-surface, #1f1b1b);
+    margin: 0;
+  }
+
+  .lide-all-link {
+    font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 600;
+    color: var(--color-primary, #ff8080);
     text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s;
   }
 
-  .card-socials__link:hover {
-    opacity: 0.8;
+  .lide-all-link:hover {
+    opacity: 0.75;
+  }
+
+  /* ── Row ──────────────────────────────────────── */
+  .lide-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 2rem;
+    max-width: 1100px;
+    margin: 3.5rem auto 0;
+  }
+
+  /* ── Avatar card ──────────────────────────────── */
+  .avatar-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    color: inherit;
+    width: 130px;
+    transition: transform 0.18s;
+  }
+
+  .avatar-card:hover {
+    transform: translateY(-3px);
+  }
+
+  /* ── Avatar circle ───────────────────────────── */
+  .avatar-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f5e6d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .avatar-placeholder {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c87b5a;
+  }
+
+  /* ── Text ─────────────────────────────────────── */
+  .avatar-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-on-surface, #1f1b1b);
+    line-height: 1.2;
+  }
+
+  .avatar-role {
+    font-size: 0.75rem;
+    color: var(--color-on-surface-variant, #7a6360);
+    line-height: 1.2;
+  }
+
+  /* ── CTA card ─────────────────────────────────── */
+  .cta-wrap {
+    background: #f5e6d8;
+    border: 2px dashed #e5c9b8;
+  }
+
+  .cta-plus {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #c87b5a;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .cta-card .avatar-name {
+    color: var(--color-on-surface-variant, #7a6360);
+    font-weight: 600;
+  }
+
+  /* ── Responsive ───────────────────────────────── */
+  @media (max-width: 480px) {
+    .lide-row {
+      gap: 1.25rem 1.5rem;
+    }
+    .avatar-wrap {
+      width: 90px;
+      height: 90px;
+    }
+    .avatar-card {
+      width: 100px;
+    }
   }
 </style>

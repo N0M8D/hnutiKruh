@@ -19,65 +19,98 @@ const Tag = href ? 'a' : 'button';
 </Tag>
 
 <style>
+  /* ── Base ── */
   .btn {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
     width: fit-content;
-    padding: 0 1.2rem; /* Remove vertical padding to allow centering to work better */
-    margin: auto 0; /* Add margin auto for vertical centering in flex containers */
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 2.75rem; /* Match input field height */
-    line-height: 1;
-    background: linear-gradient(120deg, rgba(255,255,255,0.32) 60%, rgba(255,128,128,0.18) 100%);
-    color: var(--theme-on-bg);
-    border: 0.1px solid var(--theme-primary);
-    border-radius: var(--theme-button-border-radius);
+    gap: 0.4rem;
+    padding: 0.85rem 2rem;
+    font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+    font-size: var(--font-size-base, 1rem);
     font-weight: 600;
-    letter-spacing: 0.03em;
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    box-shadow: 0 4px 16px 0 rgba(255,128,128,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.10);
-    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box; /* Ensure padding is included in height calculation */
+    letter-spacing: 0.01em;
+    line-height: 1;
+    border: none;
+    border-radius: var(--theme-button-border-radius, 9999px);
+    cursor: pointer;
+    text-decoration: none;
+    transition: box-shadow var(--theme-transition), transform var(--theme-transition), background var(--theme-transition);
+    box-sizing: border-box;
+    /* Primární: Signature Gradient */
+    background: var(--theme-gradient-primary, linear-gradient(135deg, #ff8080 0%, #ffb3b1 100%));
+    color: var(--color-on-primary, #ffffff);
+    box-shadow: 0 4px 20px 0 rgba(255, 128, 128, 0.30);
   }
-  /* Nová třída fullwidth */
+  .btn:hover {
+    box-shadow: 0 6px 28px 0 rgba(255, 128, 128, 0.45);
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px 0 rgba(163, 59, 62, 0.18);
+  }
+
+  /* Fullwidth */
   .btn--fullwidth {
     width: 100%;
   }
-  .btn:hover {
-    background: linear-gradient(120deg, rgba(255,255,255,0.44) 60%, rgba(255,128,128,0.28) 100%);
-    color: var(--theme-primary-hover);
-    border-color: var(--theme-primary-hover);
-    box-shadow: 0 6px 24px 0 rgba(255,128,128,0.18), 0 2px 12px 0 rgba(0,0,0,0.12);
-  }
-  .btn--unelevated {
-    background-color: transparent;
-    color: var(--theme-on-bg);
-  }
-  .btn--unelevated:hover {
-    background-color: transparent;
-    opacity: var(--theme-primary-hover);
-  }
+
+  /* Sekundární – tónové pozadí, bez borderu */
   .btn--outlined {
-    color: var(--theme-primary);
-    background-color: transparent;
-    border: 2px solid var(--theme-primary);
-    transition: background-color var(--theme-transition);
+    background: var(--color-surface-highest, #e9e0e0);
+    color: var(--color-on-surface, #1f1b1b);
+    box-shadow: none;
   }
   .btn--outlined:hover {
-    background-color: var(--theme-primary);
-    color: var(--theme-on-primary);
+    background: var(--color-surface-dim, #e1d8d7);
+    box-shadow: var(--g-shadow-float, 0 4px 24px 0 rgba(37, 25, 15, 0.08));
+    transform: translateY(-1px);
   }
-  .custom-icon__span {
-    margin-left: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+  /* Terciární – jen text, podtržení při hover */
+  .btn--unelevated {
+    background: transparent;
+    color: var(--color-primary, #ff8080);
+    box-shadow: none;
+    padding: 0.85rem 0.5rem;
+    text-decoration: none;
+    position: relative;
   }
-  .custom-icon__span :global(svg) {
-    width: 24px;
-    height: 24px;
+  .btn--unelevated::after {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0.55rem;
+    height: 1.5px;
+    background: var(--color-primary, #ff8080);
+    transform: scaleX(0);
+    transition: transform var(--theme-transition);
+    transform-origin: left;
   }
+  .btn--unelevated:hover {
+    background: transparent;
+    transform: none;
+  }
+  .btn--unelevated:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* On-primary varianta (bílé pozadí na barevném bg) */
+  .btn--on-primary {
+    background: var(--color-surface-lowest, #ffffff);
+    color: var(--color-primary-dark, #a33b3e);
+    box-shadow: 0 4px 20px 0 rgba(37, 25, 15, 0.10);
+  }
+  .btn--on-primary:hover {
+    background: var(--color-primary-fixed, #ffdad8);
+    box-shadow: 0 6px 28px 0 rgba(37, 25, 15, 0.14);
+  }
+
   a.btn {
     text-decoration: none;
   }
@@ -86,11 +119,10 @@ const Tag = href ? 'a' : 'button';
     outline: none;
   }
 
-  /* Dočasný styl pro kampaň "Nepřehlédni to" – křídová tabule */
+  /* Kampaňové tlačítko – křídová tabule (ponecháno beze změny) */
   .campaign-btn {
     position: relative;
     background: linear-gradient(145deg,#252a25 0%, #1f2420 55%, #1a1d1a 100%);
-    border:1px solid #3a4239;
     color:#f8f8f5;
     box-shadow:0 1px 3px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05);
     text-shadow:0 1px 2px rgba(255,255,255,.08), 0 0 2px rgba(255,255,255,.12);
@@ -103,14 +135,13 @@ const Tag = href ? 'a' : 'button';
     background:
       radial-gradient(circle at 28% 22%,rgba(255,255,255,.07),transparent 60%),
       radial-gradient(circle at 75% 68%,rgba(255,255,255,.05),transparent 65%),
-      repeating-linear-gradient(92deg,rgba(255,255,255,.05)_0_2px,transparent_2px_6px);
+      repeating-linear-gradient(92deg,rgba(255,255,255,.05) 0 2px,transparent 2px 6px);
     mix-blend-mode:overlay;
     opacity:.45;
   }
   .campaign-btn:hover,
   .campaign-btn:focus-visible {
     background: linear-gradient(145deg,#2d332d 0%, #242a25 55%, #202320 100%);
-    border-color:#485248;
     color:#ffffff;
   }
   .campaign-btn:active { transform:translateY(1px); }

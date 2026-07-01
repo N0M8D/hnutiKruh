@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Page.astro';
-import { TextSection, Button, Container, AnnouncementBar, BlogPostsList } from '@components/odyssey-theme';
+import { Button } from '@components/odyssey-theme';
+import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 const seo = {
   title: 'Manifest | Hnutí kruh',
@@ -9,64 +10,143 @@ const seo = {
 ---
 
 <Layout {seo}>
-   <!-- Manifest -->
-  <div class="manifest">
-    <TextSection narrow>
-      <h1 hidden>HNUTÍ KRUH</h1>
-      
-      <h2 id="manifest">Manifest</h2>
-      <p><strong>Otevřenost, soudržnost a spolupráce</strong></p>
-      <p>
-        Spojujeme své síly ve jménu hodnot férové politiky tvořené všemi a pro všechny. Chceme společnost založenou na spolupráci, přímosti a poctivosti. Vytváříme politický systém, který zajistí dobrý život, beze strachu o budoucnost, nám všem.
-      </p>
-      <div class="boxes">
-        <div class="box">
-          Věříme ve svět, kde má každý férovou šanci uspět a nikdo netrpí jen proto, že se správně nenarodil. Práce a přínos musí být náležitě oceněny. Odmítáme úspěch na úkor druhých. Usilujeme o <strong>spravedlivé podmínky a rovné příležitosti.</strong>
+  <section class="manifest-page">
+    <div class="manifest-page__inner">
+
+      <header class="manifest-header">
+        <h1>Manifest</h1>
+        <div class="manifest-header__accent"></div>
+        <p class="manifest-header__sub"><strong>Otevřenost, soudržnost a spolupráce</strong></p>
+        <p class="manifest-header__lead">
+          Spojujeme své síly ve jménu hodnot férové politiky tvořené všemi a pro všechny. Chceme společnost
+          založenou na spolupráci, přímosti a poctivosti. Vytváříme politický systém, který zajistí dobrý
+          život, beze strachu o budoucnost, nám všem.
+        </p>
+      </header>
+
+      <div class="manifest-boxes">
+        <div class="manifest-box">
+          Věříme ve svět, kde má každý férovou šanci uspět a nikdo netrpí jen proto, že se správně nenarodil.
+          Práce a přínos musí být náležitě oceněny. Odmítáme úspěch na úkor druhých. Usilujeme o
+          <strong>spravedlivé podmínky a rovné příležitosti.</strong>
         </div>
-        <div class="box">
-          Stavíme se proti koncentraci moci v rukou vyvolených. Požadujeme transparentní rozhodování politiků. O budoucnosti musíme rozhodovat společně. Prosazujeme <strong>odpovědnost a otevřenost.</strong>
+        <div class="manifest-box">
+          Stavíme se proti koncentraci moci v rukou vyvolených. Požadujeme transparentní rozhodování politiků.
+          O budoucnosti musíme rozhodovat společně. Prosazujeme <strong>odpovědnost a otevřenost.</strong>
         </div>
-        <div class="box">
-          Chceme férový daňový systém, který podporuje důstojný život. Danit se mají astronomické zisky, ne prospěšná práce obyčejných lidí. Daně jsou naše <strong>investice do budoucnosti.</strong>
+        <div class="manifest-box">
+          Chceme férový daňový systém, který podporuje důstojný život. Danit se mají astronomické zisky,
+          ne prospěšná práce obyčejných lidí. Daně jsou naše <strong>investice do budoucnosti.</strong>
         </div>
-        <div class="box">
-          Víme, že <strong>společnost prospívá ze spolupráce.</strong> Chráníme volný přístup ke společné debatě za společným cílem. Oceňujeme rozdílné pohledy a odlišné zkušenosti. To přináší nejlepší výsledky pro celek i do budoucna.
+        <div class="manifest-box">
+          Víme, že <strong>společnost prospívá ze spolupráce.</strong> Chráníme volný přístup ke společné
+          debatě za společným cílem. Oceňujeme rozdílné pohledy a odlišné zkušenosti. To přináší nejlepší
+          výsledky pro celek i do budoucna.
         </div>
-        <div class="box">
-          Stojíme na straně těch, kdo se nemohou bránit sami. Pomáháme růst – jedincům, i celku. Naše síla vychází ze vzájemné důvěry a podpory. <strong>Prosazujeme solidaritu, sounáležitost a empatii.</strong>
+        <div class="manifest-box">
+          Stojíme na straně těch, kdo se nemohou bránit sami. Pomáháme růst – jedincům, i celku. Naše síla
+          vychází ze vzájemné důvěry a podpory. <strong>Prosazujeme solidaritu, sounáležitost a empatii.</strong>
         </div>
-        <div class="box">
-          Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi. <strong>Jsme odvážné a máme svou hrdost.</strong>
+        <div class="manifest-box">
+          Stojíme pevně za svými názory, ale vždy s respektem a ochotou vedeme věcnou diskusi.
+          <strong>Jsme odvážné a máme svou hrdost.</strong>
         </div>
       </div>
-      <p><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
 
-      <Button href="/assets/docs/manifestA2.pdf" newTab fullWidth>
-        📄 Stáhnout Manifest
-      </Button>
-    </TextSection>
+      <div class="manifest-footer">
+        <p class="manifest-footer__text"><strong>Tento manifest je výzvou všem, kdo sdílí naše hodnoty.</strong></p>
+        <Button href="/assets/docs/manifestA2.pdf" newTab>
+          📄 Stáhnout Manifest
+        </Button>
+      </div>
 
-  </div>
-  
-  </Layout>
-  
+    </div>
+  </section>
+  <ZapojSe />
+</Layout>
 
 <style>
-  .manifest {
-  position: relative;
-  margin: 2rem 0;
-  z-index: 1;
-}
-  .manifest .boxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin: 1rem 0;
+  .manifest-page {
+    padding: 4rem 1.5rem;
   }
-  .manifest .box {
-    background-color: var(--theme-surface-1, #f2f2f2);
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: var(--g-box-shadow);
+
+  .manifest-page__inner {
+    max-width: var(--container-max-width, 1100px);
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .manifest-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .manifest-header h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .manifest-header__accent {
+    width: 3rem;
+    height: 4px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    margin: 0.75rem auto 1.5rem;
+  }
+
+  .manifest-header__sub {
+    font-size: 1.15rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+
+  .manifest-header__lead {
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.75;
+    color: var(--color-text-muted, #555);
+  }
+
+  /* Boxes grid */
+  .manifest-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .manifest-box {
+    background: var(--color-surface-lowest, #ffffff);
+    padding: 1.5rem;
+    border-radius: var(--theme-card-radius, 2rem);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+    line-height: 1.7;
+  }
+
+  /* Footer CTA */
+  .manifest-footer {
+    text-align: center;
+  }
+
+  .manifest-footer__text {
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .manifest-boxes {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .manifest-page {
+      padding: 2.5rem 1rem;
+    }
+
+    .manifest-boxes {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

@@ -59,7 +59,7 @@ interface RawTx {
 // 3) Záložní data (bez dotahování z Fio API)
 // Zdroj: transparentní účet (https://ib.fio.cz/ib/transparent?a=2403303750&f=03.06.2025&t=03.01.2026)
 const electionTransactions: RawTx[] = [
-  {
+  /*{
     id: '2025-12-30-1',
     date: '2025-12-30',
     amount: -387.48,
@@ -121,7 +121,7 @@ const electionTransactions: RawTx[] = [
     currency: 'CZK',
     message: 'Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010',
     type: 'IN'
-  }
+  }*/
 ];
 electionTransactions.sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
@@ -202,7 +202,7 @@ function formatSize(bytes: number) {
       </div>
     )}
 
-    <h2 id="volebni-ucet">Transparentní (volební) účet PS 2025</h2>
+    <h2 id="volebni-ucet">Transparentní (volební) účet Senát 2026</h2>
     <div class="totals">
       <div><span class="label">Příjmy</span><span class="value in">{formatCurrency(totalIn)}</span></div>
       <div><span class="label">Výdaje</span><span class="value out">{formatCurrency(totalOut)}</span></div>

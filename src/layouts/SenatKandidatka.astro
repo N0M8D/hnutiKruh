@@ -17,7 +17,7 @@
  *   procKandiduje   – motivační text (multi-line YAML string)
  *   profesniCesta   – Array<{rok, nazev, popis}>
  *   kompetence      – Array<{ikona, nazev, popis}>
- *   priority        – Array<{ikona, nazev, popis, body?}>
+ *   priority        – Array<{ikona, nazev, popis, odstavce?, body?}>
  */
 import Layout from './Page.astro';
 import { Icon } from 'astro-icon/components';
@@ -229,13 +229,20 @@ const firstName = name.split(' ')[0];
         </header>
 
         <div class="sk-priority__grid">
-          {priority.map((p: {ikona: string; nazev: string; popis: string; body?: string[]}) => (
+          {priority.map((p: {ikona: string; nazev: string; popis: string; odstavce?: string[]; body?: string[]}) => (
             <div class="sk-prior-card">
               <div class="sk-prior-card__icon" aria-hidden="true">
                 <Icon name={p.ikona} />
               </div>
               <h3 class="sk-prior-card__nazev">{p.nazev}</h3>
               <p class="sk-prior-card__popis">{p.popis}</p>
+              {p.odstavce && p.odstavce.length > 0 && (
+                <div class="sk-prior-card__prose">
+                  {p.odstavce.map((odstavec: string) => (
+                    <p>{odstavec}</p>
+                  ))}
+                </div>
+              )}
               {p.body && p.body.length > 0 && (
                 <ul class="sk-prior-card__list">
                   {p.body.map((b: string) => (
@@ -706,6 +713,20 @@ const firstName = name.split(' ')[0];
     font-size: 0.9rem;
     color: var(--color-on-surface-variant);
     line-height: 1.6;
+    margin: 0;
+  }
+
+  .sk-prior-card__prose {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .sk-prior-card__prose p {
+    font-family: var(--theme-font-family-sans);
+    font-size: 0.9rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.7;
     margin: 0;
   }
 

@@ -42,33 +42,53 @@ export const senatKandidatky2026 = Object.values(candidateModules)
 
 export const senatPriority2026 = [
     {
+        ikona: 'ic:baseline-home',
+        nazev: 'Dostupný a důstojný život',
+        popis: 'Bydlení, zdravotní a sociální péče ani psychologická pomoc nesmí být luxusem, ale základem důstojného života pro každého.',
+        body: [
+            'Prevence ztráty bydlení a rozumný rozvoj obecního a družstevního bydlení',
+            'Dostupnější zdravotní, sociální a psychologická péče pro rodiny, seniory i mladé lidi',
+            'Férovější podmínky pro pečující o děti, seniory a nemocné členy rodiny',
+        ],
+    },
+    {
         ikona: 'ic:baseline-volunteer-activism',
-        nazev: 'Rodina a péče',
-        popis: 'Legislativní podpora pro pečující osoby, dostupné školky a reforma systému sociálních služeb.',
-        body: ['Garantovaná místa v jeslích', 'Podpora zkrácených úvazků', 'Pečovatelský příspěvek pro blízké'],
+        nazev: 'Silné komunity a vzdělání',
+        popis: 'Dobrá společnost vzniká tam, kde lidé mohou ovlivňovat své okolí a školy jsou místem bezpečí, důvěry a příležitostí.',
+        body: [
+            'Stabilní financování škol a školek',
+            'Větší důraz na školní psychology, učitele a moderní výuku',
+            'Propojování škol, spolků, kultury, sportu a sousedského života',
+        ],
+    },
+    {
+        ikona: 'ic:baseline-directions-bike',
+        nazev: 'Bezpečí, klima a odpovědný rozvoj',
+        popis: 'Bezpečný veřejný prostor, kvalitní životní prostředí a rozvoj měst musí jít ruku v ruce s dopravou, službami a prevencí.',
+        body: [
+            'Bezpečný pohyb městem pro chodce, cyklisty i uživatele veřejné dopravy',
+            'Více zeleně, ochrana vody a podpora biodiverzity jako součást každodenní kvality života',
+            'Rozvoj bydlení společně se školami, službami, dopravou a dobře udržovaným veřejným prostorem',
+        ],
+    },
+    {
+        ikona: 'ic:baseline-bar-chart',
+        nazev: 'Férová práce a odměňování',
+        popis: 'Lidé mají být odměňováni podle práce, zkušeností a výkonu, ne podle pohlaví, věku nebo jiných okolností.',
+        body: [
+            'Transparentnější a srozumitelnější pravidla odměňování',
+            'Hledání účinných nástrojů, které opravdu zmenšují mzdové nerovnosti',
+            'Férové podmínky pro zaměstnance i jasná pravidla pro zaměstnavatele',
+        ],
     },
     {
         ikona: 'ic:baseline-balance',
-        nazev: 'Spravedlnost',
-        popis: 'Nulová tolerance domácímu násilí a posílení práv obětí v soudním systému.',
-        body: ['Reforma definice znásilnění', 'Dostupná právní pomoc', 'Specializované soudy pro domácí násilí'],
-    },
-    {
-        ikona: 'ic:baseline-eco',
-        nazev: 'Budoucnost',
-        popis: 'Ochrana pitné vody a krajiny jako základní bezpečnostní priority státu.',
-        body: ['Ústavní ochrana vody', 'Lokální energetická soběstačnost', 'Zelená infrastruktura v obcích'],
-    },
-    {
-        ikona: 'ic:baseline-local-hospital',
-        nazev: 'Zdravotnictví',
-        popis: 'Dostupná a důstojná zdravotní péče pro každého bez ohledu na místo bydliště.',
-        body: ['Lékaři do regionů', 'Podpora duševního zdraví', 'Preventivní prohlídky zdarma'],
-    },
-    {
-        ikona: 'ic:baseline-school',
-        nazev: 'Vzdělávání',
-        popis: 'Rovné příležitosti ve vzdělávání a podpora učitelů jako klíčové profese.',
-        body: ['Snížení nerovností ve školách', 'Důstojné platové ohodnocení učitelů', 'Inkluzivní vzdělávání'],
+        nazev: 'Spravedlivé daně a odpovědný stát',
+        popis: 'Stát musí hlídat dopady zákonů, odpovědně nakládat s veřejnými penězi a nastavit daňový systém spravedlivěji vůči práci i majetku.',
+        body: [
+            'Nižší zdanění práce, zvlášť u nízkopříjmových lidí',
+            'Vyšší zdanění superbohatých a progresivnější přístup k majetku a spekulativnímu vlastnictví',
+            'Důsledná kontrola dopadů zákonů a veřejných výdajů na běžný život lidí i obcí',
+        ],
     },
 ];

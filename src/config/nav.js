@@ -24,14 +24,18 @@ export const nav = [
 		slug: 'https://generator.hnutikruh.cz/'
 	},
 	{
-		title: 'Zapoj se',
-		slug: '/forms/zapoj-se',
+		title: 'Podpoř nás ♥️',
 		highlight: true,
+		children: [
+			{
+				title: 'Zapoj se',
+				slug: '/forms/zapoj-se',
+			},
+			{
+				title: 'Daruj',
+				slug: '/forms/daruj',
+			},
+		],
 	},
-	/*{
-		title: 'Daruj',
-		slug: '/forms/daruj',
-		highlight: true,
-	},*/
 
 ];

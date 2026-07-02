@@ -3,8 +3,9 @@ import { Icon } from 'astro-icon/components'
 
 interface NavItem {
   title: string;
-  slug: string;
+  slug?: string;
   highlight?: boolean;
+  children?: NavItem[];
 }
 
 interface Props {
@@ -17,33 +18,71 @@ const { navData, rightMenu } = Astro.props as Props;
 
 <script type="module">
   document.addEventListener('DOMContentLoaded', function() {
-    const bodyElement = document.querySelector('body');
     const menuButton = document.querySelector('#menuButton')
     const navHeader = document.querySelector('#odysseyNavHeader');
     const menuButtonIconHam = document.querySelector('#menuButtonIconHam');
     const menuButtonIconClose = document.querySelector('#menuButtonIconClose');
-    let scrollPosition = 0;
 
     if (!menuButton || !navHeader || !menuButtonIconHam || !menuButtonIconClose) {
       console.error('Menu elements not found');
       return;
     }
 
+    const dropdownItems = Array.from(navHeader.querySelectorAll('[data-nav-item]'));
+
+    function closeDropdowns() {
+      dropdownItems.forEach((item) => {
+        item.removeAttribute('nav-dropdown-open');
+        const trigger = item.querySelector('[data-nav-dropdown-trigger]');
+        if (trigger) {
+          trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
     menuButton.addEventListener('click', toggleMenu)
 
+    dropdownItems.forEach((item) => {
+      const trigger = item.querySelector('[data-nav-dropdown-trigger]');
+      if (!trigger) {
+        return;
+      }
+
+      trigger.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = item.hasAttribute('nav-dropdown-open');
+        closeDropdowns();
+
+        if (!isOpen) {
+          item.setAttribute('nav-dropdown-open', '');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!navHeader.contains(event.target)) {
+        closeDropdowns();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeDropdowns();
+      }
+    });
+
     function toggleMenu() {
-      console.log('Toggle menu clicked');
       menuButtonIconHam.toggleAttribute('hidden');
       menuButtonIconClose.toggleAttribute('hidden');
       
       if (navHeader.hasAttribute('mobile-menu-open')) {
-        console.log('Closing menu');
         menuButton.title = "Open Main Menu"
       } else {
-        console.log('Opening menu');
         menuButton.title = "Close Main Menu"
       }
       
+      closeDropdowns();
       navHeader.toggleAttribute('mobile-menu-open');
     }
   });
@@ -68,11 +107,33 @@ const { navData, rightMenu } = Astro.props as Props;
     <slot name="nav">
       {navData && <nav>
         <ul>
-          {navData.map((navItem: NavItem) => (
-            (<li>
-              <a href={navItem.slug} class={navItem.highlight ? 'highlight-button' : ''}>
-                {navItem.title}
-              </a>
+          {navData.map((navItem: NavItem, index: number) => (
+            (<li data-nav-item class={navItem.children?.length ? 'nav-item nav-item--has-children' : 'nav-item'}>
+              {navItem.children?.length ? (
+                <>
+                  <button
+                    type="button"
+                    class={navItem.highlight ? 'nav-trigger highlight-button' : 'nav-trigger'}
+                    data-nav-dropdown-trigger
+                    aria-expanded="false"
+                    aria-controls={`nav-submenu-${index}`}
+                  >
+                    <span>{navItem.title}</span>
+                    <Icon name="ic:baseline-keyboard-arrow-down" width={18} height={18} class="nav-trigger__icon" />
+                  </button>
+                  <div id={`nav-submenu-${index}`} class="nav-submenu">
+                    {navItem.children.map((childItem: NavItem) => (
+                      <a href={childItem.slug} class="nav-submenu__link">
+                        {childItem.title}
+                      </a>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <a href={navItem.slug} class={navItem.highlight ? 'highlight-button' : ''}>
+                  {navItem.title}
+                </a>
+              )}
             </li>)
           ))}
         </ul>
@@ -166,11 +227,31 @@ const { navData, rightMenu } = Astro.props as Props;
     transition: opacity var(--theme-transition), background var(--theme-transition);
     white-space: nowrap;
   }
-  nav ul li a:hover {
+  .nav-trigger {
+    font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 0.4rem 0.75rem;
+    color: var(--color-on-surface);
+    opacity: 0.75;
+    border-radius: 9999px;
+    transition: opacity var(--theme-transition), background var(--theme-transition);
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+  nav ul li a:hover,
+  .nav-trigger:hover {
     opacity: 1;
     background: rgba(163, 59, 62, 0.07);
   }
-  nav ul li a.highlight-button {
+  nav ul li a.highlight-button,
+  .nav-trigger.highlight-button {
     background: var(--theme-gradient-primary, linear-gradient(135deg, #a33b3e 0%, #ff8080 100%));
     color: #ffffff;
     opacity: 1;
@@ -178,10 +259,55 @@ const { navData, rightMenu } = Astro.props as Props;
     box-shadow: 0 2px 12px 0 rgba(163, 59, 62, 0.20);
     transition: box-shadow var(--theme-transition), transform var(--theme-transition);
   }
-  nav ul li a.highlight-button:hover {
+  nav ul li a.highlight-button:hover,
+  .nav-trigger.highlight-button:hover {
     box-shadow: 0 4px 20px 0 rgba(163, 59, 62, 0.30);
     transform: translateY(-1px);
     background: var(--theme-gradient-primary);
+  }
+  .nav-item {
+    position: relative;
+  }
+  .nav-item--has-children[nav-dropdown-open] .nav-trigger__icon {
+    transform: rotate(180deg);
+  }
+  .nav-trigger__icon {
+    transition: transform var(--theme-transition);
+  }
+  .nav-submenu {
+    position: absolute;
+    top: calc(100% + 0.65rem);
+    right: 0;
+    min-width: 10rem;
+    padding: 0.4rem;
+    border-radius: 1rem;
+    background: rgba(255, 248, 245, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 40px rgba(37, 25, 15, 0.14);
+    display: none;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .nav-item--has-children[nav-dropdown-open] .nav-submenu {
+    display: flex;
+  }
+  .nav-submenu__link {
+    font-family: var(--theme-font-family-label, 'Work Sans', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-on-surface);
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.8rem;
+    opacity: 0.92;
+    white-space: nowrap;
+    transition: background var(--theme-transition), opacity var(--theme-transition), transform var(--theme-transition);
+  }
+  .nav-submenu__link:hover {
+    opacity: 1;
+    background: rgba(163, 59, 62, 0.07);
+    transform: translateY(-1px);
   }
 
   @media(max-width: 1120px) {
@@ -223,7 +349,8 @@ const { navData, rightMenu } = Astro.props as Props;
     header[mobile-menu-open] nav ul li {
       width: 100%;
     }
-    header[mobile-menu-open] nav ul li a {
+    header[mobile-menu-open] nav ul li a,
+    header[mobile-menu-open] nav ul li .nav-trigger {
       pointer-events: auto;
       cursor: pointer;
       color: var(--color-on-surface);
@@ -235,17 +362,42 @@ const { navData, rightMenu } = Astro.props as Props;
       width: 100%;
       text-align: center;
     }
-    header[mobile-menu-open] nav ul li a:hover {
+    header[mobile-menu-open] nav ul li .nav-trigger {
+      display: flex;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+    header[mobile-menu-open] nav ul li a:hover,
+    header[mobile-menu-open] nav ul li .nav-trigger:hover {
       background: rgba(163, 59, 62, 0.07);
     }
-    header[mobile-menu-open] nav ul li a.highlight-button {
+    header[mobile-menu-open] nav ul li a.highlight-button,
+    header[mobile-menu-open] nav ul li .nav-trigger.highlight-button {
       background: var(--theme-gradient-primary);
       color: white;
       margin-top: 0.5rem;
       box-shadow: 0 2px 12px 0 rgba(163, 59, 62, 0.20);
     }
-    header[mobile-menu-open] nav ul li a.highlight-button:hover {
+    header[mobile-menu-open] nav ul li a.highlight-button:hover,
+    header[mobile-menu-open] nav ul li .nav-trigger.highlight-button:hover {
       box-shadow: 0 4px 20px 0 rgba(163, 59, 62, 0.30);
+    }
+    .nav-submenu {
+      position: static;
+      min-width: 0;
+      margin-top: 0.5rem;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      padding: 0;
+    }
+    .nav-submenu__link {
+      width: 100%;
+      text-align: center;
+      padding: 0.8rem 1rem;
+      border-radius: var(--theme-shape-radius);
+      background: rgba(163, 59, 62, 0.05);
     }
   }
 </style>

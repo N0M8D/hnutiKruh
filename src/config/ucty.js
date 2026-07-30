@@ -21,7 +21,7 @@ export const accounts = [
          note: 'Financování kampaně hnutí.'
      },*/
     {
-        label: 'Volební účet Senát 2065',
+        label: 'Volební účet Senát 2026',
         purpose: 'Financování volební kampaně',
         number: '2503455583/2010',
         iban: null,

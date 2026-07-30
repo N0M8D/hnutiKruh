@@ -80,7 +80,8 @@ const seo = {
   .post-layout__img {
     margin: 1.5rem auto 2rem auto;
     border-radius: 2rem;
-    max-width: 90%;
+    width: min(100%, var(--container-max-width-narrow));
+    max-width: 100%;
     box-shadow: var(--g-shadow-raised, 0 20px 60px 0 rgba(37, 25, 15, 0.08));
   }
   .post-layout__date {

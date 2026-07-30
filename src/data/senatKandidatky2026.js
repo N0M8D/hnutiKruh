@@ -40,6 +40,36 @@ export const senatKandidatky2026 = Object.values(candidateModules)
     .filter((candidate) => candidate.jmeno && candidate.href)
     .sort((left, right) => left.jmeno.localeCompare(right.jmeno, 'cs'));
 
+export const podporovaneSenatniKandidatky2026 = [
+    {
+        slug: 'miroslav-stross',
+        jmeno: 'Miroslav Štross',
+        obvod: 'Volební obvod č. 33 - Děčín',
+        oblastExpertizy: 'Architekt',
+        foto: '/assets/candidates/support/miroslav_stross.jpg',
+        href: 'https://miroslav.zeleni.cz/?utm_source=programydovoleb.cz',
+        perex: 'Projektuje domy, které mají vydržet desítky let. Práce s místními obyvateli, městem a krajinou ho naučila, že kvalitní prostředí začíná u rozhodnutí obce, regionu a státu.',
+    },
+    {
+        slug: 'ivana-hlustikova',
+        jmeno: 'Ivana Hluštíková',
+        obvod: 'Volební obvod č. 6 - Louny',
+        oblastExpertizy: 'Vychovatelka a zastupitelka Loun',
+        foto: '/assets/candidates/support/ivana_hlustikova.jpg',
+        href: 'https://ivana.zeleni.cz/',
+        perex: 'Celý profesní život pracuje ve školství a věří, že politika má být službou veřejnosti. Vzdělávání, rodina, péče o slabší, voda v krajině i zdravé životní prostředí pro ni tvoří jeden celek.',
+    },
+    {
+        slug: 'adela-sucharda-sipova',
+        jmeno: 'Adéla Sucharda Šípová',
+        obvod: 'Volební obvod č. 30 - Kladno',
+        oblastExpertizy: 'Senátorka a advokátka',
+        foto: '/assets/candidates/support/adela_sipova.JPG',
+        href: 'https://www.adelasipova.cz/',
+        perex: 'Jako senátorka prosazuje dostupnost bydlení, lepší ochranu obětí násilí, silnější postavení občanů při rozhodování i spravedlivější pravidla pro lidi v dluhové pasti.',
+    },
+];
+
 export const senatPriority2026 = [
     {
         ikona: 'ic:baseline-volunteer-activism',

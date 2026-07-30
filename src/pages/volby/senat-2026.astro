@@ -4,7 +4,11 @@ import SenatHero from '../../components/volby/SenatHero.astro';
 import SenatPriority from '../../components/volby/SenatPriority.astro';
 import SenatKandidatky from '../../components/volby/SenatKandidatky.astro';
 import ZapojSe from '../../components/sections/ZapojSe.astro';
-import { senatKandidatky2026, senatPriority2026 } from '../../data/senatKandidatky2026.js';
+import {
+  podporovaneSenatniKandidatky2026,
+  senatKandidatky2026,
+  senatPriority2026,
+} from '../../data/senatKandidatky2026.js';
 
 const seo = {
   title: 'Senátní volby 2026 | Hnutí Kruh',
@@ -16,6 +20,9 @@ const seo = {
 <Layout {seo}>
   <SenatHero kandidatky={senatKandidatky2026} />
   <SenatPriority priority={senatPriority2026} />
-  <SenatKandidatky kandidatky={senatKandidatky2026} />
+  <SenatKandidatky
+    kandidatky={senatKandidatky2026}
+    podporovaneKandidatky={podporovaneSenatniKandidatky2026}
+  />
   <ZapojSe />
 </Layout>

@@ -1,4 +1,4 @@
-const ICS_URL = 'https://calendar.google.com/calendar/ical/e3b2ccf24db663a33c6a14b19f6b3691354919608f197b799747719d14f943b9%40group.calendar.google.com/public/basic.ics';
+const ICS_URL = 'https://calendar.google.com/calendar/ical/hnutikruh%40gmail.com/public/basic.ics';
 
 interface ParsedEvent {
     start: Date;

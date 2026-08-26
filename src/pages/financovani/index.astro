@@ -6,6 +6,7 @@ import * as path from 'node:path';
 import { accounts } from '../../config/ucty.js';
 import { reports } from '../../config/reports';
 import { prisma } from '../../lib/prisma';
+import { fetchPoliticalAds } from '../../lib/nocodbAds';
 import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // SEO
@@ -113,6 +114,10 @@ const accountsWithTx = await Promise.all(
     };
   })
 );
+
+// 3b) Politická reklama (nařízení EU 2024/900) - data z NocoDB, ne z vlastní DB
+// (viz docs/nocodb-politicka-reklama.md).
+const politicalAds = await fetchPoliticalAds();
 
 // Utility
 function formatCurrency(v: number) {
@@ -239,6 +244,48 @@ function formatSize(bytes: number) {
         </div>
       </Fragment>
     ))}
+
+    <h2 id="politicka-reklama">Politická reklama</h2>
+    <p class="syncInfo">
+      Zveřejňujeme v souladu s nařízením Evropského parlamentu a Rady (EU) 2024/900
+      o transparentnosti a cílení politické reklamy.
+    </p>
+    <div class="tableWrap">
+      <table class="txTable" aria-describedby="politicka-reklama">
+        <caption class="visually-hidden">Přehled placené politické reklamy</caption>
+        <thead>
+          <tr>
+            <th>Datum platby</th>
+            <th>Zveřejněno od</th>
+            <th>Zveřejněno do</th>
+            <th class="number-col">Částka</th>
+            <th>Zadavatel</th>
+            <th>Vydavatel</th>
+            <th>Popis</th>
+            <th>Odkaz</th>
+          </tr>
+        </thead>
+        <tbody>
+          {politicalAds.map(ad => (
+            <tr>
+              <td>{ad.datumPlatby ? formatDate(ad.datumPlatby) : '—'}</td>
+              <td>{ad.zverejnenoOd ? formatDate(ad.zverejnenoOd) : '—'}</td>
+              <td>{ad.zverejnenoDo ? formatDate(ad.zverejnenoDo) : '—'}</td>
+              <td class="amt number-col">{ad.castka !== null ? formatCurrency(ad.castka) : '—'}</td>
+              <td>{ad.zadavatel || '—'}</td>
+              <td>{ad.vydavatel || '—'}</td>
+              <td class="msg">{ad.popis || '—'}</td>
+              <td>{ad.odkaz ? <a href={ad.odkaz} target="_blank" rel="noopener">Zobrazit</a> : '—'}</td>
+            </tr>
+          ))}
+          {politicalAds.length === 0 && (
+            <tr>
+              <td colspan={8} style="text-align:center; opacity:.7;">Momentálně nejsou zveřejněny žádné záznamy.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
 
     <h2 id="smlouvy">Smlouvy</h2>
     {contracts.length === 0 && <p>Momentálně nejsou zveřejněny žádné soubory.</p>}

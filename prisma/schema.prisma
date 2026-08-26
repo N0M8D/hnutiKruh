@@ -54,3 +54,53 @@ enum PaymentStatus {
     FAILED // pokus o platbu selhal / zamítnuto bankou
     CANCELED // zrušeno (např. chybně vyplněný formulář, ruční zásah)
 }
+
+// Bankovní účet napojený na Fio API (jeden token = jeden účet).
+// Účty se v čase mění (nové volby, staré se deaktivují) - proto konfigurace
+// aktivních účtů žije v src/config/fioAccounts.ts, tady jen historie synchronizace.
+model FioAccount {
+    id           Int       @id @default(autoincrement())
+    key          String    @unique @db.VarChar(64) // "dary" | "senat2026" ...
+    lastSyncedAt DateTime?
+    lastFioId    BigInt? // idTo z posledního stažení, pojistka navíc k "last/" endpointu
+
+    // Účty starší 90 dní vyžadují na "last/" endpointu jednorázovou "silnou autorizaci",
+    // pokud nemá jít jen o posledních ~90 dní - to obejdeme dvoufázovým bootstrapem
+    // přes "periods/" + "set-last-date". Fio počítá do 30s rate limitu i neúspěšný
+    // pokus, takže obě fáze musí proběhnout v samostatných (časově oddělených) bězích
+    // synchronizace, ne v jednom request/response cyklu.
+    // null = normální provoz, "PERIOD" = čeká na periods/ fetch, "SET_LAST_DATE" = čeká na posun ukazatele
+    bootstrapPending String? @db.VarChar(20)
+
+    transactions FioTransaction[]
+}
+
+model FioTransaction {
+    id               Int        @id @default(autoincrement())
+    fioTransactionId BigInt // ID pohybu z Fio (jedinečné v rámci účtu)
+    accountId        Int
+    account          FioAccount @relation(fields: [accountId], references: [id])
+
+    date     DateTime
+    amount   Decimal @db.Decimal(14, 2)
+    currency String  @default("CZK") @db.VarChar(3)
+
+    counterAccount     String? // protiúčet
+    counterBankCode    String? @db.VarChar(10)
+    counterBankName    String?
+    counterName        String? // název/majitel protiúčtu
+
+    variableSymbol     String? @db.VarChar(20)
+    constantSymbol     String? @db.VarChar(20)
+    specificSymbol     String? @db.VarChar(20)
+    userIdentification String?
+    message            String? // zpráva pro příjemce
+    type               String? // typ transakce dle Fio (Bezhotovostní platba, Vklad, ...)
+    comment            String?
+
+    raw       Json? // celá surová transakce z Fio - pojistka, kdyby bylo potřeba pole navíc
+    createdAt DateTime @default(now())
+
+    @@unique([accountId, fioTransactionId])
+    @@index([accountId, date])
+}

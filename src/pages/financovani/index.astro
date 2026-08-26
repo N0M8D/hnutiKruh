@@ -4,6 +4,8 @@ import { TextSection } from '@components/odyssey-theme';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { accounts } from '../../config/ucty.js';
+import { reports } from '../../config/reports';
+import { prisma } from '../../lib/prisma';
 import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // SEO
@@ -39,106 +41,95 @@ if (fs.existsSync(contractsDir)) {
     .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 }
 
-// 3) Načtení transakcí volebního účtu
-// Umožníme dvě varianty:
-// - PUBLIC_ELECTION_ACCOUNT_API (plná URL na JSON endpoint banky / proxy)
-// - PUBLIC_ELECTION_ACCOUNT_JSON (statický JSON string nebo relative path)
-// Pokud není nic dostupné -> fallback.
-interface RawTx {
-  id: string;
-  date: string;
-  sender?: string;
-  recipient?: string;
-  amount: number;
-  currency?: string;
-  message?: string;
-  vs?: string;
-  type?: 'IN' | 'OUT';
+// 2b) Načtení zpráv (výroční apod.) z /public/assets/docs/reports.
+// Titulek/rok se bere z src/config/reports.ts podle jména souboru; soubor bez
+// záznamu v configu se přesto zobrazí, jen s titulkem odvozeným z jeho jména.
+interface ReportFile {
+  file: string;
+  title: string;
+  year?: number;
+  description?: string;
+  size: number;
+  mtime: Date;
+  ext: string;
+  url: string;
+}
+const reportsDir = path.join(process.cwd(), 'public', 'assets', 'docs', 'reports');
+let reportFiles: ReportFile[] = [];
+if (fs.existsSync(reportsDir)) {
+  reportFiles = fs.readdirSync(reportsDir)
+    .filter(f => /\.(pdf|docx?|odt)$/i.test(f))
+    .map(f => {
+      const fp = path.join(reportsDir, f);
+      const st = fs.statSync(fp);
+      const meta = reports.find(r => r.file === f);
+      return {
+        file: f,
+        title: meta?.title || f.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' '),
+        year: meta?.year,
+        description: meta?.description,
+        size: st.size,
+        mtime: st.mtime,
+        ext: f.split('.').pop()!.toLowerCase(),
+        url: `/assets/docs/reports/${encodeURIComponent(f)}`
+      };
+    })
+    .sort((a, b) => (b.year || 0) - (a.year || 0) || b.mtime.getTime() - a.mtime.getTime());
 }
 
-// 3) Záložní data (bez dotahování z Fio API)
-// Zdroj: transparentní účet (https://ib.fio.cz/ib/transparent?a=2403303750&f=03.06.2025&t=03.01.2026)
-const electionTransactions: RawTx[] = [
-  /*{
-    id: '2025-12-30-1',
-    date: '2025-12-30',
-    amount: -387.48,
-    currency: 'CZK',
-    message: 'Převod zůstatku z volebního účtu PSP 2025',
-    type: 'OUT'
-  },
-  {
-    id: '2025-09-28-1',
-    date: '2025-09-28',
-    amount: -10000,
-    currency: 'CZK',
-    message: 'Videospot do CT pro volby PSP 25 - FA',
-    vs: '240925',
-    type: 'OUT'
-  },
-  {
-    id: '2025-09-28-2',
-    date: '2025-09-28',
-    sender: 'Hnutí Kruh',
-    amount: 1300,
-    currency: 'CZK',
-    message: 'Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010',
-    type: 'IN'
-  },
-  {
-    id: '2025-09-27-1',
-    date: '2025-09-27',
-    amount: -1300,
-    currency: 'CZK',
-    message: 'Výběr z bankomatu: FIO BANKA, DEJVICKÁ 33, PRAHA 6, 16000, CZ, dne 27.9.2025, částka 1300.00 CZK',
-    vs: '7395',
-    type: 'OUT'
-  },
-  {
-    id: '2025-09-24-1',
-    date: '2025-09-24',
-    sender: 'Print Promotion',
-    amount: 767.14,
-    currency: 'CZK',
-    message: 'Print Promotion vratka chybně objednaného tisku letáků',
-    vs: '250400028',
-    type: 'IN'
-  },
-  {
-    id: '2025-09-22-1',
-    date: '2025-09-22',
-    amount: -5379.66,
-    currency: 'CZK',
-    message: 'Nákup: GOPAY *PRINT.CZ, CHRUDIM, CZ, dne 19.9.2025, částka 5379.66 CZK',
-    vs: '7395',
-    type: 'OUT'
-  },
-  {
-    id: '2025-09-19-1',
-    date: '2025-09-19',
-    sender: 'Hnutí Kruh',
-    amount: 15000,
-    currency: 'CZK',
-    message: 'Prevod prostredku na volebni ucet pro volby 2025 2403303750/2010',
-    type: 'IN'
-  }*/
-];
-electionTransactions.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+// 3) Transakce transparentních účtů - dotahují se pravidelně z Fio API
+// (viz src/lib/fioSync.ts, src/pages/api/fio-sync.ts) a ukládají do DB.
+// Tahle stránka z Fio nikdy nečte přímo, jen zobrazuje poslední stažený stav.
+const trackedAccounts = accounts.filter((a) => a.fioKey && a.fioPublic !== false);
+const accountsWithTx = await Promise.all(
+  trackedAccounts.map(async (acc) => {
+    const fioAccount = await prisma.fioAccount.findUnique({ where: { key: acc.fioKey } });
+    const rows = fioAccount
+      ? await prisma.fioTransaction.findMany({
+          where: { accountId: fioAccount.id },
+          orderBy: { date: 'desc' }
+        })
+      : [];
 
-// Agregace
-const totalIn = electionTransactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-const totalOut = electionTransactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0);
-const balance = totalIn + totalOut;
+    const transactions = rows.map((tx) => ({
+      id: tx.id,
+      date: tx.date,
+      amount: Number(tx.amount),
+      counterName: tx.counterName,
+      message: tx.message,
+      variableSymbol: tx.variableSymbol
+    }));
+
+    const totalIn = transactions.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+    const totalOut = transactions.filter((t) => t.amount < 0).reduce((s, t) => s + t.amount, 0);
+
+    return {
+      ...acc,
+      lastSyncedAt: fioAccount?.lastSyncedAt ?? null,
+      transactions,
+      totalIn,
+      totalOut,
+      balance: totalIn + totalOut
+    };
+  })
+);
 
 // Utility
 function formatCurrency(v: number) {
   return v.toLocaleString('cs-CZ', { style: 'currency', currency: 'CZK', minimumFractionDigits: 2 });
 }
-function formatDate(d: string) {
+function formatDate(d: Date | string) {
   try {
     return new Date(d).toLocaleDateString('cs-CZ');
   } catch {
-    return d;
+    return String(d);
+  }
+}
+function formatDateTime(d: Date | string) {
+  try {
+    return new Date(d).toLocaleString('cs-CZ');
+  } catch {
+    return String(d);
   }
 }
 function formatSize(bytes: number) {
@@ -202,43 +193,52 @@ function formatSize(bytes: number) {
       </div>
     )}
 
-    <h2 id="volebni-ucet">Transparentní (volební) účet Senát 2026</h2>
-    <div class="totals">
-      <div><span class="label">Příjmy</span><span class="value in">{formatCurrency(totalIn)}</span></div>
-      <div><span class="label">Výdaje</span><span class="value out">{formatCurrency(totalOut)}</span></div>
-      <div><span class="label">Zůstatek</span><span class="value bal">{formatCurrency(balance)}</span></div>
-      <div><span class="label">Transakcí</span><span class="value">{electionTransactions.length}</span></div>
-    </div>
-    <div class="tableWrap">
-      <table class="txTable" aria-describedby="volebni-ucet">
-        <caption class="visually-hidden">Transakce transparentního volebního účtu</caption>
-        <thead>
-          <tr>
-            <th>Datum</th>
-            <th>Od / Komu</th>
-            <th class="number-col">Částka</th>
-            <th>Zpráva</th>
-            <th>VS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {electionTransactions.map(tx => (
-            <tr class={tx.amount < 0 ? 'out' : 'in'}>
-              <td>{formatDate(tx.date)}</td>
-              <td>{tx.amount < 0 ? (tx.recipient || '—') : (tx.sender || '—')}</td>
-              <td class="amt number-col">{formatCurrency(tx.amount)}</td>
-              <td class="msg">{tx.message || '—'}</td>
-              <td class="number-col">{tx.vs || '—'}</td>
-            </tr>
-          ))}
-          {electionTransactions.length === 0 && (
-            <tr>
-              <td colspan={5} style="text-align:center; opacity:.7;">Žádné transakce k zobrazení.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+    {accountsWithTx.map((acc) => (
+      <Fragment>
+        <h2 id={`ucet-${acc.fioKey}`}>Transparentní účet – {acc.label}</h2>
+        <p class="syncInfo">
+          {acc.lastSyncedAt
+            ? <>Poslední aktualizace: {formatDateTime(acc.lastSyncedAt)}</>
+            : <>Zatím nebyla provedena žádná synchronizace s Fio.</>}
+        </p>
+        <div class="totals">
+          <div><span class="label">Příjmy</span><span class="value in">{formatCurrency(acc.totalIn)}</span></div>
+          <div><span class="label">Výdaje</span><span class="value out">{formatCurrency(acc.totalOut)}</span></div>
+          <div><span class="label">Zůstatek</span><span class="value bal">{formatCurrency(acc.balance)}</span></div>
+          <div><span class="label">Transakcí</span><span class="value">{acc.transactions.length}</span></div>
+        </div>
+        <div class="tableWrap">
+          <table class="txTable" aria-describedby={`ucet-${acc.fioKey}`}>
+            <caption class="visually-hidden">Transakce účtu {acc.label}</caption>
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Od / Komu</th>
+                <th class="number-col">Částka</th>
+                <th>Zpráva</th>
+                <th>VS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {acc.transactions.map(tx => (
+                <tr class={tx.amount < 0 ? 'out' : 'in'}>
+                  <td>{formatDate(tx.date)}</td>
+                  <td>{tx.counterName || '—'}</td>
+                  <td class="amt number-col">{formatCurrency(tx.amount)}</td>
+                  <td class="msg">{tx.message || '—'}</td>
+                  <td class="number-col">{tx.variableSymbol || '—'}</td>
+                </tr>
+              ))}
+              {acc.transactions.length === 0 && (
+                <tr>
+                  <td colspan={5} style="text-align:center; opacity:.7;">Žádné transakce k zobrazení.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Fragment>
+    ))}
 
     <h2 id="smlouvy">Smlouvy</h2>
     {contracts.length === 0 && <p>Momentálně nejsou zveřejněny žádné soubory.</p>}
@@ -254,6 +254,26 @@ function formatSize(bytes: number) {
                 <span class="ext">{c.ext.toUpperCase()}</span>
               </span>
             </a>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <h2 id="zpravy">Zprávy</h2>
+    {reportFiles.length === 0 && <p>Momentálně nejsou zveřejněny žádné zprávy.</p>}
+    {reportFiles.length > 0 && (
+      <ul class="contracts reports">
+        {reportFiles.map(r => (
+          <li>
+            <a href={r.url} download>
+              <span class="file">{r.title}{r.year ? ` (${r.year})` : ''}</span>
+              <span class="meta">
+                <span>{formatSize(r.size)}</span>
+                <span>{r.mtime.toLocaleDateString('cs-CZ')}</span>
+                <span class="ext">{r.ext.toUpperCase()}</span>
+              </span>
+            </a>
+            {r.description && <p class="reportDesc">{r.description}</p>}
           </li>
         ))}
       </ul>
@@ -481,6 +501,14 @@ function formatSize(bytes: number) {
     --acc-accent-soft:#d7f1f3;
   }
 
+  /* SYNC INFO */
+  .syncInfo {
+    text-align:center;
+    font-size:.68rem;
+    opacity:.65;
+    margin:-.4rem 0 .8rem;
+  }
+
   /* TOTALS */
   .totals {
     display:flex;
@@ -580,6 +608,11 @@ function formatSize(bytes: number) {
   @media (min-width:760px) {
     .contracts { grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
   }
+  /* Zprávy - záměrně pod sebou (ne do sloupců), ať jsou položky vždy stejně široké */
+  .reports {
+    display:flex;
+    flex-direction:column;
+  }
   .contracts li a {
     display:flex;
     justify-content:space-between;
@@ -611,6 +644,13 @@ function formatSize(bytes: number) {
     align-items:center;
     opacity:.85;
   }
+  .reportDesc {
+    margin:.35rem 0 0;
+    font-size:.62rem;
+    line-height:1.35;
+    opacity:.75;
+  }
+
   .contracts .ext {
     background:#6a4d34;
     color:#fff;

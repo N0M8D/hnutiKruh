@@ -29,7 +29,8 @@ export const accounts = [
         closed: false,
         transparent: true,
         bankUrl: 'https://ib.fio.cz/ib/transparent?a=2503455583',
-        note: 'Financování kampaně hnutí ve volbách do Senátu české republiky.'
+        note: 'Financování kampaně hnutí ve volbách do Senátu české republiky.',
+        fioKey: 'senat2026'
     },
     {
         label: 'Volební účet Komunál 2026',
@@ -50,6 +51,8 @@ export const accounts = [
         type: 'donations',
         transparent: true,
         bankUrl: 'https://ib.fio.cz/ib/transparent?a=2003303743',
-        note: 'Podpora činnosti hnutí.'
+        note: 'Podpora činnosti hnutí.',
+        fioKey: 'dary',
+        fioPublic: false // transakce se dál synchronizují a párují s dary, jen se nezobrazují na webu
     }
 ];

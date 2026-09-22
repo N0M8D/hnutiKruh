@@ -50,6 +50,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
               *Vaše údaje budou využity výhradně pro zasílání novinek a informací o aktivitách Hnutí Kruh.
             </p>
           </div>
+          <p class="newsletter-feedback" data-newsletter-feedback role="alert" aria-live="polite" hidden></p>
         </div>
         
       </form>
@@ -94,6 +95,14 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   min-height: 0;
 }
 
+.newsletter-feedback {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--color-error, #b3261e);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
 /* Tlačítko se zarovná na spodek buňky (výška inputu, bez labelu) */
 .newsletter-btn-wrap {
   align-self: center;
@@ -130,5 +139,52 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   document.querySelectorAll<HTMLFormElement>('form[action="/api/subscribe"]').forEach((form) => {
     const startedAt = form.elements.namedItem('formStartedAt');
     if (startedAt instanceof HTMLInputElement) startedAt.value = String(Date.now());
+
+    const feedback = form.querySelector<HTMLElement>('[data-newsletter-feedback]');
+    const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"], button:not([type])');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      if (feedback) {
+        feedback.hidden = true;
+        feedback.textContent = '';
+      }
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+
+        if (response.redirected) {
+          window.location.assign(response.url);
+          return;
+        }
+
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.error || 'Formulář se nepodařilo odeslat. Zkuste to prosím znovu.');
+      } catch (error) {
+        if (feedback) {
+          feedback.textContent = error instanceof Error
+            ? error.message
+            : 'Formulář se nepodařilo odeslat. Zkuste to prosím znovu.';
+          feedback.hidden = false;
+        }
+
+        window.turnstile?.reset();
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.removeAttribute('aria-busy');
+        }
+      }
+    });
   });
 </script>

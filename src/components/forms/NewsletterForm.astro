@@ -2,6 +2,8 @@
 import { Icon } from 'astro-icon/components';
 import { Button, FormInput, TextSection } from "@components/odyssey-theme";
 import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
+
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <div class="newsletter">
@@ -11,9 +13,24 @@ import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
       <h2>Přihlášení k odběru newsletteru</h2>
       <form name="Newsletter Form" method="POST" action="/api/subscribe">
         <div class="newsletter-form__container">
+          <div class="newsletter-honeypot" aria-hidden="true">
+            <label for="newsletter-website">Webová stránka</label>
+            <input id="newsletter-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <input name="formStartedAt" type="hidden" value="" />
           <FormInput name="Jmeno" label="Jméno" />
           <FormInput name="Prijmeni" label="Příjmení" />
           <FormInput name="Email" label="Email" required />
+          <div class="turnstile-widget">
+            <div
+              class="cf-turnstile"
+              data-sitekey={turnstileSiteKey}
+              data-action="newsletter_subscribe"
+              data-appearance="interaction-only"
+              data-theme="light"
+              data-language="cs"
+            ></div>
+          </div>
                     <div class="newsletter-btn-wrap">
             <Button customIcon fullWidth>
               Přihlásit se k odběru
@@ -40,6 +57,8 @@ import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
   </TextSection>
 </div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <style>
 .newsletter {
   margin: 2rem 0;
@@ -60,6 +79,19 @@ import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+.newsletter-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.turnstile-widget {
+  min-height: 0;
 }
 
 /* Tlačítko se zarovná na spodek buňky (výška inputu, bez labelu) */
@@ -93,3 +125,10 @@ import FormCheckbox from "@components/form-fields/FormCheckbox.astro";
   }
 }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[action="/api/subscribe"]').forEach((form) => {
+    const startedAt = form.elements.namedItem('formStartedAt');
+    if (startedAt instanceof HTMLInputElement) startedAt.value = String(Date.now());
+  });
+</script>

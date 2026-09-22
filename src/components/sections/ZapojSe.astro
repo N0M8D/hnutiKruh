@@ -4,6 +4,8 @@ import Button from '../buttons/Button.astro';
 import FormInput from '../form-fields/FormInput.astro';
 import FormCheckbox from '../form-fields/FormCheckbox.astro';
 
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
 /**
  * ZapojSe – sekce "zapoj se do kruhu"
  *
@@ -79,11 +81,26 @@ const {
         </p>
 
         <form name="Newsletter Form" method="POST" action="/api/subscribe" class="nl-form">
+          <div class="newsletter-honeypot" aria-hidden="true">
+            <label for="zapoj-se-website">Webová stránka</label>
+            <input id="zapoj-se-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <input name="formStartedAt" type="hidden" value="" />
           <div class="nl-form__two-col">
             <FormInput name="Jmeno" label="Jméno" />
             <FormInput name="Prijmeni" label="Příjmení" />
           </div>
           <FormInput name="Email" label="E-mail" type="email" required />
+          <div class="turnstile-widget">
+            <div
+              class="cf-turnstile"
+              data-sitekey={turnstileSiteKey}
+              data-action="newsletter_subscribe"
+              data-appearance="interaction-only"
+              data-theme="light"
+              data-language="cs"
+            ></div>
+          </div>
           <div class="nl-btn-wrap">
             <Button fullWidth>Přihlásit k odběru</Button>
           </div>
@@ -99,7 +116,22 @@ const {
   </div>
 </section>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <style>
+.newsletter-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.turnstile-widget {
+  min-height: 0;
+}
+
 /* ── Sekce ── */
 .zapoj-se {
   padding: 5rem 2rem;
@@ -257,3 +289,10 @@ const {
   }
 }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[action="/api/subscribe"]').forEach((form) => {
+    const startedAt = form.elements.namedItem('formStartedAt');
+    if (startedAt instanceof HTMLInputElement) startedAt.value = String(Date.now());
+  });
+</script>

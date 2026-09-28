@@ -16,28 +16,44 @@ const allPeople = Object.values(peopleModules).map((mod: any) => ({
   slug: mod.url.split('/').pop()
 }));
 
-// Define lists of people by their slugs (MDX filenames without extension)
-const boardMembers = [
+// Předsednictvo podle aktuálního zápisu ve veřejném rejstříku.
+const boardMemberSlugs = [
   'marta-martinova',
-  'michaela-nedory',
-  'klara-kadar',
-  'pavla-krausova',
+  'veronika-holcnerova',
 ];
 
-// Shuffle boardMembers on each page load
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-shuffle(boardMembers);
+const boardMembersWithoutProfile = [
+  {
+    name: 'Zuzana Janková',
+    description: 'Členka předsednictva hnutí.',
+    role: 'Členka předsednictva hnutí',
+    photo: null,
+    href: null,
+  },
+  {
+    name: 'Lucie Spáčilová',
+    description: 'Členka předsednictva hnutí.',
+    role: 'Členka předsednictva hnutí',
+    photo: '/assets/candidates/lucie_spacilova.png',
+    href: null,
+  },
+];
 
-// Filter people into different groups
-const predsednictvoUnsorted = allPeople.filter(person => boardMembers.includes(person.slug));
-// Sort predsednictvo according to shuffled boardMembers order
-const predsednictvo = boardMembers.map(slug => predsednictvoUnsorted.find(person => person.slug === slug));
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let index = shuffled.length - 1; index > 0; index--) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
+const predsednictvo = shuffle([
+  ...boardMemberSlugs
+    .map(slug => allPeople.find(person => person.slug === slug))
+    .filter(Boolean),
+  ...boardMembersWithoutProfile,
+]);
 
 const seo = {
   title: 'Naše tváře | Hnutí kruh',
@@ -65,15 +81,27 @@ const seo = {
           {predsednictvo.map((person, index) => {
             const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';
             return (
-              <a href={person.href} class="person-card">
-                <div class="photo-wrapper">
-                  <img src={frameImage} alt="" class="photo-frame noShadow" />
-                  <img src={person.photo} alt={person.name} class="person-photo noShadow" />
-                </div>
-                <h3>{person.name}</h3>
-                <p class="role">{person.role}</p>
-                <p class="description">{person.description}</p>
-              </a>
+              person.href ? (
+                <a href={person.href} class="person-card">
+                  <div class="photo-wrapper">
+                    <img src={frameImage} alt="" class="photo-frame noShadow" />
+                    {person.photo ? <img src={person.photo} alt={person.name} class="person-photo noShadow" /> : <span class="person-placeholder">{person.name.split(' ').map(part => part[0]).join('')}</span>}
+                  </div>
+                  <h3>{person.name}</h3>
+                  <p class="role">{person.role}</p>
+                  <p class="description">{person.description}</p>
+                </a>
+              ) : (
+                <article class="person-card">
+                  <div class="photo-wrapper">
+                    <img src={frameImage} alt="" class="photo-frame noShadow" />
+                    {person.photo ? <img src={person.photo} alt={person.name} class="person-photo noShadow" /> : <span class="person-placeholder">{person.name.split(' ').map(part => part[0]).join('')}</span>}
+                  </div>
+                  <h3>{person.name}</h3>
+                  <p class="role">{person.role}</p>
+                  <p class="description">{person.description}</p>
+                </article>
+              )
             );
           })}
         </div>
@@ -84,7 +112,7 @@ const seo = {
         <h2>Další tváře</h2>
         <div class="people-grid">
           {allPeople
-        .filter(person => !boardMembers.includes(person.slug))
+        .filter(person => !boardMemberSlugs.includes(person.slug))
         .map((person, index) => {
           const frameImage = index % 2 === 0 ? '/assets/brand/kolo+.png' : '/assets/brand/kolo.png';
           return (
@@ -209,6 +237,20 @@ const seo = {
   border-radius: 50%;
   z-index: 2;
   max-width: 100%;
+}
+
+.person-placeholder {
+  position: absolute;
+  inset: 14%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-primary-fixed, #ffd8d4);
+  color: var(--color-primary-dark, #a33d3d);
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 .role {

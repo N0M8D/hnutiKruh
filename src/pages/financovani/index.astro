@@ -7,6 +7,7 @@ import { accounts } from '../../config/ucty.js';
 import { reports } from '../../config/reports';
 import { prisma } from '../../lib/prisma';
 import { fetchPoliticalAds } from '../../lib/nocodbAds';
+import { fetchSenateElectionDonations } from '../../lib/nocodbSenateDonations';
 import ZapojSe from '../../components/sections/ZapojSe.astro';
 
 // SEO
@@ -118,6 +119,7 @@ const accountsWithTx = await Promise.all(
 // 3b) Politická reklama (nařízení EU 2024/900) - data z NocoDB, ne z vlastní DB
 // (viz docs/nocodb-politicka-reklama.md).
 const politicalAds = await fetchPoliticalAds();
+const senateElectionDonations = await fetchSenateElectionDonations();
 
 // Utility
 function formatCurrency(v: number) {
@@ -242,6 +244,43 @@ function formatSize(bytes: number) {
             </tbody>
           </table>
         </div>
+        {acc.fioKey === 'senat2026' && (
+          <>
+            <h3 id="dary-senat-2026">Dary pro volby do Senátu 2026</h3>
+            <div class="tableWrap">
+              <table class="txTable" aria-describedby="dary-senat-2026">
+                <caption class="visually-hidden">Přehled darů pro volby do Senátu 2026</caption>
+                <thead>
+                  <tr>
+                    <th>Jméno</th>
+                    <th>Příjmení</th>
+                    <th>Datum daru</th>
+                    <th class="number-col">Částka</th>
+                    <th>Datum narození</th>
+                    <th>Obec trvalého pobytu</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {senateElectionDonations.map(donation => (
+                    <tr>
+                      <td>{donation.firstName || '—'}</td>
+                      <td>{donation.surname || '—'}</td>
+                      <td>{donation.donationDate ? formatDate(donation.donationDate) : '—'}</td>
+                      <td class="amt number-col">{donation.amount !== null ? formatCurrency(donation.amount) : '—'}</td>
+                      <td>{donation.birthDate ? formatDate(donation.birthDate) : '—'}</td>
+                      <td>{donation.permanentResidence || '—'}</td>
+                    </tr>
+                  ))}
+                  {senateElectionDonations.length === 0 && (
+                    <tr>
+                      <td colspan={6} style="text-align:center; opacity:.7;">Momentálně nejsou zveřejněny žádné dary.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </Fragment>
     ))}
 

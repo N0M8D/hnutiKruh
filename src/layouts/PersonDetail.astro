@@ -4,8 +4,10 @@ import Layout from './Page.astro';
 import AnimatedCircle from '../components/animated/AnimatedCircle.astro';
 
 const {
-  content: { name, description, function: role, featuredImage }
+  content: { name, description, function: legacyRole, role, featuredImage }
 } = Astro.props;
+
+const personRole = role ?? legacyRole;
 
 const seo = {
   title: name,
@@ -20,7 +22,7 @@ const seo = {
       <img class="person-avatar" src={featuredImage} alt={name} />
     )}
     <h1>{name}</h1>
-    {role && <p class="person-role">{role}</p>}
+    {personRole && <p class="person-role">{personRole}</p>}
     {description && <p class="person-description">{description}</p>}
   </div>
 

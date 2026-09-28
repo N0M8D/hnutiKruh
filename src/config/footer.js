@@ -55,24 +55,22 @@ export const contactList = [
 		phone: '+420 724 020 585',
 	},
 	{
-		name: 'Klára Kadár',
-		email: 'klara.kadar@hnutikruh.cz',
-		phone: '+420 736 456 457',
-	},
-	{
 		name: 'Marta Martinová',
 		email: 'marta.martinova@hnutikruh.cz',
 		phone: '+420 724 020 585',
 	},
 	{
-		name: 'Pavla Krausová',
-		email: 'pavla.krausova@hnutikruh.cz',
-		phone: ''
+		name: 'Veronika Holcnerová',
+		email: 'veronika.holcnerova@hnutikruh.cz',
+		phone: '+420 607 201 360',
 	},
 	{
-		name: 'Michaela Nedory',
-		email: 'michaela.nedory@hnutikruh.cz',
-		phone: ''
+		name: 'Zuzana Janková',
+		email: 'zuzana.jankova@hnutikruh.cz',
+	},
+	{
+		name: 'Lucie Spáčilová',
+		email: 'lucie.spacilova@hnutikruh.cz',
 	},
 ];
 

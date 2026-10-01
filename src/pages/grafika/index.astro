@@ -59,9 +59,30 @@ if (fs.existsSync(brandDir)) {
   }).sort((a,b) => a.rel.localeCompare(b.rel));
 }
 
-const electionPrefix = 'volby2025/';
-const electionAssets = allFiles.filter(f => f.rel.startsWith(electionPrefix));
-const baseAssets = allFiles.filter(f => !f.rel.startsWith(electionPrefix));
+const parliamentaryElectionPrefix = 'volby2025/';
+const senateElectionPrefix = 'volby2026/';
+const parliamentaryElectionAssets = allFiles.filter((file) => file.rel.startsWith(parliamentaryElectionPrefix));
+const senateElectionAssets = allFiles.filter((file) => file.rel.startsWith(senateElectionPrefix));
+const baseAssets = allFiles.filter(
+  (file) => !file.rel.startsWith(parliamentaryElectionPrefix) && !file.rel.startsWith(senateElectionPrefix),
+);
+
+const previewExtensions = ['webp', 'png', 'jpg', 'jpeg'];
+
+function isPdfPreviewAsset(asset: { rel: string }) {
+  return previewExtensions.some((extension) => asset.rel.endsWith(`_nahled.${extension}`));
+}
+
+function getPdfPreviewUrl(asset: { rel: string }) {
+  if (!asset.rel.endsWith('.pdf')) return null;
+
+  const previewBase = asset.rel.replace(/\.pdf$/i, '_nahled');
+  const preview = allFiles.find((file) =>
+    previewExtensions.some((extension) => file.rel === `${previewBase}.${extension}`),
+  );
+
+  return preview ? brandPath + encodeURI(preview.rel) : null;
+}
 
 const priorityOrder = ['logo.svg','logo.png','logo_bila.png','logo_bila_losos.png','symbol.svg','symbol.png'];
 baseAssets.sort((a,b) => {
@@ -86,7 +107,7 @@ const seo = {
       <a href="#barvy">Barvy</a>
       <a href="#logo">Logo</a>
       <a href="#download">Ke stažení</a>
-      {electionAssets.length > 0 && <a href="#volby2025">Volby 2025</a>}
+      {parliamentaryElectionAssets.length > 0 && <a href="#volby2025">Volby 2025</a>}
     </nav>*/}
 
     <TextSection>
@@ -177,13 +198,14 @@ const seo = {
         </ul>
       )}
 
-          {electionAssets.length > 0 && (
+          {parliamentaryElectionAssets.length > 0 && (
         <>
-          <h2 id="volby2025">Volby 2025 – volební grafika</h2>
+          <h2 id="volby2025">Volby do Poslanecké sněmovny 2025</h2>
           <ul class="assetGrid">
-            {electionAssets.map(a => {
+            {parliamentaryElectionAssets.filter((asset) => !isPdfPreviewAsset(asset)).map(a => {
               const url = brandPath + encodeURI(a.rel);
               const isImg = /\.(png|jpe?g|svg|webp|gif)$/i.test(a.rel);
+              const previewUrl = getPdfPreviewUrl(a);
               const ext = a.rel.split('.').pop()?.toUpperCase();
               return (
                 <li>
@@ -191,6 +213,8 @@ const seo = {
                     <div class="thumb">
                       {isImg
                         ? <img src={url} alt={a.rel} loading="lazy" />
+                        : previewUrl
+                          ? <img src={previewUrl} alt={`Náhled ${a.rel}`} loading="lazy" class="posterPreview" />
                         : <span class="ext">{ext}</span>
                       }
                     </div>
@@ -202,7 +226,37 @@ const seo = {
             })}
           </ul>
         </>
-    )}
+          )}
+
+          {senateElectionAssets.length > 0 && (
+            <>
+              <h2 id="volby2026">Volby do Senátu 2026</h2>
+              <ul class="assetGrid">
+                {senateElectionAssets.filter((asset) => !isPdfPreviewAsset(asset)).map(a => {
+                  const url = brandPath + encodeURI(a.rel);
+                  const isImg = /\.(png|jpe?g|svg|webp|gif)$/i.test(a.rel);
+                  const previewUrl = getPdfPreviewUrl(a);
+                  const ext = a.rel.split('.').pop()?.toUpperCase();
+                  return (
+                    <li>
+                      <a href={url} download>
+                        <div class="thumb">
+                          {isImg
+                            ? <img src={url} alt={a.rel} loading="lazy" />
+                            : previewUrl
+                              ? <img src={previewUrl} alt={`Náhled ${a.rel}`} loading="lazy" class="posterPreview" />
+                              : <span class="ext">{ext}</span>
+                          }
+                        </div>
+                        <span class="file">{a.rel}</span>
+                        <span class="size">{formatSize(a.size)}</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          )}
     </TextSection>
 
 </Layout>
@@ -343,6 +397,10 @@ const seo = {
     box-shadow: none;
     border:none;
     border-radius: 0;
+  }
+  .assetGrid .thumb img.posterPreview {
+    max-width:100%;
+    max-height:100%;
   }
   .assetGrid .thumb .ext {
     font-size:.9rem;

@@ -42,6 +42,7 @@ const posts = Object.values(postModules)
     authors: mod.frontmatter.authors,
     publishDate: parse(mod.frontmatter.publishDate, 'dd.MM.yyyy', new Date()),
     featuredImage: mod.frontmatter.featuredImage,
+    imageFocus: mod.frontmatter.imageFocus,
     excerpt: mod.frontmatter.excerpt,
     tags: mod.frontmatter.tags,
     href: mod.url

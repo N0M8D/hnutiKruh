@@ -17,6 +17,7 @@ const posts = Object.values(postFiles)
 		authors: frontmatter.authors,
 		publishDate: parse(frontmatter.publishDate, 'dd.MM.yyyy', new Date()),
 		featuredImage: frontmatter.featuredImage,
+		imageFocus: frontmatter.imageFocus,
 		excerpt: frontmatter.excerpt,
 		href: url,
 	}))

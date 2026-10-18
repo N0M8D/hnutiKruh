@@ -3,7 +3,9 @@
  * AktualitySection – editorial blok s aktualitami
  *
  * Props:
- *   posts   – pole článků ({ title, excerpt, featuredImage, href, publishDate: Date, tags? })
+ *   posts   – pole článků ({ title, excerpt, featuredImage, imageFocus?, href, publishDate: Date, tags? })
+ *             imageFocus – nepovinná CSS object-position (např. "top", "30% 60%") pro doladění
+ *             ořezu náhledového obrázku, když výchozí "top" nesedí.
  *   allHref – odkaz na všechny články (default: /blog)
  */
 
@@ -40,6 +42,7 @@ function formatDate(d: Date) {
             src={featured.featuredImage}
             alt={featured.title}
             class="featured__img"
+            style={featured.imageFocus ? `--img-focus: ${featured.imageFocus}` : undefined}
           />
         </div>
         <div class="featured__body">
@@ -140,7 +143,7 @@ function formatDate(d: Date) {
 
 .featured__img-wrap {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--color-surface-low, #ffe6d5);
 }
@@ -150,6 +153,7 @@ function formatDate(d: Date) {
   height: 100%;
   max-width: 100%;
   object-fit: cover;
+  object-position: var(--img-focus, top);
   display: block;
   margin: 0;
   border-radius: 0;

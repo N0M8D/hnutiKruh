@@ -5,7 +5,11 @@ const {post} = Astro.props;
 <li class="blog-post__preview">
   <a href={post.href}>
     <div class="blog-post__img-wrap">
-      <img src={post.featuredImage} alt={post.title} />
+      <img
+        src={post.featuredImage}
+        alt={post.title}
+        style={post.imageFocus ? `--img-focus: ${post.imageFocus}` : undefined}
+      />
     </div>
     <div class="blog-post__body">
       <h3>{post.title}</h3>
@@ -35,7 +39,7 @@ const {post} = Astro.props;
 }
 .blog-post__img-wrap {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--color-surface-low, #ffe6d5);
 }
@@ -44,6 +48,7 @@ const {post} = Astro.props;
   height: 100%;
   max-width: 100%;
   object-fit: cover;
+  object-position: var(--img-focus, top);
   margin: 0;
   border-radius: 0;
   box-shadow: none;
